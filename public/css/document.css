@@ -71,3 +71,55 @@ a.document-access:hover,
     justify-content: center;
 }
 
+
+
+
+
+ul.site-visit {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+ul.site-visit li {
+    float: left;
+    margin: 14px 8px 14px 8px;
+}
+
+ul.site-visit li>* {
+    display: inline-block;
+    color: #333333;
+    text-decoration: none;
+}
+
+ul.site-visit li>a {
+    padding-left: 0;
+    text-transform: uppercase;
+}
+ul.site-visit li>i {
+     color: #5a5a5a;
+}
+ul.site-visit li span {
+    font-weight: 800;
+    font-size: 15px;
+}
+
+ul.site-visit li .total-visit {
+    color: #08767e;
+
+}
+
+ul.site-visit li .weekly-visit {
+    color: #9c9e0c;
+}
+
+ul.site-visit li .monthly-visit {
+    color: #8a1d1d;
+}
+
+@media (max-width: 970px) {
+ ul.site-visit li>a{
+     display:none;
+ }
+}

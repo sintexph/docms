@@ -46,7 +46,8 @@ DOCMS - @yield('title','Document Management System')
                 {{ Auth::user()->name }}
             </a>
             <ul class="dropdown-menu">
-                <li><a href="{{ route('drafts') }}">Drafts</a><span class="glyphicon glyphicon-edit pull-right"></span></li>
+                <li><a href="{{ route('drafts') }}">Drafts</a><span class="glyphicon glyphicon-edit pull-right"></span>
+                </li>
                 <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign
                         Out</a><span class="glyphicon glyphicon-log-out pull-right"></span></li>
             </ul>
@@ -133,6 +134,15 @@ DOCMS - @yield('title','Document Management System')
         </a>
     </li>
 
+    
+    <li class="@yield('nav-9')">
+        <a href="{{ route('trashed') }}">
+            <i class="fa fa-trash" aria-hidden="true"></i> <span>Trashed Documents</span>
+        </a>
+    </li>
+
+    
+
     <li class="treeview @yield('nav-5')">
         <a href="#">
             <i class="fa fa-cog" aria-hidden="true"></i> <span>Manage Data</span>
@@ -150,16 +160,18 @@ DOCMS - @yield('title','Document Management System')
             <li class="@yield('nav-5-3')">
                 <a href="{{ route('categories') }}"><i class="fa fa-circle-o"></i> Categories</a>
             </li>
-            <li class="@yield('nav-5-4')">
-                <a href="{{ route('traffic') }}"><i class="fa fa-circle-o"></i> Site Traffic</a>
-            </li>
         </ul>
     </li>
-    <li class="@yield('nav-9')">
-        <a href="{{ route('trashed') }}">
-            <i class="fa fa-trash" aria-hidden="true"></i> <span>Trashed Documents</span>
+
+    
+    <li class="@yield('nav-10')">
+        <a href="{{ route('traffic') }}">
+           <i class="fa fa-line-chart" aria-hidden="true"></i> <span>Traffic Monitoring</span>
+ 
         </a>
     </li>
+
+
 
     @endif
 

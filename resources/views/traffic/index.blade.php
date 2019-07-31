@@ -1,16 +1,15 @@
 @extends('layouts.app-side-bar')
 
-@section('nav-5','active')
-@section('nav-5-4','active')
+@section('nav-10','active')
 
 @section('breadcrumbs')
 <li><a href="/">Home</a></li>
-<li class="active">Manage Traffic</li>
+<li class="active">Traffic Monitoring</li>
 @stop
 
-@section('title','Site Traffic')
-@section('header_title','Site Traffic')
-@section('header_title_sm','Statistics site traffic')
+@section('title','Traffic Monitoring')
+@section('header_title','Traffic Monitoring')
+@section('header_title_sm','Graphical Display')
 
 @section('top_script') 
 

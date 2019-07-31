@@ -1,6 +1,5 @@
 @sintexlayouttop
 
-
 @slot('page_title')
 DOCMS - @yield('title','Document Management System')
 @endslot
@@ -36,6 +35,27 @@ DOCMS - @yield('title','Document Management System')
     <ul class="nav navbar-nav">
         <li class="@yield('nav-1')"><a href="/">Home <span class="sr-only">(current)</span></a></li>
     </ul>
+
+
+    <ul class="site-visit">
+        <li>
+            <i class="fa fa-pie-chart" title="Total Visitors" aria-hidden="true"></i>
+            <a href="javascript:void(0);" title="Total Visitors">Total Visitors</a>
+            <span class="total-visit" title="Total Visitors">{{ SiteVisitHelper::total_visit() }}</span>
+        </li>
+        <li>
+            <i title="Weekly Visitor" class="fa fa-user" aria-hidden="true"></i>
+            <a href="javascript:void(0);" title="Weekly Visitor">Weekly Visitor</a>
+            <span class="weekly-visit" title="Weekly Visitor">{{ SiteVisitHelper::weekdays_total() }}</span>
+        </li>
+        <li>
+            <i title="Monthly Visitor" class="fa fa-user" aria-hidden="true"></i>
+            <a href="javascript:void(0);" title="Monthly Visitor">Monthly Visitor</a>
+            <span title="Monthly Visitor" class="monthly-visit">{{ SiteVisitHelper::days_of_month_total() }}</span>
+        </li>
+    </ul>
+
+
 </div>
 
 
@@ -71,9 +91,13 @@ DOCMS - @yield('title','Document Management System')
     </ul>
 </div>
 
+
+
 @endslot
 
 @slot('content')
+
+
 @yield('content')
 @endslot
 
