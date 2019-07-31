@@ -1,3 +1,3 @@
-## About Helpdesk
+## About Document Management System
 
-Helpdesk Philippines is a ticketing system for IT related concerns/issues.
+Manage company policies and memorandums
