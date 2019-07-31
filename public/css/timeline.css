@@ -1,0 +1,78 @@
+
+
+.cd-timeline {
+    width: 100%;
+    max-width: 800px;
+    position: relative;
+}
+
+.cd-timeline:before {
+    content: '';
+    position: absolute;
+    top: 0px;
+    left: calc(33% + 15px);
+    bottom: 0px;
+    width: 4px;
+    background: #ddd;
+}
+
+.cd-timeline:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.entry {
+    clear: both;
+    text-align: left;
+    position: relative;
+}
+
+.entry .title {
+    margin-bottom: .5em;
+    float: left;
+    width: 33%;
+    padding-right: 30px;
+    text-align: right;
+    position: relative;
+}
+
+
+
+
+.entry .title h3 {
+    margin: 0;
+    font-size: 100%;
+}
+
+.entry .title p {
+    margin: 0;
+    font-size: 100%;
+}
+
+.entry .body {
+    margin: 0 0 3em;
+    float: right;
+    width: 66%;
+    padding-left: 30px;
+}
+
+.entry .body p {
+    line-height: 1.4em;
+}
+
+.entry .body p:first-child {
+    margin-top: 0;
+    font-weight: 400;
+}
+
+.entry .body ul {
+    color: #aaa;
+    padding-left: 0;
+    list-style-type: none;
+}
+
+.entry .body ul li:before {
+    content: "–";
+    margin-right: .5em;
+}

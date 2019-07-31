@@ -1,0 +1,31 @@
+.table tr.rejected,
+.legend .rejected {
+    background-color: #ffd5d5b0;
+}
+
+.table tr.approved,
+.legend .approved {
+    background-color: #d5ffd5b0;
+}
+
+.table tr.pending,
+.legend .pending {
+    background-color: #fff9d5b0;
+}
+
+.table tr.cancelled,
+.legend .cancelled {
+    background-color: #ac7979b0;
+}
+
+legend {
+    font-size: 15px;
+    text-transform: uppercase;
+      margin-bottom: 10px;
+}
+
+.legend label {
+    font-size: 12px;
+    font-weight: 600;
+    padding:2px 10px 2px 10px;
+}

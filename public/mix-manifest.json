@@ -1,0 +1,15 @@
+{
+    "/js/account.js": "/js/account.js",
+    "/js/category.js": "/js/category.js",
+    "/js/draft.js": "/js/draft.js",
+    "/js/global.js": "/js/global.js",
+    "/js/home.js": "/js/home.js",
+    "/css/document_content.css": "/css/document_content.css",
+    "/js/manage/document.js": "/js/manage/document.js",
+    "/js/manage/for_approval.js": "/js/manage/for_approval.js",
+    "/js/manage/for_review.js": "/js/manage/for_review.js",
+    "/js/section.js": "/js/section.js",
+    "/js/site-traffic.js": "/js/site-traffic.js",
+    "/js/system.js": "/js/system.js",
+    "/js/trashed-document.js": "/js/trashed-document.js"
+}
