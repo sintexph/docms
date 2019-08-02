@@ -39,7 +39,7 @@
                 </div>
             </div>
         </div>
-        <label class="text-uppercase">Description</label>
+        <label class="text-uppercase">Revision Logs</label>
         <main-item v-model="version.description"></main-item>
         <label class="text-uppercase">Content</label>
         <main-item v-model="version.content"></main-item>
