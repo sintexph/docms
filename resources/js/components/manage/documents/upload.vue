@@ -17,7 +17,7 @@
 
 <script>
     export default {
-        props: ['document_id'],
+        props: ['version_id'],
         data: function () {
             return {
                 files: null,
@@ -44,7 +44,7 @@
 
 
                     // Send request to server
-                    axios.post('/manage/documents/file/upload/' + par.document_id, form, {
+                    axios.post('/manage/documents/file/upload/' + par.version_id, form, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }

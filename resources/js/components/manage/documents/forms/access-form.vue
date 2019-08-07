@@ -3,14 +3,14 @@
 
         <div class="form-group" style="min-width: 150px;">
             <label class="control-label">Access</label>
-            <select3 :options="access_options" style_name="width:100%;" placeholder="Please choose a access" :required="true"
-                v-model="access_data.access"></select3>
+            <select2 :options="access_options" style_name="width:100%;" placeholder="Please choose a access" :required="true"
+                v-model="access_data.access"></select2>
         </div>
         <div class="form-group" v-if="show_accessors">
             <label class="control-label">Accessors</label>
-            <select3 v-model="access_data.accessors" style_name="width:100%;" :multiple="true" :required="true"
+            <select2 v-model="access_data.accessors" style_name="width:100%;" :multiple="true" :required="true"
                 :options="users_options">
-            </select3>
+            </select2>
         </div>
     </div>
 </template>

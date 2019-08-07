@@ -7,7 +7,7 @@ use Auth;
 use App\Document;
 use App\DocumentVersion;
 use App\ReferenceDocument;
-use App\DocumentAttachment;
+use App\DocumentVersionAttachment;
 
 class DocumentActionMiddleware
 {
@@ -53,10 +53,10 @@ class DocumentActionMiddleware
             $document=$reference_document->document;
         }
         elseif ($model=='attachment') {
-            $attachment=DocumentAttachment::find($request['id']);
+            $attachment=DocumentVersionAttachment::find($request['id']);
             abort_if($attachment==null,404,'Could not find the the document attachment.');
 
-            $document=$attachment->document;
+            $document=$attachment->version->document;
         }
         else
             abort(404,'Page could not be found!');

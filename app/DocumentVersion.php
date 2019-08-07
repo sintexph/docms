@@ -54,6 +54,13 @@ class DocumentVersion extends Model
     ];
 
 
+
+    public function attachments()
+    {
+        return $this->hasMany('App\DocumentVersionAttachment','version_id');
+    }
+
+
     public function castedContent()
     {
         return Cast::cast_to_content($this->content);

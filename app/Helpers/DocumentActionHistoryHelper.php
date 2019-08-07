@@ -7,7 +7,7 @@ use App\DocumentActionHistory;
 use App\DocumentAccessor;
 use App\DocumentVersion;
 use App\ReferenceDocument;
-use App\DocumentAttachment;
+use App\DocumentVersionAttachment;
 
 class DocumentActionHistoryHelper 
 {
@@ -42,20 +42,22 @@ class DocumentActionHistoryHelper
     {
         self::create_history($document,$user,$user->name.' has change the status of the document to '.$status.'.');
     }
-    public static function upload_file(DocumentAttachment $attachment,User $user)
+    public static function upload_file(DocumentVersionAttachment $attachment,User $user)
     {
-        $document=$attachment->document;
+        $version=$attachment->version;
+        $document=$version->document;
         $upload=$attachment->upload;
 
-        self::create_history($document,$user,$user->name.' has uploaded a file named '.$upload->file_name.'.');
+        self::create_history($document,$user,$user->name.' has uploaded a file named '.$upload->file_name.' in version '.$version->version.'.');
     }
 
-    public static function delete_file(DocumentAttachment $attachment,User $user)
+    public static function delete_file(DocumentVersionAttachment $attachment,User $user)
     {
-        $document=$attachment->document;
+        $version=$attachment->version;
+        $document=$version->document;
         $upload=$attachment->upload;
-
-        self::create_history($document,$user,$user->name.' has deleted a file named '.$upload->file_name.'.');
+        
+        self::create_history($document,$user,$user->name.' has deleted a file named '.$upload->file_name.' in version '.$version->version.'.');
     }
 
     public static function add_reference(ReferenceDocument $reference_document,User $user)

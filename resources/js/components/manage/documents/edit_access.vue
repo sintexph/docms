@@ -10,8 +10,8 @@
 
                 <div class="form-group" v-if="!true">
                     <label class="control-label">Moderators</label>
-                    <select3 v-model="moderators" style_name="width:100%;" :multiple="true" :options="users_data">
-                    </select3>
+                    <select2 v-model="moderators" style_name="width:100%;" :multiple="true" :options="users_data">
+                    </select2>
                 </div>
 
             </div>

@@ -51,7 +51,7 @@
                     <tr>
                         <th><i class="fa fa-paperclip" aria-hidden="true"></i> Attachments</th>
                         <td>
-                            @foreach($document->document_attachments as $att)
+                            @foreach($current_version->attachments as $att)
                             <a href="{{ $att->upload->download_link }}"
                                 title="Download {{ $att->upload->file_name }} attachment">
                                 <i class="fa fa-download" aria-hidden="true"></i>

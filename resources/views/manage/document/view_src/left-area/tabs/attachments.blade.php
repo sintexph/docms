@@ -1,7 +1,7 @@
 
-<doc-attachments :attachments="{{ json_encode($attachments) }}"></doc-attachments>
+<doc-ver-attachments :attachments="{{ json_encode($attachments) }}"></doc-ver-attachments>
 
 
 @if(auth()->user()->can('initiate_action',$document))
-    <upload-file document_id="{{ $document->id }}"></upload-file>
+    <upload-file version_id="{{ $selected_version->id }}"></upload-file>
 @endif

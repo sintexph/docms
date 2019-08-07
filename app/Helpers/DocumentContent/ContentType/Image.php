@@ -38,8 +38,14 @@ class Image extends Datum
     
     public function generateLink()
     {
-        $file=Upload::find($this->upload_id);
-        return 'data:image/'.$file->file_type.';base64,'.base64_encode(file_get_contents(\Config::get('app.url').'/file/'.$file->id));
+        
+        if(config('app.env')=='production')
+        {
+            $file=Upload::find($this->upload_id);
+            return 'data:image/'.$file->file_type.';base64,'.base64_encode(file_get_contents(\Config::get('app.url').'/file/'.$file->id));
+        }
+        else
+            return 'data:image/png;base64,'.base64_encode(file_get_contents('http://cdn.sportscity.com.ph/images/no-img.jpg'));
     }
 
     public function toString(){

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Document;
 use App\User;
-use App\DocumentAttachment;
+use App\DocumentVersionAttachment;
 use DB;
 use App\Helpers\UploadHelper;
 use App\DocumentVersion;
@@ -357,6 +357,77 @@ class VersionActionController extends Controller
         } catch (\Exception $e) {
 
             abort(442,$e->getMessage());
+        }
+    }
+
+
+    /**
+     * Upload files to the document attachment
+     * @param $request Holds the files
+     * @param $id The database id of the document version
+     */
+    public function upload_files(Request $request,$id)
+    {
+        
+        $this->validate($request,['files.*'=>'required|file|mimes:csv,docx,xls,xlsx,pdf,txt|max:2000']);
+        
+        $document_version=DocumentVersion::find($id);
+        abort_if($document_version==null,404,'Document version could not be found!');
+        $files=$request['files'];
+        $user=auth()->user();
+
+        try {
+
+            DB::beginTransaction();
+            foreach($files as $file)
+            {
+                $upload=UploadHelper::upload_file($file,$user);
+                $attachment=DocumentVersionAttachment::create([
+                    'version_id'=>$document_version->id, 
+                    'file_id'=>$upload->id,
+                ]);
+
+                DocumentActionHistoryHelper::upload_file($attachment,$user);
+            }
+
+            DB::commit();
+
+            return response()->json(['message'=>'File(s) has been successfully uploaded!']);
+
+        } catch (\Exception $ex) {
+            DB::rollBack();
+            abort(404,$ex->getMessage());
+        }
+    }
+
+    /**
+     * Delete the file from the database
+     * @param $id The database id of the attachment
+     */
+    public function remove_file($id)
+    {
+        $attachment=DocumentVersionAttachment::find($id);
+        abort_if($attachment==null,404,'Attachment could not be found!');
+
+        try {
+
+            DB::beginTransaction();
+
+            $upload=$attachment->upload;
+            $upload->delete();
+            $attachment->delete();
+ 
+
+            DocumentActionHistoryHelper::delete_file($attachment,auth()->user());
+
+            DB::commit();
+
+
+            return response()->json(['message'=>'File has been successfully removed!']);
+
+        } catch (\Exception $ex) {
+            DB::rollBack();
+            abort(404,$ex->getMessage());
         }
     }
 }

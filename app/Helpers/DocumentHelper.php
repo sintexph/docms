@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 use App\Document;
-use App\DocumentAttachment;
+use App\DocumentVersionAttachment;
 use App\User;
 use App\DocumentVersion;
 use App\DocumentApprover;
@@ -68,13 +68,6 @@ class DocumentHelper
 
     /**
      * Save the document version to the database
-     * @param $doc The document
-     * @param $attachment The document attachment or the file
-     * @param $user Who will create the version
-     * @param $document_type The type of the document
-     * @param $description The description of the document version
-     * @param $version_number The version number or none
-     * @return Instance of DocumentVersion model
      */
     public static function save_version(
         Document $doc,
@@ -149,97 +142,8 @@ class DocumentHelper
         
         return $data;
     }
-    /**
-     * Save a new version of the document
-     * 
-     */
-    public static function new_version(
-        Document $doc,
-        User $user,
-        $content,
-        $description,
-        $effective_date,
-        $expiry_date,
-        array $reviewer_ids=[],
-        array $approver_ids=[])
-    {
-        $response=[
-            'message'=>'',
-            'success'=>false,
-        ];
 
-        try {
-            
-            # Upload the file to the server
-            $upload=UploadHelper::upload_file($file,$user);
-
-            # Save the uploaded to the attachments of the document
-            $attachment=DocumentAttachment::create([
-                'document_id'=>$doc->id, 
-                'file_id'=>$upload->id,
-            ]);
-
-            $version=self::save_version(
-                $doc,
-                $attachment,
-                $user,
-                $document_type,
-                $description,
-                $version_number,
-                $effective_date,
-                $expiry_date);
-            
-            # Save the reviewer
-            foreach ($reviewer_ids as $id) {
-                # Get the reviewer user on the database
-                $reviewer=User::find($id);
-                if($reviewer==null)
-                {
-                    $response['message']='One of the reviewer is not exists on the system!';
-                    
-                    return $response;
-                }
-                
-                self::save_reviewer($reviewer,$version);
-                        
-            }
-
-            # Save the approver
-            foreach ($approver_ids as $id) {
-                # Get the approver user on the database
-                $approver=User::find($id);
-                if($approver==null)
-                {
-                    $response['message']='One of the approver is not exists on the system!';
-                    
-                    return $response;
-                }
-                
-                self::save_approver($approver,$version);
-                        
-            }
-
-            # Update the latest version number of the document
-            $doc->version=$version->version;
-            $doc->save();
-
-
-            
-            $response['message']='Version successfully saved!';
-            $response['success']=true;
-
-            return $response;
-            
-        } catch (\Exception $e) {
- 
-            $response['message']=$e->getMessage();
-            $response['success']=false;
-
-            return $response;
-        }
-
-
-    }
+    
     public static function save_revision(DocumentVersion $version,User $user,$content)
     {
         $document=$version->document;

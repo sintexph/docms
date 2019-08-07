@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Document;
-use App\DocumentAttachment;
+use App\DocumentVersionAttachment;
 use DB;
 use App\Helpers\UploadHelper;
 

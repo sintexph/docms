@@ -119,12 +119,7 @@ Route::prefix('manage')->name('manage')->group(function(){
             Route::put('add_reference/{id}','DocumentActionController@add_reference')->name('.add_reference');
         });
                 
-        Route::prefix('file')->name('.file')->group(function(){
-            
-            Route::put('upload/{id}','DocumentActionController@upload_files')->name('.upload')->middleware('document-action');
-            Route::delete('remove/{id}','DocumentActionController@remove_file')->name('.remove')->middleware('document-action:attachment');
 
-        });
         Route::put('remove_reference/{id}','DocumentActionController@remove_reference')->name('.remove_reference')->middleware('document-action:reference');
 
 
@@ -161,6 +156,13 @@ Route::prefix('manage')->name('manage')->group(function(){
         Route::prefix('for_approval')->name('.file')->group(function(){
             Route::patch('{id}','VersionActionController@for_approval');
             Route::patch('cancel/{id}','VersionActionController@cancel_for_approval')->name('.cancel');
+        });
+
+        Route::prefix('file')->name('.file')->group(function(){
+            
+            Route::put('upload/{id}','VersionActionController@upload_files')->name('.upload')->middleware('document-action:version');
+            Route::delete('remove/{id}','VersionActionController@remove_file')->name('.remove')->middleware('document-action:attachment');
+
         });
           
         

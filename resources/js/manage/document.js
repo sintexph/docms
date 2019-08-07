@@ -19,7 +19,7 @@ Vue.component('change-status', require('.././components/manage/documents/change-
 Vue.component('document-create', require('.././components/manage/documents/create_document.vue').default).mixin(contentListMixin);
 Vue.component('document-edit', require('.././components/manage/documents/edit_document.vue').default);
 Vue.component('add-reference', require('.././components/manage/documents/add_reference.vue').default);
-Vue.component('doc-attachments', require('.././components/manage/documents/attachments.vue').default);
+Vue.component('doc-ver-attachments', require('.././components/manage/documents/version_attachments.vue').default);
 Vue.component('upload-file', require('.././components/manage/documents/upload.vue').default);
 Vue.component('current-version', require('.././components/manage/documents/current_version.vue').default);
 Vue.component('edit-access', require('.././components/manage/documents/edit_access.vue').default);

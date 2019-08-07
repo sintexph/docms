@@ -81,11 +81,7 @@ class Document extends Model
         return \strtolower(\str_replace(" ","-",$this->title));
     }
 
-    public function document_attachments()
-    {
-        return $this->hasMany('App\DocumentAttachment','document_id');
-    }
-
+ 
     public function getVersionAttribute($value)
     {
         return str_pad($value,3,"0",STR_PAD_LEFT);

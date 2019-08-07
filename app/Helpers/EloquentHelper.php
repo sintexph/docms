@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 use App\Document;
-use App\DocumentAttachment;
+use App\DocumentVersionAttachment;
 use App\User;
 use App\DocumentVersion;
 use App\DocumentApprover;

@@ -155,7 +155,7 @@ class ManageDocumentController extends Controller
         
         $old_versions=$document->versions()->where('id','<>',$selected_version->id)->get();
         $reference_documents=$document->reference_documents()->with('referred_document')->get();
-        $attachments=$document->document_attachments()->with('upload')->get();
+        $attachments=$selected_version->attachments()->with('upload')->get();
         $document_action_histories=$document->action_histories()->orderBy('created_at','desc')->orderBy('id','desc')->paginate(10);
         
         $current_view = Input::get('view', false);

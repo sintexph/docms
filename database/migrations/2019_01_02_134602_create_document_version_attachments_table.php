@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDocumentAttachmentsTable extends Migration
+class CreateDocumentVersionAttachmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateDocumentAttachmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('document_attachments', function (Blueprint $table) {
+        Schema::create('document_version_attachments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('document_id')->unsigned();
             $table->integer('file_id')->unsigned();
@@ -26,7 +26,7 @@ class CreateDocumentAttachmentsTable extends Migration
             ->onDelete('cascade')
             ->onUpdate('cascade');
 
-            $table->foreign('document_id')
+            $table->foreign('version_id')
             ->references('id')
             ->on('documents')
             ->onDelete('cascade')
@@ -43,6 +43,6 @@ class CreateDocumentAttachmentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('document_attachments');
+        Schema::dropIfExists('document_version_attachments');
     }
 }

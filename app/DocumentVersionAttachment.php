@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DocumentAttachment extends Model
+class DocumentVersionAttachment extends Model
 {
     protected $fillable=[
-        'document_id', 
+        'version_id', 
         'file_id',
     ];
 
@@ -16,8 +16,8 @@ class DocumentAttachment extends Model
         return $this->belongsTo('App\Upload','file_id');
     }
 
-    public function document()
+    public function version()
     {
-        return $this->belongsTo('App\Document','document_id');
+        return $this->belongsTo('App\DocumentVersion','version_id');
     }
 }
