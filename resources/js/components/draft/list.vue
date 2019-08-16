@@ -6,7 +6,7 @@
                     <div class="form-group"><label class="control-label">Search Draft </label>
                         <div class="input-group input-group-sm">
                             <input type="text" placeholder="Search" class="form-control" @keydown.enter="find_document"
-                                v-model="find">
+                                v-model="filter.find">
                             <span class="input-group-btn">
                                 <button type="button" class="btn" @click.prevent="find_document"><i aria-hidden="true"
                                         class="fa fa-search"></i>
@@ -37,7 +37,9 @@
         },
         data: function () {
             return {
-                find: '',
+                filter:{
+                    find:'',
+                },
                 submitted:false,
                 columns: [{
                         label: '#',
@@ -80,8 +82,7 @@
         },
         methods: {
             find_document: function () {
-
-                this.$refs.datatables.custom_search("find", this.find);
+                this.$refs.datatables.reload();
             },
             delete: function (id) {
                 var par = this;

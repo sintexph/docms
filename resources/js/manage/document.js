@@ -4,6 +4,12 @@ Vue.mixin(httpAlert);
 import ".././content-form.js";
 import contentListMixin from '.././mixin/content_list.js';
 
+import IdleVue from 'idle-vue'
+const eventsHub = new Vue()
+Vue.use(IdleVue, {
+    eventEmitter: eventsHub,
+    idleTime: 5000
+})
 
 Vue.component('version-form', require('.././components/manage/documents/forms/version-form.vue').default);
 Vue.component('document-form', require('.././components/manage/documents/forms/document-form.vue').default);

@@ -7,7 +7,7 @@
             <div class="box-body">
                 <div class="form-group" style="min-width: 150px;">
                     <label class="control-label">Status</label>
-                    <select2 :select_data="status_data" placeholder="Please choose a status" :required="true" @selected="status_selected"></select2>
+                    <select2 :options="status_data" style_name="width:100%;" placeholder="Please choose a status" :required="true" @selected="status_selected"></select2>
                 </div>
             </div>
             <div class="box-footer">
@@ -26,11 +26,11 @@
                 status_data: [
 
                     {
-                        value: 'obsolete',
+                        id: 'obsolete',
                         text: 'OBSOLETE',
                     },
                     {
-                        value: 'active',
+                        id: 'active',
                         text: 'ACTIVE',
                     },
                 ],

@@ -4,8 +4,12 @@ table.ordered-list tr td.ol-content {
     text-align: left;
 }
 
-table.ol-content .ordered-list {
-    padding-left: 10px;
+table.ordered-list {
+    border-collapse: collapse;
+}
+
+table.ordered-list tr td.ol-content {
+    padding: 0px;
 }
 
 .item-btn-action {

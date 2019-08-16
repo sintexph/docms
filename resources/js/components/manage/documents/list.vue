@@ -74,7 +74,7 @@
                 <h3 class="box-title">Document List</h3>
             </div>
             <div class="box-body">
-                <datatable ref="datatables" :columns="columns" url="/manage/documents/list"></datatable>
+                <datatable ref="datatables" :parameters="filters" :columns="columns" url="/manage/documents/list"></datatable>
             </div>
         </div>
     </div>
@@ -226,7 +226,7 @@
         },
         methods: {
             filter_list: function () {
-                this.$refs.datatables.custom_search_multiple(this.filters);
+                this.$refs.datatables.reload();
             }
         },
         mounted() {

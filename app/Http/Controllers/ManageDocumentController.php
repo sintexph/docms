@@ -173,7 +173,44 @@ class ManageDocumentController extends Controller
             'document_action_histories'=>$document_action_histories,
         ]);
     }
-    
+    public function edit_current_version($id)
+    {
+   
+        $document=Document::find($id);
+        \abort_if($document==null,404);
+
+        # Get authenticated user
+        $user=auth()->user();
+
+        # Cannot view if not administrator, creator or moderator of the document
+        if($user->perm_administrator==false && $document->created_by!=$user->id && $document->moderators()->where('user_id','=',$user->id)->first()==null)
+            abort(403,'You dont have a permission to do any further action to this document.');
+
+
+        $selected_version=$document->current_version();
+        $selected_version=$selected_version->with(['reviewers'=>function($query){
+            $query->select(['id','reviewed','reviewed_at','version_id','user_id'])->with([
+                'user'=>function($user_query){
+                    $user_query->select(['id','name']);
+                }
+            ]);
+        }])
+        ->with(['approvers'=>function($query){
+            $query->select(['id','approved','approved_at','version_id','user_id'])->with([
+                'user'=>function($user_query){
+                    $user_query->select(['id','name']);
+                }
+            ]);
+        }])
+        ->first();
+
+        abort_if($selected_version->reviewed==true && $selected_version->approved==true,403,'The document is not available for editing.');
+
+        return view('manage.document.edit_version_full',[
+            'document'=>$document,
+            'selected_version'=>$selected_version, 
+        ]);
+    }
     /**
      * Show the creation form of the document
      */

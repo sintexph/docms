@@ -4,7 +4,7 @@
 
 
 @slot('page_title')
-DOCMS - @yield('title','Document Management System')
+DMS - @yield('title','Document Management System')
 @endslot
 
 

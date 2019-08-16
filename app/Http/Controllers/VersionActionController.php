@@ -163,6 +163,7 @@ class VersionActionController extends Controller
             'version.for_review'=>'required',
             'version.for_approval'=>'required',
             'version.effective_date'=>'required',
+            'submit_only'=>'required',
 
         ];
         
@@ -218,7 +219,7 @@ class VersionActionController extends Controller
                 if($user_rev==null)
                     abort(404,'Reviewer not could not be found on the system');
 
-                    DocumentHelper::save_reviewer($user_rev,$document_version);
+                    DocumentHelper::save_reviewer($user_rev,$document_version,$request->submit_only);
             }
             
             # Delete first the approver list
@@ -230,7 +231,7 @@ class VersionActionController extends Controller
                 if($user_rev==null)
                     abort(404,'Approver not could not be found on the system');
 
-                    DocumentHelper::save_approver($user_rev,$document_version);
+                    DocumentHelper::save_approver($user_rev,$document_version,$request->submit_only);
             }
 
 

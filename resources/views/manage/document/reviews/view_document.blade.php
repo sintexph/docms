@@ -104,7 +104,7 @@
 
 
 
-                 
+
 
                     <tr>
                         <th>Prepared By</th>
@@ -151,7 +151,7 @@
                             @endforeach
                         </td>
                     </tr>
-                    
+
                     <tr>
                         <td>Revision Logs</td>
                         <td colspan="5">
@@ -171,6 +171,7 @@
 
 
 
+
     <div class="box box-solid">
         <div class=" box-header with-border">
             <h3 class="box-title">Document Preview</h3>
@@ -186,8 +187,25 @@
 
         </div>
     </div>
-
-
+    <div class="box box-solid">
+        <div class="box-body">
+            <table class="table table-striped table-bordered">
+                <tbody>
+                    <tr>
+                        <th><i class="fa fa-paperclip" aria-hidden="true"></i> Attachments</th>
+                        <td>
+                            @foreach($current_version->attachments as $att)
+                            <a href="{{ $att->upload->download_link }}"
+                                title="Download {{ $att->upload->file_name }} attachment">
+                                <i class="fa fa-download" aria-hidden="true"></i>
+                                {{ $att->upload->file_name }}&nbsp;&nbsp;&nbsp;</a>
+                            @endforeach
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <div class="box box-solid">
         <div class=" box-header with-border">
             <h3 class="box-title">Comments</h3>

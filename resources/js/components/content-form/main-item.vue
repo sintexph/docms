@@ -14,7 +14,7 @@
         <div class="box-body">
             <draggable v-model="content.content_items" :group="'content'+_uid" @start="drag=true" @end="drag=false"
                 handle=".control-drag-mover">
-                <div class="box box-solid" v-for="(value,key) in content.content_items" :key="key">
+                <div class="box box-solid main-item" v-for="(value,key) in content.content_items" :key="key">
                     <div class="box-header with-border">
                         <a href="#"
                             @click.prevent="change_content_title==true?change_content_title=false:change_content_title=true"
@@ -71,7 +71,7 @@
         },
         props: {
             value: {
-                required:true,
+                required: true,
                 type: [Array, Object],
                 default: function () {
                     return new Content;
@@ -111,9 +111,19 @@
             value: {
                 deep: true,
                 handler: function (val) {
-                   this.content = val;
+                    this.content = val;
                 }
             }
+        },
+        mounted() {
+
+            $(document).on('click', '.main-item *', function () {
+
+                $('.box').not($(this).parent()).removeClass('main-item-focus');
+                $(this).parent().addClass('main-item-focus');
+
+            });
+
         }
     }
 
@@ -122,7 +132,15 @@
     .main-item-input {
         margin: 10px 0px 10px 0px;
     }
+
     .item-holder {
         margin: 10px 0px 10px 0px;
     }
+
+    .box.main-item-focus {
+        -webkit-box-shadow: 0px 0px 7px 5px rgba(204, 145, 145, 1);
+        -moz-box-shadow: 0px 0px 7px 5px rgba(204, 145, 145, 1);
+        box-shadow: 0px 0px 7px 5px rgba(204, 145, 145, 1);
+    }
+
 </style>

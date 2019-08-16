@@ -28,7 +28,7 @@
                     keywords: '',
                     comment: '',
                     access_data: {
-                        access: '1',
+                        access: '3',
                         accessors: [],
                     },
                 },

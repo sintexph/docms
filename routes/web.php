@@ -104,6 +104,8 @@ Route::prefix('manage')->name('manage')->group(function(){
         Route::get('create','ManageDocumentController@create')->name('.create');
         Route::get('view/{id}', 'ManageDocumentController@view')->name('.view');
 
+        Route::get('edit-version/{id}', 'ManageDocumentController@edit_current_version')->name('.edit_current_version');
+
         Route::put('save','DocumentActionController@save')->name('.save');
         Route::put('save_draft','DocumentActionController@save_draft')->name('.save_draft');
         Route::put('update_draft/{id}','DocumentActionController@update_draft')->name('.update_draft');

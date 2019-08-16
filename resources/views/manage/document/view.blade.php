@@ -78,12 +78,11 @@
 
 @section('bottom_script')
 
-
+<script src="http://cdn.sportscity.com.ph/idle-timeout.js/idle-timeout.min.js"></script>
 <script src="http://cdn.sportscity.com.ph/AdminLTE-2.4.3/plugins/input-mask/jquery.inputmask.js"></script>
 <script src="http://cdn.sportscity.com.ph/AdminLTE-2.4.3/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
 <script src="http://cdn.sportscity.com.ph/bs-tag-input/src/bootstrap-tagsinput.js"></script>
 <script src="http://cdn.sportscity.com.ph/AdminLTE-2.4.5/bower_components/select2/dist/js/select2.full.min.js"></script>
 <script src="{{ asset('js/manage/document.js') }}"></script>
-
 
 @stop

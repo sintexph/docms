@@ -1,7 +1,7 @@
 @sintexlayouttop
 
 @slot('page_title')
-DOCMS - @yield('title','Document Management System')
+DMS - @yield('title','Document Management System')
 @endslot
 
 @slot('header_tools')
@@ -15,7 +15,7 @@ DOCMS - @yield('title','Document Management System')
 
 <a href="/" class="navbar-brand">
     <img src="{{ asset('img/brand-icon.png') }}" class="brand-logo">
-    <b>DOC Management</b> System
+    <b>Document Management</b> System
 </a>
 
 @endslot

@@ -120,25 +120,27 @@ class DocumentHelper
 
         return $version;
     }
-    public static function save_reviewer(User $reviewer,DocumentVersion $version)
+    public static function save_reviewer(User $reviewer,DocumentVersion $version,$send_email=true)
     {
         $data=DocumentReviewer::create([
             'user_id'=>$reviewer->id,
             'version_id'=>$version->id,
         ]);
         
-        MailHelper::send_email_reviewer($data);
+        if($send_email==true)
+            MailHelper::send_email_reviewer($data);
 
         return $data;
     }
-    public static function save_approver(User $approver,DocumentVersion $version)
+    public static function save_approver(User $approver,DocumentVersion $version,$send_email=true)
     {
         $data=DocumentApprover::create([
             'user_id'=>$approver->id,
             'version_id'=>$version->id,
         ]);
         
-        MailHelper::send_email_approver($data);
+        if($send_email==true)
+            MailHelper::send_email_approver($data);
         
         return $data;
     }

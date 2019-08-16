@@ -3506,7 +3506,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      find: '',
+      filter: {
+        find: ''
+      },
       submitted: false,
       columns: [{
         label: '#',
@@ -3536,7 +3538,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     find_document: function find_document() {
-      this.$refs.datatables.custom_search("find", this.find);
+      this.$refs.datatables.reload();
     },
     "delete": function _delete(id) {
       var par = this;
@@ -8652,13 +8654,13 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.find,
-                    expression: "find"
+                    value: _vm.filter.find,
+                    expression: "filter.find"
                   }
                 ],
                 staticClass: "form-control",
                 attrs: { type: "text", placeholder: "Search" },
-                domProps: { value: _vm.find },
+                domProps: { value: _vm.filter.find },
                 on: {
                   keydown: function($event) {
                     if (
@@ -8673,7 +8675,7 @@ var render = function() {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.find = $event.target.value
+                    _vm.$set(_vm.filter, "find", $event.target.value)
                   }
                 }
               }),

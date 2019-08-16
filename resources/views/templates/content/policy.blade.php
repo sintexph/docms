@@ -9,7 +9,7 @@
     <!--Change fonts if the content is for download-->
     <style>
         body {
-            padding:10px;
+            padding: 10px;
             font-family: 'Arial';
             font-size: 17px;
         }
@@ -29,6 +29,7 @@
         .header {
             font-size: 15px;
         }
+
     </style>
     @endif
     <style>
@@ -124,8 +125,12 @@
             text-align: left;
         }
 
-        .ol-content .ordered-list {
-            padding-left: 10px;
+        table.ordered-list {
+            border-collapse: collapse;
+        }
+
+        table.ordered-list tr td.ol-content {
+            padding: 0px;
         }
 
     </style>
