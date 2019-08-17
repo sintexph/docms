@@ -58,6 +58,10 @@
                     if (parent.draft !== null)
                         link = '/manage/documents/save?draft=' + parent.draft.id;
 
+                    // By default set the send for approval and send for review to true when submitting the document
+                    parent.version.for_review = false;
+                    parent.version.for_approval = false;
+
                     axios.put(link, {
                         document: parent.document,
                         version: parent.version,

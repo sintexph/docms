@@ -468,9 +468,10 @@ class DocumentActionController extends Controller
                 # Remove first the current version
                 $document->current_version()->delete();
                 
-                # Get the nearest old version and update it as current version
-                $nearest_version=$document->versions()->orderBy('id','desc')->first();
+                # Get the nearest old version and update it as active and current version
+                $nearest_version=$document->active_version;
                 $nearest_version->active=true;
+                $nearest_version->current=true;
                 $nearest_version->save();
 
 

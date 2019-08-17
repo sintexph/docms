@@ -1,4 +1,4 @@
-@if($selected_version->active==false)
+@if($selected_version->current==false)
 <div class="clearfix alert-custom alert-custom-warning">You are <strong>viewing</strong> an old version of this document. <span class="pull-right">Click <a href="{{ route('manage.documents.view',$document->id) }}">here</a> to get to the latest version</span></div>
 @endif 
 <div class="nav-tabs-custom">

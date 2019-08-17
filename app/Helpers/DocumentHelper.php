@@ -87,8 +87,8 @@ class DocumentHelper
         # Auto version if the $version_number is empty
         if($version_number==null)
         {
-            # Get the current version of the document
-            $old_version=$doc->current_version;
+            # Get the active version of the document
+            $old_version=$doc->active_version;
 
             if($old_version==null)
                 $version->version='1'; # Set the version to one if no old version
@@ -100,9 +100,9 @@ class DocumentHelper
             $version->version=$version_number;
         }
 
-        # Get all the versions and reset the active to false since the newest version will be the active one
-        DocumentVersion::where('document_id','=',$doc->id)->where('active','=',true)->update([
-            'active'=>false,
+        # Get all the versions and reset the current to false since the newest version will be the current one
+        DocumentVersion::where('document_id','=',$doc->id)->where('current','=',true)->update([
+            'current'=>false,
         ]);
         
         $version->content=$content;
@@ -112,7 +112,8 @@ class DocumentHelper
         $version->expiry_date=$expiry_date;
         $version->for_approval=$for_approval;
         $version->for_review=$for_review;
-        $version->active=true;
+        $version->current=true;
+        $version->active=false;
         $version->save();
 
         DocumentActionHistoryHelper::new_version($version,$user);

@@ -191,32 +191,32 @@
             <tr>
                 <th class="fit">Effectivity Date</th>
                 <td>
-                    @if($current_version->effective_date!=null)
+                    @if($document_version->effective_date!=null)
                     <span>
-                        {{$current_version->effective_date_formatted}}
+                        {{$document_version->effective_date_formatted}}
                     </span>
                     @else
                     <span>---</span>
                     @endif
                 </td>
                 <th class="fit" colspan="3">Version</th>
-                <td>{{ $current_version->version }}</td>
+                <td>{{ $document_version->version }}</td>
             </tr>
             <tr>
                 <th class="fit">Prepared By</th>
                 <td>
 
-                    {{ $current_version->creator->name }}
+                    {{ $document_version->creator->name }}
                 </td>
                 <th class="fit" colspan="3">Revision Date</th>
-                <td>{{ $current_version->updated_at->format('F d, Y') }}</td>
+                <td>{{ $document_version->updated_at->format('F d, Y') }}</td>
             </tr>
             <tr>
                 <th class="fit">
                     <span>Reviewed By</span>
                 </th>
                 <td colspan="5">
-                    @foreach($current_version->reviewers as $reviewer)
+                    @foreach($document_version->reviewers as $reviewer)
                     <p>
                         {{ $reviewer->user->name }}
                         @if($reviewer->reviewed)
@@ -234,7 +234,7 @@
                     <span>Approver<small>(s)</small></span>
                 </th>
                 <td colspan="5">
-                    @foreach($current_version->approvers as $approver)
+                    @foreach($document_version->approvers as $approver)
                     <p>
                         {{ $approver->user->name }}
                         <span>&nbsp;</span>
@@ -254,7 +254,7 @@
 
 
     <br>
-    {!! $current_version->castedContent()->toString() !!}
+    {!! $document_version->castedContent()->toString() !!}
 </body>
 
 </html>

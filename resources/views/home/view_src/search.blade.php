@@ -30,7 +30,7 @@
                     <td>
                         <strong>
                             @if($document->access=="3")
-                            <a href="{{ route('home.view_document',$document->id) }}">
+                            <a href="{{ route('home.view_document',$document->active_version->id) }}">
                                 @if($document->obsolete==true)
                                 <strike>{{ $document->document_number }}</strike>
                                 @else
@@ -54,8 +54,8 @@
                         <span>{{ $document->title }}</span><br>
 
                     </td>
-                    <td>{{ $document->version }}</td>
-                    <td class="fit">{{ $document->current_version->effective_date_formatted }}</td>
+                    <td>{{ $document->active_version->version }}</td>
+                    <td class="fit">{{ $document->active_version->effective_date_formatted }}</td>
 
                 </tr>
 

@@ -167,7 +167,7 @@
             <h3 class="box-title">Document Preview</h3>
         </div>
         <div class="box-body">
-            <iframe src="{{ route('content.view',$document->id) }}" width="100%" height="600"></iframe>
+            <iframe src="{{ route('content.view',$current_version->id) }}" width="100%" height="600"></iframe>
         </div>
     </div>
     <div class="box box-solid">

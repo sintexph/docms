@@ -24,18 +24,20 @@
                     <select2 v-model="version.reviewers" style_name="width:100%" :multiple="true"
                         :options="reviewers_data">
                     </select2>
+                    <!--
                     <label class="control-label"><input type="checkbox" v-model="version.for_review"> Send for
                         reviewing
-                    </label>
+                    </label>-->
                 </div>
                 <div class="form-group" style="min-width: 150px;">
                     <label class="control-label">Approvers</label>
                     <select2 v-model="version.approvers" style_name="width:100%" :multiple="true"
                         :options="approvers_data">
                     </select2>
+                     <!--
                     <label class="control-label"><input type="checkbox" v-model="version.for_approval"> Send for
                         approval
-                    </label>
+                    </label>-->
                 </div>
             </div>
         </div>

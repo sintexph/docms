@@ -3,8 +3,10 @@
         <version-form :show_version="false" :data_required="false" v-model="version">
             <template slot="header">Edit version information</template>
         </version-form>
-        <button class="btn btn-sm btn-warning" @click="submit_only=true" type="submit">Save</button>
-        <button class="btn btn-sm btn-success" @click="submit_only=false" type="submit">Submit Document</button>
+        <button class="btn btn-sm btn-warning" @click="submit_only=true" type="submit"
+            title="Save the changes of the document, it will not send notification to the approver and reviewer of the document.">Save Only</button>
+        <button class="btn btn-sm btn-success" @click="submit_only=false" type="submit"
+            title="Submit the document which means it is ready to be reviewed and approved.">Submit Document</button>
     </form>
 </template>
 
@@ -50,6 +52,12 @@
                 let parent = this;
                 if (parent.submitted === false) {
                     parent.submitted = true;
+
+                    if (parent.submit_only === false) {
+                        parent.version.for_review = true;
+                        parent.version.for_approval = true;
+                    }
+
                     // Show wait modal
                     parent.show_wait("Please wait while the system is saving the document...");
                     axios.patch('/manage/documents/update_version/' + parent.version_id, {
@@ -125,7 +133,7 @@
 
                 par.idle = idleTimeout(par.auto_save, {
                     element: document,
-                    timeout: 60000,
+                    timeout: 60000*2,
                     loop: true
                 });
 

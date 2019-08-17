@@ -105,10 +105,10 @@
                         @foreach($document->related_documents as $related)
 
                         <tr>
-                            <td><a href="{{ route('home.view_document',$related->document->id) }}" target="_blank">{{
+                            <td><a href="{{ route('home.view_document',$related->active_version->document->id) }}" target="_blank">{{
                                     $related->document->document_number }}</a></td>
                             <td>{{ $related->document->title }}</td>
-                            <td><a href="{{ route('home.view_document',$related->document->id) }}" target="_blank">View
+                            <td><a href="{{ route('home.view_document',$related->active_version->document->id) }}" target="_blank">View
                                     Online</a></td>
                         </tr>
 

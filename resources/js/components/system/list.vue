@@ -6,7 +6,7 @@
                 <div class="form-group">
                     <label class="control-label">Find System</label>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" v-model="find" @keydown.enter="find_system">
+                        <input type="text" class="form-control" v-model="filters.find" @keydown.enter="find_system">
                         <span class="input-group-btn">
                             <button type="button" @click.prevent="find_system" class="btn btn-default btn-flat">
                                 <i class="fa fa-search" aria-hidden="true"></i>
@@ -39,7 +39,7 @@
 
             </div>
             <div class="box-body">
-                <datatable ref="datatables" :columns="columns" url="/systems/list"></datatable>
+                <datatable ref="datatables" :parameters="filters" :columns="columns" url="/systems/list"></datatable>
                 <create-system ref="createSystem" @created="$refs.datatables.reload()"></create-system>
                 <edit-system ref="editSystem" @updated="$refs.datatables.reload()"></edit-system>
 
@@ -51,7 +51,9 @@
     export default {
         data: function () {
             return {
-                find: '',
+                filters:{
+                    find:'',
+                },
                 submitted: false,
                 columns: [
 
@@ -137,7 +139,7 @@
         },
         methods: {
             find_system: function () {
-                this.$refs.datatables.custom_search('find', this.find);
+                this.$refs.datatables.reload();
             },
             archive: function (id) {
                 var par = this;

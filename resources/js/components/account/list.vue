@@ -6,7 +6,7 @@
                 <div class="form-group">
                     <label class="control-label">Find Account</label>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" v-model="find" @keydown.enter="find_account">
+                        <input type="text" class="form-control" v-model="filters.find" @keydown.enter="find_account">
                         <span class="input-group-btn">
                             <button type="button" @click.prevent="find_account" class="btn btn-default btn-flat">
                                 <i class="fa fa-search" aria-hidden="true"></i>
@@ -39,7 +39,7 @@
 
             </div>
             <div class="box-body">
-                <datatable ref="datatables" :columns="columns" url="/accounts/list"></datatable>
+                <datatable ref="datatables" :parameters="filters" :columns="columns" url="/accounts/list"></datatable>
                 <create-account ref="createAccount" @created="$refs.datatables.reload()"></create-account>
                 <edit-account ref="editAccount" @updated="$refs.datatables.reload()"></edit-account>
 
@@ -51,7 +51,9 @@
     export default {
         data: function () {
             return {
-                find: '',
+                filters:{
+                    find:'',
+                },
                 submitted: false,
                 columns: [
 
@@ -180,7 +182,7 @@
         },
         methods: {
             find_account: function () {
-                this.$refs.datatables.custom_search('find', this.find);
+                this.$refs.datatables.reload();
             },
             delete: function (id) {
                 var par = this;

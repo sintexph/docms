@@ -6,7 +6,7 @@
                 <div class="form-group">
                     <label class="control-label">Find Document</label>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" v-model="filter_find" @keydown.enter="find_document">
+                        <input type="text" class="form-control" v-model="filters.find" @keydown.enter="find_document">
                         <span class="input-group-btn">
                             <button type="button" @click.prevent="find_document" class="btn btn-default btn-flat"><i
                                     class="fa fa-search" aria-hidden="true"></i>
@@ -17,7 +17,7 @@
 
                 <div class="form-group">
                     <label class="control-label">State</label>
-                    <select class="form-control input-sm" v-model="filter_state">
+                    <select class="form-control input-sm" v-model="filters.state">
                         <option value="">-- Filter State --</option>
                         <option value="rv">Approved</option>
                         <option value="al">All</option>
@@ -30,7 +30,7 @@
                 <h3 class="box-title">Documents to be approved</h3>
             </div>
             <div class="box-body">
-                <datatable ref="datatables" :columns="columns" url="/for_approval/list"></datatable>
+                <datatable ref="datatables" :parameters="filters" :columns="columns" url="/for_approval/list"></datatable>
             </div>
         </div>
     </div>
@@ -39,8 +39,10 @@
     export default {
         data: function () {
             return {
-                filter_find: '',
-                filter_state: '',
+               filters:{
+                    find:'',
+                    state:'',
+                },
                 submitted: false,
                 columns: [
 
@@ -112,15 +114,14 @@
             }
         },
         watch: {
-            filter_state: function (val) {
-                this.$refs.datatables.custom_search('state', val);
+            filter_state: function () {
+              this.find_document();
 
             }
         },
         methods: {
             find_document: function () {
-                this.$refs.datatables.custom_search('find', this.filter_find);
-                this.$refs.datatables.custom_search('state', this.filter_state);
+                this.$refs.datatables.reload();
             },
             approve: function (id) {
                 var par = this;

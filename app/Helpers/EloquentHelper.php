@@ -21,7 +21,7 @@ class EloquentHelper
      */
     public static function document_public()
     {
-        return Document::whereHas('current_version',function($query){
+        return Document::whereHas('active_version',function($query){
             $query->where('approved','=',true)
             ->where('released','=',true)
             ->where('reviewed','=',true);

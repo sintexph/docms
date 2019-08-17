@@ -35,7 +35,7 @@
                 <li><a :href="'/content/download/version/'+selected_version.id">
                         <i class="fa fa-download" aria-hidden="true"></i>
                         <span>Download Document</span></a></li>
-                <li><a :href="'/home/view/'+document.id" target="_blank"><i class="fa fa-star"
+                <li><a :href="'/home/view/'+selected_version.id" target="_blank"><i class="fa fa-star"
                             aria-hidden="true"></i>
                         <span>View Online</span></a></li>
                 <li>

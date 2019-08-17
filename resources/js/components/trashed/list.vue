@@ -7,7 +7,7 @@
                         <label class="control-label">Search Document </label>
                         <div class="input-group input-group-sm">
                             <input type="text" placeholder="Search" class="form-control" @keydown.enter="filter_list"
-                                v-model="find">
+                                v-model="filters.find">
                             <span class="input-group-btn">
                                 <button type="button" class="btn" @click.prevent="filter_list">
                                     <i aria-hidden="true" class="fa fa-search"></i>
@@ -24,7 +24,7 @@
                 <h3 class="box-title text-red"><i class="fa fa-trash" aria-hidden="true"></i> Trashed Document List</h3>
             </div>
             <div class="box-body">
-                <datatable ref="datatables" :columns="columns" url="/trashed/list"></datatable>
+                <datatable ref="datatables" :parameters="filters" :columns="columns" url="/trashed/list"></datatable>
             </div>
         </div>
     </div>
@@ -41,7 +41,9 @@
         },
         data: function () {
             return {
-                find: '',
+                filters: {
+                    find: '',
+                },
                 columns: [{
                         label: '#',
                         name: 'id',
@@ -156,14 +158,11 @@
                     }
                 ],
                 system_data: [],
-                system_filters: [],
             }
         },
         methods: {
             filter_list: function () {
-                this.$refs.datatables.custom_search_multiple({
-                    find: this.find,
-                });
+                this.$refs.datatables.reload();
             },
             perment_delete: function (id) {
                 var par = this;

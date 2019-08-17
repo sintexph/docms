@@ -37,6 +37,15 @@ class VersionActionController extends Controller
         # Document must be approved and reviewed before releasing
         abort_if($document_version->approved==false || $document_version->reviewed==false,404,'Could not release the document since it was not reviewed/approved yet!');
 
+        $document=$document_version->document;
+
+        # Set all the other version to not active and not current version except to the version that will updated as released
+        DocumentVersion::where('document_id','=',$document->id)
+        ->where('id','<>',$document_version->id)->update([
+            'current'=>false,
+            'active'=>false,
+        ]);
+
         $document_version->released=true;
         $document_version->released_date=\Carbon\Carbon::now();
         $document_version->save();

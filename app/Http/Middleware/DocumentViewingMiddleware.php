@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Document;
+use App\DocumentVersion;
 use Auth;
 use App\Helpers\Access;
 
@@ -18,25 +18,24 @@ class DocumentViewingMiddleware
      */
     public function handle($request, Closure $next)
     {
-        # Get the document based on the id
-        $document=Document::find($request['id']);
-        abort_if($document==null,404);
-    
-        $user=auth()->user();
- 
-
-        # Get the current version of the document
-        $current_version=$document->current_version;
+        $document_version=DocumentVersion::find($request['id']);
+        abort_if($document_version==null,404);
         
+        # Get the document based document version
+        $document=$document_version->document;
+        abort_if($document==null,404);
+       
+        $user=auth()->user();
+
         if($user!=null)
         {
             # Approver and reviewer of the document version can view
-            if($current_version->reviewers()->where('user_id','=',$user->id)->exists()==true || $current_version->approvers()->where('user_id','=',$user->id)->exists()==true)
+            if($document_version->reviewers()->where('user_id','=',$user->id)->exists()==true || $document_version->approvers()->where('user_id','=',$user->id)->exists()==true)
                 return $next($request);
         }
         
         # Cannot view if not approved
-        if($current_version->released==false || $current_version->approved==false || $current_version->reviewed==false)
+        if($document_version->released==false || $document_version->approved==false || $document_version->reviewed==false)
             abort(403,'Document is not available for viewing.');
 
         # Cannot view based on the type of access of the document

@@ -10,6 +10,7 @@ use App\Section;
 use App\Helpers\EloquentHelper;
 use App\Helpers\SiteVisitHelper;
 use Cache;
+use App\DocumentVersion;
 
 class HomeController extends Controller
 {
@@ -61,6 +62,7 @@ class HomeController extends Controller
             $approved_documents=EloquentHelper::document_public()->paginate(5);
         }
 
+
         
         return view('home.index',[
             'systems'=>$systems,
@@ -81,29 +83,29 @@ class HomeController extends Controller
      */
     public function view_document($id)
     {
-        $document=Document::find($id);
-        abort_if($document==null,404);
+        $document_version=DocumentVersion::find($id);
+        abort_if($document_version==null,404);
+        $document=$document_version->document;
 
 
         $slug=str_replace("/","-",$document->url_title);
-        return redirect()->route('home.view_document.slug',[$document->id,$slug]);
+        return redirect()->route('home.view_document.slug',[$document_version->id,$slug]);
     }
     public function view_document_slug($id,$document_title)
     {
-        $document=Document::find($id);
-        abort_if($document==null,404);
-
+        $document_version=DocumentVersion::find($id);
+        abort_if($document_version==null,404);
+        $document=$document_version->document;
 
         $reference_documents=$document->reference_documents;
-        $current_version=$document->current_version;
-        
-        $current_version_revision=$current_version->revision;
+ 
+        $document_version_revision=$document_version->revision;
 
         return view('home.view_document',[
             'document'=>$document,
-            'current_version'=>$current_version,
+            'document_version'=>$document_version,
             'reference_documents'=>$reference_documents,
-            'current_version_revision'=>$current_version_revision,
+            'document_version_revision'=>$document_version_revision,
         ]);
     }
 }

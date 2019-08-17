@@ -60,7 +60,8 @@ Route::prefix('home')->name('home')->group(function(){
 
 Route::prefix('content')->name('content')->group(function(){
     
-    Route::get('view/{id}','DocumentContentController@view_content')->name('.view')->middleware('document-viewing');
+    Route::get('view/{id}','DocumentContentController@view_content')->name('.view')
+                                                                    ->middleware('document-viewing');
 
     // No permission yet
     Route::get('view/version/{id}','DocumentContentController@view_version_content')->name('.view.version');

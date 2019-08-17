@@ -26,7 +26,7 @@
                         <label class="control-label">Search Document</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-search" aria-hidden="true"></i></span>
-                            <input type="text" class="form-control" @keydown.enter="search" v-model="search_document">
+                            <input type="text" class="form-control" @keydown.enter="search" v-model="filters.find">
                             <div class="input-group-btn">
                                 <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"
                                     aria-expanded="false"> Filter
@@ -43,7 +43,7 @@
                         </div>
                     </div>
 
-                    <datatable :buttons="false" ref="datatables" :columns="columns" url="/util/find_documents"></datatable>
+                    <datatable :buttons="false" :parameters="filters" ref="datatables" :columns="columns" url="/util/find_documents"></datatable>
 
                 </div>
             </div>
@@ -56,7 +56,9 @@
     export default {
         data: function () {
             return {
-                search_document:'',
+                  filters:{
+                    find:'',
+                }, 
                 systems: [],
                 columns: [{
                     data: 'document_number',
@@ -83,7 +85,7 @@
         },
         methods: {
             search:function(){
-                this.$refs.datatables.custom_search("find",this.search_document);
+                this.$refs.datatables.reload();
 
             },
             get_systems: function () {

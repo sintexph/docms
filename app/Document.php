@@ -112,6 +112,10 @@ class Document extends Model
 
     public function current_version()
     {
+        return $this->hasOne('App\DocumentVersion','document_id')->where('current','=',true);
+    }
+    public function active_version()
+    {
         return $this->hasOne('App\DocumentVersion','document_id')->where('active','=',true);
     }
     public function versions()
@@ -120,8 +124,10 @@ class Document extends Model
     }
     public function old_versions()
     {
-        return $this->hasMany('App\DocumentVersion','document_id')->where('active','<>',true);
+        return $this->hasMany('App\DocumentVersion','document_id')->where('current','<>',true);
     }
+
+    
     public function reference_documents()
     {
         return $this->hasMany('App\ReferenceDocument','document_id');

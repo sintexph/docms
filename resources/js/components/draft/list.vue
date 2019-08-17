@@ -6,7 +6,7 @@
                     <div class="form-group"><label class="control-label">Search Draft </label>
                         <div class="input-group input-group-sm">
                             <input type="text" placeholder="Search" class="form-control" @keydown.enter="find_document"
-                                v-model="filter.find">
+                                v-model="filters.find">
                             <span class="input-group-btn">
                                 <button type="button" class="btn" @click.prevent="find_document"><i aria-hidden="true"
                                         class="fa fa-search"></i>
@@ -20,7 +20,7 @@
                 <h3 class="box-title">Draft List</h3>
             </div>
             <div class="box-body">
-                <datatable ref="datatables" :columns="columns" url="/drafts/list"></datatable>
+                <datatable ref="datatables" :parameters="filters" :columns="columns" url="/drafts/list"></datatable>
             </div>
         </div>
     </div>
@@ -37,7 +37,7 @@
         },
         data: function () {
             return {
-                filter:{
+                filters:{
                     find:'',
                 },
                 submitted:false,

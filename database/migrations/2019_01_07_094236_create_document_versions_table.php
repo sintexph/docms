@@ -31,8 +31,8 @@ class CreateDocumentVersionsTable extends Migration
             $table->boolean('released')->default(false);
             $table->timestamp('released_date');
 
-
-            $table->boolean('active')->comment('Active version or current version')->default(false);
+            $table->boolean('current')->comment('Current version')->default(false);
+            $table->boolean('active')->comment('Active version that will be viewed publicly')->default(false);
             
             
             $table->timestamps();

@@ -9,7 +9,7 @@
 @section('title',$document->title)
 
 
-@section('header_title',$document->title.' - Version: '.$document->version)
+@section('header_title',$document->title.' - Version: '.$document_version->version)
 @section('header_title_sm',$document->document_number)
 
 
@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="box-body">
-            <iframe src="{{ route('content.view',$document->id) }}" width="100%" height="600"></iframe>
+            <iframe src="{{ route('content.view',$document_version->id) }}" width="100%" height="600"></iframe>
             <br>
             <br>
             <table class="table table-striped table-bordered">
@@ -51,7 +51,7 @@
                     <tr>
                         <th><i class="fa fa-paperclip" aria-hidden="true"></i> Attachments</th>
                         <td>
-                            @foreach($current_version->attachments as $att)
+                            @foreach($document_version->attachments as $att)
                             <a href="{{ $att->upload->download_link }}"
                                 title="Download {{ $att->upload->file_name }} attachment">
                                 <i class="fa fa-download" aria-hidden="true"></i>
