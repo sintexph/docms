@@ -67,7 +67,7 @@
                         label: 'Name',
                         name: 'name',
                         data: 'name',
-                        className: 'nowrap',
+                        className: 'fit',
                     },
 
                     {
@@ -89,7 +89,7 @@
                         label: 'Email',
                         name: 'email',
                         data: 'email',
-                        className: 'nowrap',
+                        className: 'fit',
 
                     },
 
@@ -98,7 +98,7 @@
                         label: 'Administrator',
                         name: 'perm_administrator',
                         data: 'perm_administrator',
-                        className: 'nowrap',
+                        className: 'fit',
                         render: function (data) {
                             if (data === true)
                                 return 'YES';
@@ -114,7 +114,7 @@
                         label: 'Approver',
                         name: 'perm_approver',
                         data: 'perm_approver',
-                        className: 'nowrap',
+                        className: 'fit',
                         render: function (data) {
                             if (data === true)
                                 return 'YES';
@@ -128,7 +128,7 @@
                         label: 'Reviewer',
                         name: 'perm_reviewer',
                         data: 'perm_reviewer',
-                        className: 'nowrap',
+                        className: 'fit',
                         render: function (data) {
                             if (data === true)
                                 return 'YES';

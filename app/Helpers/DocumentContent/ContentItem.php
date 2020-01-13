@@ -17,7 +17,7 @@ class ContentItem {
         if ($name!=null)
             $this->name = $name;
         else
-            $this->name = 'Title should be here ....';
+            $this->name = '';
 
         if ($data != null) {
             $this->data = $data;

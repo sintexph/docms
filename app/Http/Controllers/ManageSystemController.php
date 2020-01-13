@@ -119,7 +119,7 @@ class ManageSystemController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            abort(442,$e->getMessage());
+            abort(422,$e->getMessage());
         }
     }
 
@@ -131,9 +131,23 @@ class ManageSystemController extends Controller
     {
         $system=System::find($id);
         abort_if($system==null,404,'System could not be found!');
-        $system->delete();
+        
+        try {
+            DB::beginTransaction();
 
-        return response()->json(['message'=>'System has been successfully put to archived!']);
+            $system->edited_by=auth()->user()->name;
+            $system->save();
+
+            $system->delete();
+
+            DB::commit();
+
+            return response()->json(['message'=>'System has been successfully put to archived!']);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            abort(422,$th->getMessage());
+        }
     }
 
     /**
@@ -144,9 +158,25 @@ class ManageSystemController extends Controller
     {
         $system=System::withTrashed()->where('id',$id);
         abort_if($system==null,404,'System could not be found!');
-        $system->restore();
 
-        return response()->json(['message'=>'System has been successfully restored!']);
+        try {
+            DB::beginTransaction();
+
+            $system->restore();
+            
+
+            $system=System::find($id);
+            $system->edited_by=auth()->user()->name;
+            $system->save();
+
+            DB::commit();
+
+            return response()->json(['message'=>'System has been successfully restored!']);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            abort(422,$th->getMessage());
+        }
     }
     /**
      * Permanently delete the data from the system

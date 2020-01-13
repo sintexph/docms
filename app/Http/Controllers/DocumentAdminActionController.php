@@ -44,7 +44,7 @@ class DocumentAdminActionController extends Controller
             
         } catch (\Exception $e) {
             DB::rollBack();
-            abort(442,$e->getMessage());
+            abort(422,$e->getMessage());
         }
 
 
@@ -72,7 +72,7 @@ class DocumentAdminActionController extends Controller
             
         } catch (\Exception $e) {
             DB::rollBack();
-            abort(442,$e->getMessage());
+            abort(422,$e->getMessage());
         }
     }
 
@@ -100,7 +100,7 @@ class DocumentAdminActionController extends Controller
             
         } catch (\Exception $e) {
             DB::rollBack();
-            abort(442,$e->getMessage());
+            abort(422,$e->getMessage());
         }
     }
 
@@ -146,7 +146,7 @@ class DocumentAdminActionController extends Controller
             
         } catch (\Exception $e) {
             DB::rollBack();
-            abort(442,$e->getMessage());
+            abort(422,$e->getMessage());
         }
 
     }
@@ -177,7 +177,7 @@ class DocumentAdminActionController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            abort(442,$e->getMessage());
+            abort(422,$e->getMessage());
         }
     }
 
@@ -206,7 +206,7 @@ class DocumentAdminActionController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            abort(442,$e->getMessage());
+            abort(422,$e->getMessage());
         }
     }
 }

@@ -43,7 +43,7 @@ class CommentController extends Controller
             
         } catch (\Throwable $th) {
             DB::rollBack();
-            abort(442,$th->getMessage());
+            abort(422,$th->getMessage());
         }
 
     }

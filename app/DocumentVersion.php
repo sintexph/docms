@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\DocumentContent\Util\Cast;
+use App\Helpers\State;
 
 class DocumentVersion extends Model
 {
@@ -25,6 +26,8 @@ class DocumentVersion extends Model
         'expiry_date',
         'for_approval',
         'for_review',
+        'state',
+        'creator_modified_at'
     ];
 
     
@@ -34,6 +37,7 @@ class DocumentVersion extends Model
         'effective_date',
         'expiry_date',
         'created_at',
+        'creator_modified_at',
     ];
 
     protected $casts=[
@@ -47,26 +51,31 @@ class DocumentVersion extends Model
         'for_approval'=>'boolean',
         'content'=>'array',
         'description'=>'array',
+        'state'=>'integer',
     ];
     
     protected $appends=[ 
         'effective_date_formatted',
         'expiry_date_formatted',
-        'description_of_changed'
+        'description_of_changed',
     ];
 
 
+    public function getStateAttribute($value)
+    {
+        return State::state($value);
+    }
 
     public function attachments()
     {
         return $this->hasMany('App\DocumentVersionAttachment','version_id');
     }
 
-
     public function castedContent()
     {
         return Cast::cast_to_content($this->content);
     }
+
     public function castedDescription()
     {
         return Cast::cast_to_content($this->description);
@@ -76,8 +85,7 @@ class DocumentVersion extends Model
     {
         return $this->castedDescription()->toString();
     }
-
-
+    
     public function getEffectiveDateFormattedAttribute()
     {
         $date=$this->effective_date;
@@ -86,6 +94,7 @@ class DocumentVersion extends Model
         else
         return $date->format('F d, Y');
     }
+
     public function getExpiryDateFormattedAttribute($val)
     {
         $date=$this->expiry_date;

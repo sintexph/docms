@@ -13,7 +13,6 @@
     export default {
         data: function () {
             return {
-                id: '',
                 content: new Content,
             }
         },

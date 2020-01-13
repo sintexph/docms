@@ -29,11 +29,15 @@ class CreateDocumentVersionsTable extends Migration
             $table->boolean('reviewed')->default(false);
             $table->boolean('approved')->default(false);
             $table->boolean('released')->default(false);
-            $table->timestamp('released_date');
+            $table->timestamp('released_date')->nullable();
+
+            $table->timestamp('creator_modified_at')->nullable()->comment('When the creator updated the version');
+
+            $table->integer('state')->default(1);
+
 
             $table->boolean('current')->comment('Current version')->default(false);
             $table->boolean('active')->comment('Active version that will be viewed publicly')->default(false);
-            
             
             $table->timestamps();
 

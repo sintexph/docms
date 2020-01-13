@@ -19,30 +19,8 @@
         data: function () {
             return {
                 submitted: false,
-                document: {
-                    number: '',
-                    title: '',
-                    section: '',
-                    system: '',
-                    category: '',
-                    keywords: '',
-                    comment: '',
-                    access_data: {
-                        access: '3',
-                        accessors: [],
-                    },
-                },
-                version: {
-                    number: '',
-                    content: new Content,
-                    description: new Content,
-                    for_review: false,
-                    for_approval: false,
-                    reviewers: [],
-                    approvers: [],
-                    effective_date: '',
-                    expiry_date: '',
-                },
+                document: new Document,
+                version:new DocumentVersion,
             }
         },
         methods: {
@@ -63,11 +41,15 @@
                     parent.version.for_approval = false;
 
                     axios.put(link, {
-                        document: parent.document,
-                        version: parent.version,
+                        document: parent.document.toObject(),
+                        version: parent.version.toObject(),
                     }).then(function (response) {
+                        parent.hide_wait();
                         parent.alert_success(response);
-                        window.location.replace(response.data.url);
+                        setTimeout(() => {
+                            window.location.replace(response.data.url);
+                        }, 1000);
+
                     }).catch(function (error) {
                         // Hide wait modal
                         parent.hide_wait();
@@ -89,12 +71,15 @@
                         link = '/manage/documents/update_draft/' + parent.draft.id;
 
                     axios.put(link, {
-                        document: parent.document,
-                        version: parent.version,
+                        document: parent.document.toObject(),
+                        version: parent.version.toObject(),
                     }).then(function (response) {
+                        parent.hide_wait();
                         parent.alert_success(response);
-                        //parent.submitted = false;parent.hide_wait();
-                        window.location.replace(response.data.url);
+                        setTimeout(() => {
+                            window.location.replace(response.data.url);
+                        }, 1000);
+
                     }).catch(function (error) {
                         // Hide wait modal
                         parent.hide_wait();

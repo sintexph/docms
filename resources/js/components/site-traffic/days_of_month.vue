@@ -24,7 +24,7 @@
                 });
 
                 // 50 percent of max value will be the step of the chart
-                step = Math.max(...data) * 0.2;
+                step = parseInt(Math.max(...data) * 0.2);
 
                 this.renderChart({
                     labels: labels,

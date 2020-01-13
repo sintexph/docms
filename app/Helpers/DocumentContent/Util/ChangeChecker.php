@@ -76,7 +76,6 @@ class ChangeChecker
             $temp=$new->rows[$i];
             for($j=0; $j < count($old->rows); $j++){
                 $temp2=$old->rows[$j];
-                //dump([$temp,$temp2]);
                 if(count(array_diff($temp,$temp2))==0)
                 {
                     $temp=null;

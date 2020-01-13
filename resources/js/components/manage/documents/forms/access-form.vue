@@ -2,12 +2,12 @@
     <div>
 
         <div class="form-group" style="min-width: 150px;">
-            <label class="control-label">Access</label>
+            <label class="control-label"><i class="fa fa-lock" aria-hidden="true"></i> Access</label>
             <select2 :options="access_options" style_name="width:100%;" placeholder="Please choose a access" :required="true"
                 v-model="access_data.access"></select2>
         </div>
         <div class="form-group" v-if="show_accessors">
-            <label class="control-label">Accessors</label>
+            <label class="control-label"><i class="fa fa-users" aria-hidden="true"></i> Accessors</label>
             <select2 v-model="access_data.accessors" style_name="width:100%;" :multiple="true" :required="true"
                 :options="users_options">
             </select2>

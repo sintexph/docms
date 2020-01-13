@@ -22,7 +22,7 @@ Vue.component('list-preview', require('./components/content-form/component_items
 
 
 // Modal Item Components
-Vue.component('phar', require('./components/content-form/sub-items/paragraph.vue').default);
+Vue.component('par', require('./components/content-form/sub-items/paragraph.vue').default);
 Vue.component('tbl', require('./components/content-form/sub-items/table.vue').default);
 Vue.component('list', require('./components/content-form/sub-items/list.vue').default);
 Vue.component('com-image', require('./components/content-form/sub-items/image.vue').default);

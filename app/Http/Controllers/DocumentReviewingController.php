@@ -4,12 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\DocumentReviewer;
-use App\User;
 use App\DocumentVersion;
-use App\Document;
-use Illuminate\Support\Facades\Input;
-use App\Helpers\MailHelper;
 use DB;
+use App\Helpers\DocumentVersionHelper;
 
 class DocumentReviewingController extends Controller
 {
@@ -84,7 +81,6 @@ class DocumentReviewingController extends Controller
      */
     public function review($id)
     {
-        
         $user=auth()->user();
         $for_review=DocumentReviewer::find($id);
         
@@ -93,12 +89,12 @@ class DocumentReviewingController extends Controller
         $document_version=$for_review->document_version;
 
         # Must be ready for review first
-        abort_if($document_version->for_review!=true,442,'Document version is not ready for reviewing!');      
+        abort_if($document_version->for_review!=true,422,'Document version is not ready for reviewing!');      
 
-        abort_if($for_review->reviewed==true,442,'Document version was been already reviewed.');
+        abort_if($for_review->reviewed==true,422,'Document version was been already reviewed.');
                 
         # Cannot update if the user is not the reviewer of the document version
-        abort_if($for_review->user_id!=$user->id,442,'You are not the reviewer of the document!');
+        abort_if($for_review->user_id!=$user->id,422,'You are not the reviewer of the document!');
 
         
         try {
@@ -106,28 +102,7 @@ class DocumentReviewingController extends Controller
 
             DB::beginTransaction();
 
-            $for_review->reviewed=true;
-            $for_review->reviewed_at=\Carbon\Carbon::now();
-            $for_review->save();
-
-            
-            $reviewed=$document_version->reviewers->where('reviewed','=','true')->count();
-            $total_reviewers=$document_version->reviewers->count();
-
-            if($reviewed==$total_reviewers)
-            {
-                # If all reviewers has been reviewed the document version, set it to reviewed
-                $document_version->reviewed=true;
-                $document_version->save();
-
-                
-                # Send email notification to the approvers
-                foreach ($document_version->approvers as $approver) {
-                    MailHelper::send_email_approver($approver);
-                }
-               
-
-            }
+            DocumentVersionHelper::review($for_review);
             
             DB::commit();
 
@@ -135,7 +110,7 @@ class DocumentReviewingController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            abort($e->getMessage(),442);
+            abort($e->getMessage(),422);
         }
 
         
@@ -146,24 +121,31 @@ class DocumentReviewingController extends Controller
      * View the document version to be reviewed
      * @param $id The database id of the document version reviewer
      */
-    public function view_document($id)
+    public function view_document(Request $request,$id)
     {
         $document_reviewer=DocumentReviewer::find($id);
-        abort_if($document_reviewer==null,404);
+        abort_if($document_reviewer==null,404,'This link is already expired, please check your inbox for the new email generated from the system.');
 
         $user=auth()->user();
         # Check if the user is the reviewer of the document version
         abort_if($document_reviewer==null,403,'You have no permission to access the page');
 
-        $current_version=$document_reviewer->document_version;
-        $document=$current_version->document;
-        $current_version_revision=$current_version->revision;
-        $reference_documents=$document->reference_documents;
+        if(!empty($request->ver))
+        {
+            $current_version=DocumentVersion::find($request->ver);
+            $document=$current_version->document;
+            $current_version_revision=$current_version->revision;
+        }else
+        {
+            $current_version=$document_reviewer->document_version;
+            $document=$current_version->document;
+            $current_version_revision=$current_version->revision;
+        }
+
 
         return view('manage.document.reviews.view_document',[
             'document'=>$document,
             'current_version'=>$current_version,
-            'reference_documents'=>$reference_documents,
             'current_version_revision'=>$current_version_revision,
             'document_reviewer'=>$document_reviewer,
         ]);

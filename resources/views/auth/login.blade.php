@@ -11,11 +11,7 @@
 @section('header_title','Document Management System')
 @section('header_title_sm','System Login')
 
-
-
-
 @section('content')
-
 
 <div class="box box-solid login-box">
 
@@ -61,4 +57,5 @@
     </div>
     @include('layouts.sessions')
 </div>
+
 @stop

@@ -18,11 +18,9 @@
 
 @if($document->obsolete==true)
 <div class="alert-custom alert-custom-warning">
-    <span>This document is obsolete.</span>
+    <span>The document that you are viewing is <strong>obsolete</strong>.</span>
 </div>
 @endif
-
-
 
 <div id="doc-app">
     <div class="box box-solid">
@@ -59,6 +57,21 @@
                             @endforeach
                         </td>
                     </tr>
+        
+                    <tr>
+                        <th><i class="fa fa-bookmark" aria-hidden="true"></i> References</th>
+                        <td>
+                            @foreach($document->references as $reference)
+                            <div>
+                                @if(filter_var($reference->reference, FILTER_VALIDATE_URL))
+                                    <a href="{{ $reference->reference }}">{{ $reference->reference }}</a>
+                                @else
+                                    {{ $reference->reference }}
+                                @endif
+                            </div>
+                            @endforeach
+                        </td>
+                    </tr>
 
                 </tbody>
             </table>
@@ -66,20 +79,7 @@
     </div>
 </div>
 
-<div class="box box-solid">
-    <div class=" box-header with-border">
-        <h3 class="box-title">Revision Logs</h3>
-    </div>
-    <div class="box-body">
-        <iframe src="/content/view/revision-logs/{{ $document->id }}" width="100%"></iframe>
-    </div>
-</div>
 @stop
-
-
-
-
-
 
 @section('bottom_script')
 <script src="http://cdn.sportscity.com.ph/pdfobject/pdfobject.min.js"></script>

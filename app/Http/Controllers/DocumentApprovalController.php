@@ -4,11 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\DocumentApprover;
-use App\User;
-use App\DocumentVersion;
-use App\Document;
-use Illuminate\Support\Facades\Input;
-use App\Helpers\MailHelper;
+use App\Helpers\DocumentVersionHelper;
 use DB;
 
 class DocumentApprovalController extends Controller
@@ -93,32 +89,18 @@ class DocumentApprovalController extends Controller
         $document_version=$for_approval->document_version;
         
         # Must be reviewed first and must be ready for approval
-        abort_if($document_version->for_approval!=true || $document_version->reviewed!=true,442,'Document version is not ready for approval!');      
+        abort_if($document_version->for_approval!=true || $document_version->reviewed!=true,422,'Document version is not ready for approval!');      
 
-        abort_if($for_approval->approved==true,442,'Document version was been already approved.');      
+        abort_if($for_approval->approved==true,422,'Document version was been already approved.');      
         # Cannot update if the user is not the approver of the document version
-        abort_if($for_approval->user_id!=$user->id,442,'You are not the approver of the document!');
+        abort_if($for_approval->user_id!=$user->id,422,'You are not the approver of the document!');
 
         try {
 
 
             DB::beginTransaction();
-            $for_approval->approved=true;
-            $for_approval->approved_at=\Carbon\Carbon::now();
-            $for_approval->save();
 
-            
-
-            $approved=$document_version->approvers->where('approved','=','true')->count();
-            $total_approvers=$document_version->approvers->count();
-
-            if($approved==$total_approvers)
-            {
-                $document_version->approved=true;
-                $document_version->save();
-
-                MailHelper::send_email_approved_creator($document_version);
-            }
+            DocumentVersionHelper::approve($for_approval);
 
             DB::commit();
 
@@ -126,7 +108,7 @@ class DocumentApprovalController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            abort($e->getMessage(),442);
+            abort($e->getMessage(),422);
         }
 
         
@@ -149,13 +131,13 @@ class DocumentApprovalController extends Controller
         $current_version=$document_approver->document_version;
         $document=$current_version->document;
         $current_version_revision=$current_version->revision;
-        $reference_documents=$document->reference_documents;
+        $references=$document->references;
 
 
         return view('manage.document.approvals.view_document',[
             'document'=>$document,
             'current_version'=>$current_version,
-            'reference_documents'=>$reference_documents,
+            'references'=>$references,
             'current_version_revision'=>$current_version_revision,
             'document_approver'=>$document_approver,
         ]);

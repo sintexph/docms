@@ -128,23 +128,9 @@ class Document extends Model
     }
 
     
-    public function reference_documents()
+    public function references()
     {
-        return $this->hasMany('App\ReferenceDocument','document_id');
+        return $this->hasMany('App\Reference','document_id');
     }
-
-    /**
-     * Function to check if the document is already added to its references
-     * @param $document The document to be checked
-     * @return Boolean
-     */
-    public function reference_exists(Document $document)
-    {
-        return $this->reference_documents->where('reference_document_id','=',$document->id)->count() > 0;
-    }
-
-    public function related_documents()
-    {
-        return $this->hasMany('App\ReferenceDocument','reference_document_id');
-    }
+ 
 }

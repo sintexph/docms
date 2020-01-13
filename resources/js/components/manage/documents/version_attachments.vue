@@ -68,7 +68,9 @@
                 if (r == true) {
                     axios.delete('/manage/documents/file/remove/' + id).then(function (response) {
                         par.alert_success(response);
-                        location.reload();
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
                     }).catch(function (error) {
                         par.submitted = false;
                         par.alert_failed(error);
@@ -77,7 +79,7 @@
             }
 
         },
-        
+
     }
 
 </script>

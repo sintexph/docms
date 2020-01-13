@@ -87,42 +87,9 @@
 
 
         @if($left_area_tab!='ev')
-        <document-version-action :document="{{ json_encode($document) }}" :selected_version="{{ json_encode($selected_version) }}"></document-version-action>
+            <document-version-action :document="{{ json_encode($document) }}" :selected_version="{{ json_encode($selected_version) }}"></document-version-action>
         @endif
-
-        @if(count($document->related_documents)!=0)
-        <div class="box box-solid">
-            <div class=" box-header">
-                <h3 class="box-title">Related Document(s)</h3>
-            </div>
-            <div class="box-body home-box-maxh table-responsive">
-
-                <table class="table table-hover table-striped">
-
-
-                    <tbody>
-
-                        @foreach($document->related_documents as $related)
-
-                        <tr>
-                            <td><a href="{{ route('home.view_document',$related->active_version->document->id) }}" target="_blank">{{
-                                    $related->document->document_number }}</a></td>
-                            <td>{{ $related->document->title }}</td>
-                            <td><a href="{{ route('home.view_document',$related->active_version->document->id) }}" target="_blank">View
-                                    Online</a></td>
-                        </tr>
-
-
-                        @endforeach
-
-
-                    </tbody>
-                </table>
-
-
-            </div>
-        </div>
-        @endif
+ 
 
     </div>
 </div>

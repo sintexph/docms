@@ -19,6 +19,10 @@ from './Datum.js';
 
 // Content types import
 import {
+    TableCell
+} from "./ContentType/TableCell";
+
+import {
     Table
 }
 from './ContentType/Table.js';
@@ -55,6 +59,5 @@ window.OrderedList = OrderedList;
 window.ListItem = ListItem;
 window.Image = Image;
 window.Datum = Datum;
-
-
+window.TableCell = TableCell;
 

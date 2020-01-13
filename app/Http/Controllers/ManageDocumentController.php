@@ -41,6 +41,55 @@ class ManageDocumentController extends Controller
      */
     public function list(Request $request)
     {
+        $documents=$this->source($request);
+        return datatables($documents)->rawColumns(['archived','obsolete','access_icon'])->toJson();
+    }
+
+    public function download(Request $request)
+    {
+        // output headers so that the file is downloaded rather than displayed
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename=documents'.now()->format("Ymdh").'.csv');
+
+        // create a file pointer connected to the output stream
+        $output = fopen('php://output', 'w');
+        fputcsv($output,[
+            "#",
+            "TITLE",
+            "STATE",
+            "DOCUMENT NO.",
+            "VERSION",
+            "SYSTEM",
+            "SECTION",
+            "CATEGORY",
+            "ACCESS",
+            "CREATED BY",
+            "CREATED AT",
+        ]);
+
+        $documents=$this->source($request)->get();
+        foreach ($documents as $document) {
+            fputcsv($output,[
+                $document->id,
+                $document->title,
+                $document->current_version->state,
+                $document->document_number,
+                $document->version,
+                $document->system!=null?$document->system->name:$document->system_code,
+                $document->section!=null?$document->section->name:$document->section_code,
+                $document->category!=null?$document->category->name:$document->category_code,
+                $document->access_type,
+                $document->creator->name,
+                $document->created_at,
+            ]);
+        }
+    }
+
+    /**
+     * Source
+     */
+    private function source(Request $request)
+    {
         $user=Auth::user();
         $find=$request['find'];
         $state=$request['state'];
@@ -66,12 +115,14 @@ class ManageDocumentController extends Controller
             'documents.updated_at',
             'documents.archived',
             'documents.obsolete',
+            'documents.access',
         ]);
 
         $documents->with(['creator'=>function($query){
             $query->select(['id','name']);
         }]);
         $documents->with('section')
+        ->with('current_version')
         ->with('system')
         ->with('category');
 
@@ -79,15 +130,25 @@ class ManageDocumentController extends Controller
         if(!empty($state))
         {
             switch ($state) {
+
                 case 'archived':
                     $documents->where('archived','=',true);
-                    break;
+                break;
+
                 case 'obsolete':
                     $documents->where('archived','<>',true)->where('obsolete','=',true);
-                    break;
+                break;
+
                 case 'active':
                     $documents->where('archived','<>',true)->where('obsolete','<>',true);
-                    break;
+                break;
+
+                default:
+                    $documents->whereHas('current_version',function($version)use($state){
+                        $version->where('state',$state);
+                    });
+                break;
+                
             }
         }
 
@@ -107,9 +168,9 @@ class ManageDocumentController extends Controller
             });
         }
 
-
-        return datatables($documents)->rawColumns(['archived','obsolete'])->toJson();
+        return $documents;
     }
+    
     
     public function view($id)
     {
@@ -154,7 +215,7 @@ class ManageDocumentController extends Controller
 
         
         $old_versions=$document->versions()->where('id','<>',$selected_version->id)->get();
-        $reference_documents=$document->reference_documents()->with('referred_document')->get();
+        $references=$document->references;
         $attachments=$selected_version->attachments()->with('upload')->get();
         $document_action_histories=$document->action_histories()->orderBy('created_at','desc')->orderBy('id','desc')->paginate(10);
         
@@ -168,7 +229,7 @@ class ManageDocumentController extends Controller
             'old_versions'=>$old_versions,
             'current_view'=>$current_view,
             'left_area_tab'=>$left_area_tab,
-            'reference_documents'=>$reference_documents,
+            'references'=>$references,
             'attachments'=>$attachments,
             'document_action_histories'=>$document_action_histories,
         ]);

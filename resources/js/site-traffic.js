@@ -1,5 +1,5 @@
 import "@sintexph/vue-lib"
-Vue.mixin(httpAlert);
+Vue.mixin(toastHelper);Vue.mixin(httpAlert);
 
 Vue.component('site-traffic', require('./components/site-traffic/index.vue').default);
 

@@ -1,26 +1,14 @@
 <template>
     <div class="content-items">
-        <div class="form-group">
-            <a href="#" class="btn btn-xs btn-default" title="Add table" @click.prevent="$refs.table.show()">
-                <i class="fa fa-table" aria-hidden="true"></i>
-            </a>
-            <a href="#" class="btn btn-xs btn-default" title="Add list" @click.prevent="add_item_list">
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-            <a href="#" class="btn btn-xs btn-default" title="Add paragraph" @click.prevent="$refs.phar.show()">
-                <i class="fa fa-file-o" aria-hidden="true"></i>
-            </a>
-            <a href="#" class="btn btn-xs btn-default" title="Add image" @click.prevent="$refs.image.show()">
-                <i class="fa fa-picture-o" aria-hidden="true"></i>
-            </a>
-        </div>
+
         <draggable v-model="data" :group="'content-items'+_uid" @start="drag=true" @end="drag=false"
             handle=".citem-drag">
             <div class="item" v-for="(value,key) in data" :key="key">
                 <datum @edit="edit_item" :id="key" @removed="remove_item" v-model="data[key]"></datum>
             </div>
         </draggable>
-        <phar @saved="add_item" @updated="updated_item" ref="phar"></phar>
+
+        <par @saved="add_item" @updated="updated_item" ref="par"></par>
         <tbl @saved="add_item" ref="table" @updated="updated_item"></tbl>
         <com-image @saved="add_item" @updated="updated_item" ref="image"></com-image>
     </div>
@@ -35,9 +23,20 @@
             'datum': datumTemplate,
         },
         methods: {
-            add_item_list: function () {
+            show_add_paragraph() {
+                this.$refs.par.show()
+            },
+            show_add_image() {
+                this.$refs.image.show()
+            },
+            show_add_table() {
+                this.$refs.table.show()
+            },
+            show_add_item_list: function () {
                 this.data.push(new OrderedList);
             },
+
+
             add_item: function (item) {
                 this.data.push(item);
             },
@@ -54,7 +53,7 @@
                         this.$refs.table.edit(value, key);
                         break;
                     case 'paragraph':
-                        this.$refs.phar.edit(value, key);
+                        this.$refs.par.edit(value, key);
                         break;
                     case 'image':
                         this.$refs.image.edit(value, key);

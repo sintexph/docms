@@ -1,5 +1,7 @@
 <template>
     <div>
+
+         
         <div class="box box-solid">
             <div class="box-header">
                 <h3 class="box-title">
@@ -8,11 +10,11 @@
             </div>
             <div class="box-body">
                 <div class="form-group" v-if="show_version===true">
-                    <label class="control-label">Version</label>
+                    <label class="control-label">Version <span class="text-red">*</span></label>
                     <input type="number" class="form-control" v-model="version.number" required>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Effective Date</label>
+                    <label class="control-label">Effective Date <span class="text-red">*</span></label>
                     <date-mask :required="true" v-model="version.effective_date"></date-mask>
                 </div>
                 <div class="form-group">
@@ -24,20 +26,12 @@
                     <select2 v-model="version.reviewers" style_name="width:100%" :multiple="true"
                         :options="reviewers_data">
                     </select2>
-                    <!--
-                    <label class="control-label"><input type="checkbox" v-model="version.for_review"> Send for
-                        reviewing
-                    </label>-->
                 </div>
                 <div class="form-group" style="min-width: 150px;">
                     <label class="control-label">Approvers</label>
                     <select2 v-model="version.approvers" style_name="width:100%" :multiple="true"
                         :options="approvers_data">
                     </select2>
-                     <!--
-                    <label class="control-label"><input type="checkbox" v-model="version.for_approval"> Send for
-                        approval
-                    </label>-->
                 </div>
             </div>
         </div>
@@ -45,10 +39,14 @@
         <main-item v-model="version.description"></main-item>
         <label class="text-uppercase">Content</label>
         <main-item v-model="version.content"></main-item>
+
     </div>
 </template>
 <script>
+
+
     export default {
+      
         props: {
             value: {
                 type: [Object, Array],
@@ -73,17 +71,7 @@
                 read_file_word: false,
                 file_converting: false,
                 test: null,
-                version: {
-                    number: '',
-                    content: new Content,
-                    description: new Content,
-                    for_review: false,
-                    for_approval: false,
-                    reviewers: [],
-                    approvers: [],
-                    effective_date: '',
-                    expiry_date: '',
-                },
+                version: new DocumentVersion,
                 reviewers_data: [],
                 approvers_data: [],
             }

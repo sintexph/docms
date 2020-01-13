@@ -39,9 +39,9 @@
     export default {
         data: function () {
             return {
-                filters:{
-                    find:'',
-                    state:'',
+                filters: {
+                    find: '',
+                    state: '',
                 },
                 submitted: false,
                 columns: [{
@@ -53,7 +53,7 @@
                         label: 'Title',
                         name: 'title',
                         data: 'title',
-                        className: 'nowrap',
+                        className: 'fit',
                         render: function (data) {
                             return `<strong>` + data + `</strong>`;
                         }
@@ -87,7 +87,7 @@
                         label: 'Actions',
                         name: 'id',
                         data: 'id',
-                        className: 'nowrap',
+                        className: 'fit',
                         export: false,
                         render: function (data, meta, row) {
 
@@ -128,10 +128,11 @@
                         par.show_wait("Please wait while the system is updating the document...");
 
                         axios.patch('/for_review/review/' + id).then(function (response) {
-                            par.alert_success(response);
-                            par.submitted = false;
                             // Hide wait modal
                             par.hide_wait();
+                            par.alert_success(response);
+                            par.submitted = false;
+
 
                             par.$refs.datatables.reload();
 

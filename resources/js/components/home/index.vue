@@ -66,7 +66,7 @@
                     export: true,
                     sortable: false,
                     searchable: false,
-                    className: 'nowrap',
+                    className: 'fit',
                 },
                 {
                     data: 'title',
@@ -74,7 +74,7 @@
                     export: true,
                     sortable: false,
                     searchable: false,
-                    className: 'nowrap',
+                    className: 'fit',
                     render:function(data){
                         return `<a href="#"><strong>`+data+`</strong></a>`;
                     }

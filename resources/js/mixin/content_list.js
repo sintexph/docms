@@ -56,7 +56,7 @@ export default {
             datum.type = data.type;
             datum.meta = data.meta;
             datum.hidden = data.hidden;
-            
+
             return datum;
         },
         cast_to_list: function (data) {
@@ -64,22 +64,27 @@ export default {
 
             var list = new OrderedList();
             list.has_parent = data.has_parent;
-            list.meta=data.meta;
+            list.meta = data.meta;
 
             data.list_items.forEach(function (list_item) {
 
                 var temp_list_item = new ListItem();
+                temp_list_item.data = vm.cast_to_datum(list_item.data);
+
+                /*
                 switch (list_item.data.type) {
                     case 'table':
-                        temp_list_item.data = vm.cast_to_table(list_item.data);
+                        temp_list_item.data = vm.cast_to_datum(list_item.data);
                         break;
                     case 'paragraph':
-                        temp_list_item.data = vm.cast_to_paragraph(list_item.data);
+                        temp_list_item.data = vm.cast_to_datum(list_item.data);
                         break;
                     case 'image':
-                        temp_list_item.data = vm.cast_to_image(list_item.data);
+                        console.log(list_item.data);
+                        temp_list_item.data = vm.cast_to_datum(list_item.data);
                         break;
                 }
+                */
 
                 temp_list_item.is_list = list_item.is_list;
 
@@ -89,8 +94,8 @@ export default {
                 var temp_list = list_item.ordered_list;
 
                 temp_list.forEach(function (li) {
-                    temp_list_item.addOrderedList(vm.cast_to_datum(li));
-                    //temp_list_item.addOrderedList(vm.cast_to_list(li));
+                    //temp_list_item.addOrderedList(vm.cast_to_datum(li));
+                    temp_list_item.addOrderedList(vm.cast_to_list(li));
                 });
 
                 list.addListItem(temp_list_item);
@@ -100,10 +105,27 @@ export default {
             return list;
         },
         cast_to_table: function (data) {
-            var temp = new Table;
-            temp.header = data.header;
-            temp.rows = data.rows;
-            return temp;
+            var vm = this;
+
+
+            var rows = [];
+            var header = [];
+
+            data.rows.forEach(element => {
+                var row = [];
+                element.forEach(cell => {
+                    row.push(vm.cast_to_cell(cell));
+                });
+                rows.push(row);
+            });
+
+            data.header.forEach(element => {
+
+                header.push(vm.cast_to_cell(element));
+            });
+
+
+            return new Table(header, rows);
         },
         cast_to_paragraph: function (data) {
             var temp = new Paragraph;
@@ -114,6 +136,9 @@ export default {
             var temp = new Image;
             temp.upload_id = data.upload_id;
             return temp;
+        },
+        cast_to_cell: function (data) {
+            return new TableCell(data.value, data.fit);
         }
     }
 }

@@ -10,6 +10,7 @@
         body { 
             font-family: 'Arial'; 
             font-size:12px;
+            margin:0px;
         }
         .table,
         .table td,

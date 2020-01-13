@@ -15,7 +15,7 @@
                 version: {
                     number: '',
                     content: new Content,
-                    description:new Content,
+                    description: new Content,
                     for_review: false,
                     for_approval: false,
                     reviewers: [],
@@ -40,9 +40,11 @@
                     axios.patch('/manage/documents/new_version/' + parent.document_id, {
                         version: this.version
                     }).then(function (response) {
+                        parent.hide_wait();
                         parent.alert_success(response);
-                        window.location.replace('/manage/documents/view/' + parent.document_id);
-                        //alert('test');
+                        setTimeout(() => {
+                            window.location.replace('/manage/documents/view/' + parent.document_id);
+                        }, 1000);
 
                     }).catch(function (error) {
 
@@ -58,8 +60,7 @@
         },
         mounted() {
             this.$nextTick(function () {
-               
-                this.version.content =  this.cast_to_content(this.current_version_content);
+                this.version.content = this.cast_to_content(this.current_version_content);
             });
         }
     }

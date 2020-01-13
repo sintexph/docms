@@ -20,17 +20,37 @@
 <div id="app-document">
     @if($document->obsolete==true)
     <div class="alert-custom alert-custom-warning">
-        <span>This document is obsolete.</span>
+        <span>The document that you are viewing is <strong>obsolete</strong>.</span>
     </div>
     @endif
 
+
+    @if($document_reviewer->document_version->id!=$current_version->id)
+    <div class="clearfix alert-custom alert-custom-warning">You are <strong>viewing</strong> the other version of this
+        document. <span class="pull-right">Click <a
+                href="{{ route('for_review.view',$document_reviewer->id) }}">here</a> to get to the latest
+            version</span></div>
+    @endif
     <div class="box box-solid">
         <div class="box-header">
             <h3 class="box-title">Document Information</h3>
+            <div class="pull-right">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown"
+                        aria-expanded="false">
+                        Selected Version {{ $current_version->version }} <i class="fa fa-caret-down"
+                            aria-hidden="true"></i>
+                    </button>
+                    <ul class="dropdown-menu pull-right" role="menu">
+                        @foreach($document->versions as $version_menu)
+                        <li class="{{ $current_version->id==$version_menu->id?'active':'' }}"><a
+                                href="?ver={{ $version_menu->id }}">Version {{ $version_menu->version }}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class="box-body no-padding">
-
-
             <table class="table table-hover table-bordered">
                 <tbody>
 
@@ -110,7 +130,7 @@
                         <th>Prepared By</th>
                         <td colspan="5">
                             <u>{{ $current_version->creator->name }}</u>&nbsp;<a title="Reviewed" class="text-green">-
-                                <small>{{ $current_version->updated_at }}</small></a>
+                                <small>{{ $current_version->creator_modified_at }}</small></a>
                             <br>
                             {{ $current_version->creator->position }}
                         </td>
@@ -152,17 +172,11 @@
                         </td>
                     </tr>
 
-                    <tr>
-                        <td>Revision Logs</td>
-                        <td colspan="5">
-                            <a data-toggle="modal" href='#modal-revision'>View Revision Logs</a>
-                        </td>
-                    </tr>
 
                 </tbody>
             </table>
         </div>
-        @if($document_reviewer->reviewed==false)
+        @if($document_reviewer->reviewed==false && $document_reviewer->document_version->id==$current_version->id)
         <div class="box-footer clearfix">
             <button-review class="pull-right" version_reviewer_id="{{ $document_reviewer->id }}"></button-review>
         </div>
@@ -178,6 +192,8 @@
             <div class="pull-right">
                 <a class="btn btn-xs btn-default" href="{{ route('content.download.version',$current_version->id) }}"><i
                         class="fa fa-download" aria-hidden="true"></i> Download</a>
+
+
             </div>
         </div>
         <div class="box-body">
@@ -209,27 +225,6 @@
         </div>
         <div class="box-body">
             <comments version_id="{{ $current_version->id }}"></comments>
-        </div>
-    </div>
-
-
-
-
-
-    <div class="modal fade" id="modal-revision">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Revision Logs</h4>
-                </div>
-                <div class="modal-body">
-                    <iframe src="/content/view/revision-logs/{{ $document->id }}" height="700" width="100%"></iframe>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
         </div>
     </div>
 

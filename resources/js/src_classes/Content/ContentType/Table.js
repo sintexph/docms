@@ -3,6 +3,7 @@ import {
 }
 from '../Datum.js';
 
+
 export class Table extends Datum {
     constructor(header, rows) {
         super();
@@ -13,14 +14,16 @@ export class Table extends Datum {
             this._header = header;
         else
             // invokes the setter
-            this._header = ['', '', ''];
+            this._header = [new TableCell, new TableCell, new TableCell];
 
         if (rows !== undefined)
             this._rows = rows;
         else
             // invokes the setter
             this._rows = [
-                ['', '', ''],
+                [new TableCell, new TableCell, new TableCell],
+                [new TableCell, new TableCell, new TableCell],
+                [new TableCell, new TableCell, new TableCell],
             ];
     }
     get header() {
@@ -39,15 +42,18 @@ export class Table extends Datum {
 
 
     addHeader(header) {
+
         var par = this;
         if (header === undefined) {
-            this._header.push(header);
+            this._header.push(new TableCell);
+
         } else {
-            this._header.push('');
+            this._header.push(header);
         }
+
         // Insert new cell in row
         this._rows.forEach(function (row, key) {
-            par._rows[key].push('');
+            par._rows[key].push(new TableCell);
         });
 
     }
@@ -66,14 +72,14 @@ export class Table extends Datum {
     }
 
     addRow(row) {
-        if (row === undefined) {
+        if (row !== undefined) {
             this._rows.push(row);
         } else {
-            var row = [];
+            var rw = [];
             this._header.forEach(function () {
-                row.push('');
+                rw.push(new TableCell);
             });
-            this._rows.push(row);
+            this._rows.push(rw);
         }
     }
     removeRow(element) {
@@ -86,11 +92,11 @@ export class Table extends Datum {
     }
 
     init() {
-        this._header = ['', '', ''];
+        this._header = [new TableCell, new TableCell, new TableCell];
         this._rows = [
-            ['', '', ''],
-            ['', '', ''],
-            ['', '', ''],
+            [new TableCell, new TableCell, new TableCell],
+            [new TableCell, new TableCell, new TableCell],
+            [new TableCell, new TableCell, new TableCell],
         ];
 
     }
@@ -101,7 +107,10 @@ export class Table extends Datum {
         var display = '<thead>';
         display += '<tr>';
         this._header.forEach(function (head) {
-            display += '<th>' + head + '</th>';
+            if (head.fit === true)
+                display += '<th style="white-space: nowrap; width: 1%;">' + head.value + '</th>';
+            else
+                display += '<th>' + head.value + '</th>';
         });
         display += '</tr>';
         display += '</thead>';
@@ -112,7 +121,10 @@ export class Table extends Datum {
         this._rows.forEach(function (cells) {
             display += '<tr>';
             cells.forEach(function (cell) {
-                display += '<td>' + cell + '</td>';
+                if (cell.fit === true)
+                    display += '<td style="white-space: nowrap; width: 1%;">' + cell.value + '</td>';
+                else
+                    display += '<td>' + cell.value + '</td>';
             });
             display += '</tr>';
         });

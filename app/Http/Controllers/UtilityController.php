@@ -3,9 +3,38 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Helpers\DocumentHelper;
 
 class UtilityController extends Controller
 {
+
+
+    /**
+     * CHECK IF SERIAL IS EXISTS ALREADY
+     * @param $request->document_id EXEMPTION DURING CHECKING
+     */
+    public function serial_exits(Request $request)
+    {
+        $this->validate($request,[
+            'category_code'=>'required',
+            'serial'=>'required',
+            'document_id'=>'required',
+        ]);
+
+        $document=\App\Document::find($request->document_id);
+        $category=\App\Category::where('code',$request->category_code)->first();
+
+        if(DocumentHelper::check_serial_exists($category,$request->serial))
+        {
+            return response()->json([
+                'errors'=>[
+                    'serial'=>['Serial has been used already on the selected category!']
+                ]
+            ],422);
+        }
+        return "";
+    }
+
     /**
      * List of all systems with corresponding codes
      * @return JSON list of systems
@@ -84,14 +113,7 @@ class UtilityController extends Controller
 
         return datatables($documents)->toJson();
     }
-    public function recent_published_documents(Request $request)
-    {
-
-    }
-
-
-
-    
+  
     /**
      * Get all the reviewers on the system
      */
@@ -130,7 +152,27 @@ class UtilityController extends Controller
 
         return json_encode($users);
     }
+    public function users_select2(Request $request)
+    {
+        $term=$request->term;
 
+        $users=\App\User::select([
+            'name as text',
+            'id',
+        ]);
+        
+        if(!empty($term))
+        {
+            $users->where(function($condition)use($term){
+                $condition->orWhere('name','like','%'.$term.'%');
+            });
+        }
+
+
+        return json_encode([
+            'results'=>$users->get(),
+        ]);
+    }
     /**
      * Convert docx to html for document content
      */

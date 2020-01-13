@@ -147,7 +147,7 @@
                 <th>Prepared By</th>
                 <td colspan="5">
                     <u>{{ $current_version->creator->name }}</u>&nbsp;<a title="Reviewed" class="text-green">-
-                        <small>{{ $current_version->updated_at }}</small></a>
+                        <small>{{ $current_version->creator_modified_at }}</small></a>
                     <br>
                     {{ $current_version->creator->position }}
                 </td>

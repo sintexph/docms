@@ -48,7 +48,7 @@
                         label: '#',
                         name: 'id',
                         data: 'id',
-                        className: "nowrap",
+                        className: 'fit',
                         render: function (data, meta, row) {
                             var ic =
                                 `<a href="#" class="text-green" title="Active"><i class="fa fa-file" aria-hidden="true"></i></a>`;
@@ -65,7 +65,7 @@
                         label: 'Title',
                         name: 'title',
                         data: 'title',
-                        className: "nowrap",
+                        className: 'fit',
                         render: function (data, meta, row) {
                             var text = '';
                             if (row.archived === true)
@@ -83,19 +83,19 @@
                         label: 'Document No.',
                         name: 'document_number',
                         data: 'document_number',
-                        className: "nowrap"
+                        className: 'fit'
                     },
                     {
                         label: 'Version',
                         name: 'version',
                         data: 'version',
-                        className: "nowrap"
+                        className: 'fit'
                     },
                     {
                         label: 'System',
                         name: 'system_code',
                         data: 'system_code',
-                        className: 'nowrap',
+                        className: 'fit',
                         render: function (data, meta, row) {
                             if (row.system !== null)
                                 return row.system.name;
@@ -107,7 +107,7 @@
                         label: 'Section',
                         name: 'section_code',
                         data: 'section_code',
-                        className: "nowrap",
+                        className: 'fit',
                         render: function (data, meta, row) {
                             if (row.section !== null)
                                 return row.section.name;
@@ -119,7 +119,7 @@
                         label: 'Category',
                         name: 'category_code',
                         data: 'category_code',
-                        className: "nowrap",
+                        className: 'fit',
                         render: function (data, meta, row) {
                             if (row.category !== null)
                                 return row.category.name;
@@ -131,7 +131,7 @@
                         label: 'Create By',
                         name: 'created_by',
                         data: 'creator',
-                        className: "nowrap",
+                        className: 'fit',
                         render: function (data) {
                             return data.name;
                         }
@@ -140,13 +140,13 @@
                         label: 'Created At',
                         name: 'created_at',
                         data: 'created_at',
-                        className: "nowrap",
+                        className: 'fit',
                     },
                     {
                         label: 'Action',
                         name: 'id',
                         data: 'id',
-                        className: "nowrap",
+                        className: 'fit',
                         export: false,
                         render: function (data) {
                             var permanent = `<a href="#" data-id="` + data +

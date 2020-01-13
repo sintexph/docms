@@ -2,14 +2,14 @@
     <div>
         <div class="box box-solid">
             <div class=" box-header with-border">
-                <h3 class="box-title">Reference Documents</h3>
+                <h3 class="box-title">References</h3>
             </div>
             <div class="box-body table-responsive">
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>Document</th>
-                            <th>State</th>
+                            <th>Reference</th>
+
                             <th>Added</th>
                             <th>Action</th>
                         </tr>
@@ -17,39 +17,19 @@
                     <tbody>
 
                         <tr v-for="(reference,key) in references" :key="key">
-                            <td>
-                                <span>
-                                    <strong>Doc #:</strong>
-                                    <strong><a :href="'/manage/documents/view/'+reference.referred_document.id" target="_blank">
-                                            {{ reference.referred_document.document_number }}
-                                        </a>
-                                    </strong>
-                                </span><br>
-                                <span><strong>Title: </strong> {{ reference.referred_document.title }}</span><br>
-                                <span><strong>Version:</strong> {{ reference.referred_document.version }}</span><br>
+
+                            <td v-if="validURL(reference.reference)===true" class="fit">
+                                <a target="_blank" :href="reference.reference" v-text="reference.reference"></a>
                             </td>
-                            <td>
-                                <span v-if="reference.public===true">PUBLIC</span>
-                                <span v-else-if="reference.public===false">PRIVATE</span>
-                            </td>
+                            <td v-else class="fit" v-text="reference.reference"></td>
+
                             <td>
                                 <span>{{ reference.created_by }}</span><br>
                                 <small>{{ reference.created_at }}</small>
                             </td>
                             <td>
-                                <a :href="'/home/view/'+reference.referred_document.id" target="_blank"><i
-                                        aria-hidden="true" class="fa fa-star"></i> View Online</a><br>
-                                <a v-if="reference.public===true" href="#">
-                                    <i class="fa fa-eye-slash" aria-hidden="true"></i>
-                                    Private</a>
-                                <a v-else-if="reference.public===false" href="#">
-                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                    Public</a>
-                                <br>
-
-
-                                <a href="#" @click.prevent="remove_reference(reference.id)"><i class="fa fa-trash-o text-red"
-                                        aria-hidden="true"></i> Remove</a>
+                                <a href="#" @click.prevent="remove_reference(reference.id)"><i
+                                        class="fa fa-trash-o text-red" aria-hidden="true"></i> Remove</a>
                             </td>
                         </tr>
 
@@ -66,14 +46,12 @@
                 <div class="box-body">
                     <div class="form-group">
                         <label for="">Document</label>
-                        <input type="text" v-model="document_number" placeholder="Provide document number..." class="form-control"
-                            required>
-                        <div class="checkbox">
-                            <label><input type="checkbox" v-model="is_public">Set Public</label>
-                        </div>
+                        <input type="text" v-model="reference" placeholder="Text | Links"
+                            class="form-control" required>
                     </div>
 
-                    <button type="submit" class="btn btn-default pull-right"> <i class="fa fa-save"></i> Save Reference</button>
+                    <button type="submit" class="btn btn-default pull-right"> <i class="fa fa-save"></i> Save
+                        Reference</button>
                 </div>
             </form>
         </div>
@@ -84,9 +62,9 @@
 <script>
     export default {
         props: {
-            can_initiate:{
-                type:[Boolean],
-                default:function(){
+            can_initiate: {
+                type: [Boolean],
+                default: function () {
                     return false;
                 }
             },
@@ -104,23 +82,35 @@
         data: function () {
             return {
                 submitted: false,
-                document_number: '',
+                reference: '',
                 is_public: false,
             }
         },
         methods: {
+
+            validURL(str) {
+                var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+                    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+                    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+                    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+                    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+                    '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+                return !!pattern.test(str);
+            },
+
             add_reference: function () {
 
 
                 var par = this;
-                if (par.submitted === false && par.can_initiate===true) {
+                if (par.submitted === false && par.can_initiate === true) {
                     par.submitted = true;
                     axios.put('/manage/documents/add_reference/' + par.document.id, {
-                        document_number: par.document_number,
-                        public: par.is_public,
+                        reference: par.reference,
                     }).then(function (response) {
                         par.alert_success(response);
-                        location.reload();
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
                     }).catch(function (error) {
                         par.submitted = false;
                         par.alert_failed(error);
@@ -132,12 +122,14 @@
             remove_reference: function (id) {
 
                 var par = this;
-                if (par.submitted === false && par.can_initiate===true) {
-                    if (confirm('Do you want to remove the selected reference document?') === true) {
+                if (par.submitted === false && par.can_initiate === true) {
+                    if (confirm('Do you want to remove the selected reference?') === true) {
                         par.submitted = true;
                         axios.put('/manage/documents/remove_reference/' + id).then(function (response) {
                             par.alert_success(response);
-                            location.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
                         }).catch(function (error) {
                             par.submitted = false;
                             par.alert_failed(error);

@@ -71,14 +71,14 @@
                         label: 'Name',
                         name: 'name',
                         data: 'name',
-                        className: 'nowrap',
+                        className: 'fit',
                     },
 
                     {
                         label: 'System',
                         name: 'system_code',
                         data: 'system_code',
-                        className: 'nowrap',
+                        className: 'fit',
                         render: function (data, meta, row) {
                             if (row.system !== null)
                                 return row.system.name;
@@ -123,7 +123,7 @@
                         label: 'Actions',
                         name: 'id',
                         data: 'id',
-                        className: 'nowrap',
+                        className: 'fit',
                         render: function (data, meta, row) {
                             
                             if (row.deleted_at !== null) {

@@ -41,13 +41,18 @@ class HomeController extends Controller
         $search_result=[];
         $documents=[];
 
-        if($url_section!=false && $url_system!=false && $url_search==false)
+        if(($url_section!=false || $url_system!=false) && $url_search==false)
         {
             $section_db=Section::find($url_section);
             $system_db=System::find($url_system);
 
-            $documents=EloquentHelper::document_public()->where('section_code','=',$section_db->code)
-            ->where('system_code','=',$system_db->code)->paginate(10);
+            $documents=EloquentHelper::document_public();
+            if(!empty($section_db))
+                $documents->where('section_code','=',$section_db->code);
+            if(!empty($system_db))
+                $documents->where('system_code','=',$system_db->code);
+            
+            $documents=$documents->paginate(10);
         }
         elseif (!empty($url_search)) {
             $search_result=EloquentHelper::document_public()->where(function($condition)use($url_search){
@@ -60,9 +65,11 @@ class HomeController extends Controller
         {
             $documents=[];
             $approved_documents=EloquentHelper::document_public()->paginate(5);
+
+     
         }
 
-
+ 
         
         return view('home.index',[
             'systems'=>$systems,
@@ -97,14 +104,14 @@ class HomeController extends Controller
         abort_if($document_version==null,404);
         $document=$document_version->document;
 
-        $reference_documents=$document->reference_documents;
+        $references=$document->references;
  
         $document_version_revision=$document_version->revision;
 
         return view('home.view_document',[
             'document'=>$document,
             'document_version'=>$document_version,
-            'reference_documents'=>$reference_documents,
+            'references'=>$references,
             'document_version_revision'=>$document_version_revision,
         ]);
     }

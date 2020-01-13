@@ -6,7 +6,7 @@ use App\User;
 use App\DocumentActionHistory;
 use App\DocumentAccessor;
 use App\DocumentVersion;
-use App\ReferenceDocument;
+use App\Reference;
 use App\DocumentVersionAttachment;
 
 class DocumentActionHistoryHelper 
@@ -34,9 +34,9 @@ class DocumentActionHistoryHelper
     {
         self::create_history($document,$user,$user->name.' has rolled back the version of the document to '.$document->version.'.');
     }
-    public static function release(Document $document,User $user)
+    public static function release(DocumentVersion $document_version,User $user)
     {
-        self::create_history($document,$user,$user->name.' has rolled back the version of the document to '.$document->version.'.');
+        self::create_history($document_version->document,$user,$user->name.' has released the version '.$document_version->version.' of the document.');
     }
     public static function change_status(Document $document,User $user,$status)
     {
@@ -60,20 +60,17 @@ class DocumentActionHistoryHelper
         self::create_history($document,$user,$user->name.' has deleted a file named '.$upload->file_name.' in version '.$version->version.'.');
     }
 
-    public static function add_reference(ReferenceDocument $reference_document,User $user)
+    public static function add_reference(Reference $reference_document,User $user)
     {
-        $document=$reference_document->document;
-        $referred_document=$reference_document->referred_document;
-
+        $document=$reference_document->document; 
         
-        self::create_history($document,$user,$user->name.' has added the '.$referred_document->document_number.' as reference.');
+        self::create_history($document,$user,$user->name.' has added '.$reference_document->reference.' as reference.');
     }
-    public static function remove_reference(ReferenceDocument $reference_document,User $user)
+    public static function remove_reference(Reference $reference_document,User $user)
     {
         $document=$reference_document->document;
-        $referred_document=$reference_document->referred_document;
-
-        self::create_history($document,$user,$user->name.' has remove the '.$referred_document->document_number.' as reference.');
+        
+        self::create_history($document,$user,$user->name.' has remove the '.$reference_document->reference.' as reference.');
     }
     public static function edit_document(Document $document,User $user)
     {
@@ -84,7 +81,16 @@ class DocumentActionHistoryHelper
 
             foreach($dirty_fields as $field=>$value)
             {
-                self::create_history($document,$user,$user->name.' has modified the '.$field.' value from '.$original_fields[$field].' to '.$value.'.');
+                $field_name=str_replace("_"," ",$field);
+                if($field=='created_by')
+                {
+                    $old_user=User::find($original_fields[$field]);
+                    $new_user=User::find($value);
+                    
+                    self::create_history($document,$user,$user->name.' has modified the '.$field_name.' value from '.$old_user->name.' to '.$new_user->name.'.');
+                }
+                else
+                    self::create_history($document,$user,$user->name.' has modified the '.$field_name.' value from '.$original_fields[$field].' to '.$value.'.');
             }
         }
     }

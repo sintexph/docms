@@ -56,6 +56,6 @@ class ApprovingMailable extends Mailable
     public function build()
     {
         return $this->view('email.approving')
-        ->subject($this->document_number.'-'.$this->title.' to be approved.');
+        ->subject($this->document_number.' - '.$this->title.' to be approved.');
     }
 }

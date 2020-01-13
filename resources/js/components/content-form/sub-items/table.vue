@@ -6,7 +6,7 @@
         </template>
         <template slot="footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-default" @click.prevent="save">Save</button>
+            <button type="button" class="btn btn-success" @click.prevent="save">Save</button>
         </template>
     </modal>
 

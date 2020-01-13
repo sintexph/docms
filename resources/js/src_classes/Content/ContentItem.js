@@ -9,7 +9,7 @@ export class ContentItem {
         if (name !== undefined)
             this._name = name;
         else
-            this._name = 'Title should be here ....';
+            this._name = '';
 
         if (data !== undefined) {
             this._data = data;

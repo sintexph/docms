@@ -29,6 +29,6 @@ export class Datum {
         return this.toString();
     }
     toString() {
-        return 'This is a testing';
+        return '....';
     }
 }

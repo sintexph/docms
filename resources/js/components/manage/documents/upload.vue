@@ -7,7 +7,8 @@
             <div class="box-body">
                 <div class="form-group">
                     <label for="">Browse File</label>
-                    <input-file accept=".pdf,  .xlsx,  .xls,  .docx, .txt" :multiple="true" v-model="files" :required="true"></input-file>
+                    <input-file accept=".pdf,  .xlsx,  .xls,  .docx, .txt" :multiple="true" v-model="files"
+                        :required="true"></input-file>
                 </div>
                 <button type="submit" class="btn btn-default pull-right"><i class="fa fa-save"></i> Upload File</button>
             </div>
@@ -49,8 +50,11 @@
                             'Content-Type': 'multipart/form-data'
                         }
                     }).then(function (response) {
+                        par.hide_wait();
                         par.alert_success(response);
-                        location.reload();
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
                     }).catch(function (error) {
                         //hide wait dialog
                         par.hide_wait();

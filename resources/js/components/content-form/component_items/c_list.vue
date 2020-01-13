@@ -6,7 +6,7 @@
             </list-style>
             <a href="#" class="btn btn-xs btn-default" title="Add table" @click.prevent="$refs.table.show()"><i
                     class="fa fa-table" aria-hidden="true"></i></a>
-            <a href="#" class="btn btn-xs btn-default" title="Add paragraph" @click.prevent="$refs.phar.show()"><i
+            <a href="#" class="btn btn-xs btn-default" title="Add paragraph" @click.prevent="$refs.par.show()"><i
                     class="fa fa-file-o" aria-hidden="true"></i></a>
 
             <a href="#" class="btn btn-xs btn-default" title="Add image" @click.prevent="$refs.image.show()"><i
@@ -37,7 +37,7 @@
                                     </a>
                                     <a href="#" title="Edit item" class="btn btn-xs btn-default text-yellow"
                                         v-else-if="value.data.type==='paragraph'"
-                                        @click.prevent="$refs.phar.edit(value.data,key)">
+                                        @click.prevent="$refs.par.edit(value.data,key)">
                                         <i class="fa fa-pencil" aria-hidden="true"></i>
                                     </a>
                                     <a href="#" title="Edit item" class="btn btn-xs btn-default text-yellow"
@@ -71,7 +71,7 @@
                     </draggable>
                 </tbody>
             </table>
-            <phar @saved="add_item" @updated="updated_item" ref="phar"></phar>
+            <par @saved="add_item" @updated="updated_item" ref="par"></par>
             <tbl @saved="add_item" ref="table" @updated="updated_item"></tbl>
             <com-image @saved="add_item" @updated="updated_item" ref="image"></com-image>
             <list-preview ref="listPreview"></list-preview>

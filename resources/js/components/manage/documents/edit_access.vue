@@ -104,8 +104,12 @@
                         access: parent.doc_access.access,
                         accessors: parent.doc_access.accessors
                     }).then(function (response) {
+
+
                         parent.alert_success(response);
-                        location.reload();
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
                     }).catch(function (error) {
                         parent.submitted = false;
                         parent.alert_failed(error);

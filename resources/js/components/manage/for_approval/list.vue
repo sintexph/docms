@@ -55,7 +55,7 @@
                         label: 'Title',
                         name: 'title',
                         data: 'title',
-                        className: 'nowrap',
+                        className: 'fit',
                         render: function (data) {
                             return `<strong>` + data + `</strong>`;
                         }
@@ -92,7 +92,7 @@
                         label: 'Actions',
                         name: 'id',
                         data: 'id',
-                        className: 'nowrap',
+                        className: 'fit',
                          export:false,
                         render: function (data, meta, row) {
 

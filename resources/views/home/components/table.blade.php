@@ -8,7 +8,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($documents as $document)
+        @foreach($documents as $key=>$document)
 
         <tr>
             <td class="fit">
@@ -18,14 +18,19 @@
             <td>
                 <strong>
                     @if($document->access=="3")
-                    <a href="{{ route('home.view_document',$document->active_version->id) }}">
+
+                        @if($key==0)
+                            <a data-disable-interaction="1" data-step='5' data-position="bottom-middle-aligned" data-intro='E click ang kining nga numero para makita nimo ang sulod sa documento' href="{{ route('home.view_document',$document->active_version->id) }}">
+                        @else
+                             <a href="{{ route('home.view_document',$document->active_version->id) }}">
+                        @endif
+
                         @if($document->obsolete==true)
                         <strike>{{ $document->document_number }}</strike>
                         @else
                         {{ $document->document_number }}
                         @endif
-                    </a>
-
+                        </a>
                     @else
 
                     <span>

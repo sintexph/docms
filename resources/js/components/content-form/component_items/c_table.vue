@@ -12,15 +12,16 @@
                     <th class="fit">
                     </th>
                     <th v-for="(value,key) in table.header" :key="key">
-
                         <div class="input-group">
                             <input type="text" class="form-control" :name="'head-input-'+key"
-                                v-model="table.header[key]">
+                                v-model="table.header[key].value">
                             <span class="input-group-btn">
-                                <a href="#" v-if="table.header.length>1" @click="remove_header(key)"
-                                    class="btn btn-default text-red" title="Remove header"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                <a href="#" v-if="table.header.length>1" @click.prevent="remove_header(key)"
+                                    class="btn btn-default text-red" title="Remove header"><i class="fa fa-trash"
+                                        aria-hidden="true"></i></a>
                             </span>
                         </div>
+                        <div><input type="checkbox" v-model="table.header[key].fit"> Fit</div>
                     </th>
                 </tr>
             </thead>
@@ -28,12 +29,13 @@
                 <tr v-for="(rowvalue,rowkey) in table.rows" :key="rowkey">
                     <td class="fit">
                         <a v-if="table.rows.length>1" href="#" @click.prevent="remove_row(rowkey)"
-                            class="btn btn-default btn-xs text-red" title="Remove row"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            class="btn btn-default btn-xs text-red" title="Remove row"><i class="fa fa-trash"
+                                aria-hidden="true"></i></a>
                     </td>
                     <td v-for="(value,tdkey) in rowvalue" :key="tdkey">
                         <textarea class="form-control" :name="'tditem-tarea-'+tdkey"
-                            v-model="table.rows[rowkey][tdkey]"></textarea>
-
+                            v-model="table.rows[rowkey][tdkey].value"></textarea>
+                            <div><input type="checkbox" v-model="table.rows[rowkey][tdkey].fit"> Fit</div>
                     </td>
                 </tr>
             </tbody>
@@ -54,7 +56,7 @@
         },
         data: function () {
             return {
-                table: new Table(),
+                table: new Table,
             }
         },
         methods: {
@@ -67,7 +69,7 @@
                 // Loop all data on first row of the table and push empty data to new row
                 // This is to initiate exact data to be inserted in the new row
                 vm.table.rows[0].forEach(function () {
-                    row.push('');
+                    row.push(new TableCell);
                 });
                 // Push new row to table row
                 vm.table.rows.push(row);
@@ -96,7 +98,7 @@
                 vm.table.removeHeaderIndex(index);
             },
             reset: function () {
-                this.table = new Table();
+                this.table = new Table;
                 this.table.init();
                 this.$emit('input', this.table);
 

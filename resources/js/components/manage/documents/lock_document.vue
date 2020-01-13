@@ -4,18 +4,18 @@
             <h3 class="box-title">Lock Document</h3>
         </div>
         <div class="box-body">
-            <p><strong>Note:</strong> Locking the document may caused inaccessibility.</p>
+            <p><strong>Note:</strong> When the document is locked, the creator will lose access to the functions of the document.</p>
         </div>
         <div class="box-footer">
-           
-            <button v-if="lock===true" class="btn btn-sm btn-default" @click.prevent="unlock_document"><i class="fa fa-unlock-alt"
-                    aria-hidden="true"></i>
+
+            <button v-if="lock===true" class="btn btn-sm btn-default" @click.prevent="unlock_document"><i
+                    class="fa fa-unlock-alt" aria-hidden="true"></i>
                 Unlock Document</button>
-         
-            <button v-else-if="lock===false" class="btn btn-sm btn-default" @click.prevent="lock_document"><i class="fa fa-lock"
-                    aria-hidden="true"></i>
+
+            <button v-else-if="lock===false" class="btn btn-sm btn-default" @click.prevent="lock_document"><i
+                    class="fa fa-lock" aria-hidden="true"></i>
                 Lock Document</button>
-          
+
         </div>
     </div>
 </template>
@@ -33,14 +33,14 @@
                 required: true,
             }
         },
-        data:function(){
+        data: function () {
             return {
-                submitted:false,
+                submitted: false,
             }
         },
         methods: {
             lock_document: function () {
-                
+
 
                 var par = this;
                 if (par.submitted === false) {
@@ -48,7 +48,9 @@
                         par.submitted = true;
                         axios.patch('/manage/documents/lock_document/' + par.document_id).then(function (response) {
                             par.alert_success(response);
-                            location.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
                         }).catch(function (error) {
                             par.submitted = false;
                             par.alert_failed(error);
@@ -63,9 +65,12 @@
                 if (par.submitted === false) {
                     if (confirm('Do you want to unlock the document?') === true) {
                         par.submitted = true;
-                        axios.patch('/manage/documents/unlock_document/' + par.document_id).then(function (response) {
+                        axios.patch('/manage/documents/unlock_document/' + par.document_id).then(function (
+                        response) {
                             par.alert_success(response);
-                            location.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
                         }).catch(function (error) {
                             par.submitted = false;
                             par.alert_failed(error);

@@ -16,6 +16,19 @@ use App\Category;
 class DocumentHelper 
 {
 
+    public static function format_document_number(System $system,Section $section,Category $category,$serial)
+    {
+        return $system->code.'-'.$section->code.'-'.$category->code.'-'.str_pad($serial, 3, "0", STR_PAD_LEFT);
+    }
+
+    /**
+     * Check if the serial is exists already based on category
+     */
+    public static function check_serial_exists(Category $category,$serial)
+    {
+        return Document::where('category_code',$category->code)->where('serial',$serial)->exists();
+    }
+
     /**
      * Generate document number based on system, section and category and sequence based on the category
      */
@@ -30,7 +43,7 @@ class DocumentHelper
         $value->serial=static::get_last_serial($category->code);
 
         # Set initial value of the document number
-        $value->document_number=$system->code.'-'.$section->code.'-'.$category->code.'-'.str_pad($value->serial, 3, "0", STR_PAD_LEFT);
+        $value->document_number=static::format_document_number($system,$section,$category,$value->serial);//$system->code.'-'.$section->code.'-'.$category->code.'-'.str_pad($value->serial, 3, "0", STR_PAD_LEFT);
 
         return $value;
     }
@@ -38,7 +51,7 @@ class DocumentHelper
     /**
      * Generate document number based on system, section and category and sequence based on the category
      */
-    public static function update_document_number(Document $document)
+    public static function update_document_number(Document $document,User $user)
     {
         if($document->isDirty('category_code'))
         {
@@ -48,6 +61,10 @@ class DocumentHelper
         
         # Set initial value of the document number
         $document->document_number=$document->system_code.'-'.$document->section_code.'-'.$document->category_code.'-'.str_pad($document->serial, 3, "0", STR_PAD_LEFT);
+
+        # Record modification history
+        DocumentActionHistoryHelper::edit_document($document,$user);
+
         $document->save();
 
         return $document;
@@ -59,7 +76,6 @@ class DocumentHelper
     public static function get_last_serial($category)
     {
         $document=Document::where('category_code',$category)->orderBy('serial','desc')->first();
-        //dump($document);
         if($document==null)
             return 1;
         else
@@ -114,6 +130,7 @@ class DocumentHelper
         $version->for_review=$for_review;
         $version->current=true;
         $version->active=false;
+        $version->creator_modified_at=\Carbon\Carbon::now();
         $version->save();
 
         DocumentActionHistoryHelper::new_version($version,$user);
@@ -192,7 +209,7 @@ class DocumentHelper
             if($accessor==null)
             {
                 DB::rollBack();
-                abort(442,'User could not be found on the system!');
+                abort(422,'User could not be found on the system!');
             }
             DocumentAccessor::create([
                 'document_id'=>$document->id,
@@ -200,5 +217,27 @@ class DocumentHelper
             ]);
         }
     }
+
+    /**
+     * RESET THE STATUS OF THE VERSION APPROVAL AND REVIEW
+     */
+    public static function reset_status(DocumentVersion $version)
+    {
+        foreach($version->approvers as $approver)
+        {
+            $approver->approved=false;
+            $approver->approved_at=null;
+            $approver->save();
+        }
+        foreach($version->reviewers as $reviewer)
+        {
+            $reviewer->reviewed=false;
+            $reviewer->reviewed_at=null;
+            $reviewer->save();
+        }
+
+        return $version;
+    }
+
     
 }

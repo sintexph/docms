@@ -1,8 +1,20 @@
 import "@sintexph/vue-lib"
-Vue.mixin(httpAlert);
+Vue.mixin(toastHelper);Vue.mixin(httpAlert);
 
 import ".././content-form.js";
 import contentListMixin from '.././mixin/content_list.js';
+
+
+import {
+    Document
+} from '.././src_classes/Document';
+window.Document = Document;
+
+import {
+    DocumentVersion
+} from '.././src_classes/DocumentVersion';
+window.DocumentVersion = DocumentVersion;
+
 
 import IdleVue from 'idle-vue'
 const eventsHub = new Vue()
@@ -10,6 +22,7 @@ Vue.use(IdleVue, {
     eventEmitter: eventsHub,
     idleTime: 5000
 })
+
 
 Vue.component('version-form', require('.././components/manage/documents/forms/version-form.vue').default);
 Vue.component('document-form', require('.././components/manage/documents/forms/document-form.vue').default);
@@ -31,7 +44,7 @@ Vue.component('current-version', require('.././components/manage/documents/curre
 Vue.component('edit-access', require('.././components/manage/documents/edit_access.vue').default);
 Vue.component('view-version', require('.././components/manage/documents/view_version.vue').default);
 Vue.component('lock-document', require('.././components/manage/documents/lock_document.vue').default);
-Vue.component('reference-documents', require('.././components/manage/documents/reference_documents.vue').default);
+Vue.component('reference-documents', require('.././components/manage/documents/references.vue').default);
 Vue.component('document-archive', require('.././components/manage/documents/archive.vue').default);
 Vue.component('comments', require('.././components/manage/documents/comments.vue').default);
 

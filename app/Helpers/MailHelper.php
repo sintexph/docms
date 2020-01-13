@@ -1,11 +1,15 @@
 <?php
 
 namespace App\Helpers;
-use App\DocumentReviewer;
 use App\Mail\ReviewingMailable;
 use App\Mail\ApprovingMailable;
 use App\Mail\ApprovedMailable;
 use App\Mail\CommentMailable;
+use App\Mail\DocumentReviewedMailable;
+use App\Mail\VersionChangeReviewerMailable;
+use App\Mail\VersionChangeApproverMailable;
+
+use App\DocumentReviewer;
 use App\DocumentApprover;
 use App\DocumentVersion;
 use Mail;
@@ -13,6 +17,25 @@ use App\User;
 
 class MailHelper 
 {
+
+    /**
+     * Send email to reviewer that the document version was changed
+     * @param $document_reviewer The instance model of the document reviewer
+     */
+    public static function document_version_changed_reviewer(DocumentReviewer $document_reviewer)
+    {
+        $user=$document_reviewer->user;
+        Mail::to($user->email)->queue(new VersionChangeReviewerMailable($document_reviewer));
+    }
+    /**
+     * Send email to approver that the document version was changed
+     * @param $document_approver The instance model of the document approver
+     */
+    public static function document_version_changed_approver(DocumentApprover $document_approver)
+    {
+        $user=$document_approver->user;
+        Mail::to($user->email)->queue(new VersionChangeApproverMailable($document_approver));
+    }
     /**
      * Send email to reviewer and handles the logic for send the email
      * @param $document_reviewer The instance model of the document reviewer
@@ -58,7 +81,16 @@ class MailHelper
             Mail::to($user->email)->queue(new ApprovedMailable($user,$document_version));
         }
     }
-
+    
+    /**
+     * Send email to creator that the document version has been reviewed by reviewer and handles the logic for send the email
+     */
+    public static function send_email_reviewed_creator(DocumentReviewer $reviewer)
+    {
+        $user=$reviewer->document_version->creator;
+        Mail::to($user->email)->queue(new DocumentReviewedMailable($user,$reviewer));
+    }
+    
     /**
      * Send email to the users who commented the document version
      */

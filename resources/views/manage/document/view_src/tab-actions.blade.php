@@ -24,11 +24,8 @@
                     aria-hidden="true"></i> Edit Access</a></li>
         @endif
 
-
-
         <li class="{{ $current_view=='histories'?'active':'' }}"><a href="?view=histories"><i class="fa fa-history"
                     aria-hidden="true"></i> Histories</a></li>
-
 
         @if(auth()->user()->can('lock',$document))
         <li class="{{ $current_view=='lock'?'active':'' }}"><a href="?view=lock">

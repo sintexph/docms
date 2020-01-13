@@ -9,14 +9,14 @@
             <div class="row">
                 <div class="col-xs-6">
                     <div class="form-group">
-                        <label class="control-label">Document Title</label>
+                        <label class="control-label">Document Title <span class="text-red">*</span></label>
                         <input type="text" class="form-control" v-model="document.title" autofocus required>
                     </div>
                 </div>
 
                 <div class="col-xs-6">
                     <div class="form-group">
-                        <label class="control-label">System</label>
+                        <label class="control-label">System <span class="text-red">*</span></label>
                         <select class="form-control" @change="system_changed" v-model="document.system" required>
                             <option value=""> -- CHOOSE --</option>
                             <option v-for="(value,key) in systems" :key="key" :value="value.code">{{ value.name }}</option>
@@ -27,7 +27,7 @@
             <div class="row">
                 <div class="col-xs-6">
                     <div class="form-group">
-                        <label class="control-label">Section</label>
+                        <label class="control-label">Section <span class="text-red">*</span></label>
                         <select class="form-control" v-model="document.section" required>
                             <option value=""> -- CHOOSE --</option>
                             <option v-for="(value,key) in sections" :key="key" :value="value.code">{{ value.name }}</option>
@@ -36,7 +36,7 @@
                 </div>
                 <div class="col-xs-6">
                     <div class="form-group">
-                        <label class="control-label">Category</label>
+                        <label class="control-label">Category <span class="text-red">*</span></label>
                         <select class="form-control" v-model="document.category" required>
                             <option value=""> -- CHOOSE --</option>
                             <option v-for="(value,key) in categories" :key="key" :value="value.code">{{ value.name
@@ -55,8 +55,7 @@
                 <input-tag v-model="document.keywords"></input-tag>
             </div>
             <access-form v-model="document.access_data"></access-form>
-
-
+            <slot></slot>
         </div>
     </div>
 </template>
@@ -70,18 +69,7 @@
         },
         data: function () {
             return {
-                document: {
-                    title: '',
-                    section: '',
-                    system: '',
-                    category: '',
-                    keywords: '',
-                    comment: '',
-                    access_data: {
-                        access: '3',
-                        accessors: [],
-                    },
-                },
+                document:new Document,
                 systems: [],
                 categories: [],
                 sections: [],

@@ -4,12 +4,12 @@
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <li class="{{ empty($left_area_tab)?'active':'' }}"><a href="?view={{ $current_view }}&ver={{ app('request')->input('ver') }}">Current Version</a></li>
-        <li class="{{ $left_area_tab=='at'?'active':'' }}"><a href="?view={{ $current_view }}&latab=at&ver={{ app('request')->input('ver') }}">Attachments ({{ count($attachments) }})</a></li>
         @if(count($old_versions)!=0)
         <li class="{{ $left_area_tab=='ov'?'active':'' }}"><a href="?view={{ $current_view }}&latab=ov">Old Versions</a></li>
         @endif
         <li class="{{ $left_area_tab=='rl'?'active':'' }}"><a href="?view={{ $current_view }}&latab=rl">Revision Logs</a></li>
-        <li class="{{ $left_area_tab=='rd'?'active':'' }}"><a href="?view={{ $current_view }}&latab=rd">References ({{ count($reference_documents) }})</a></li>
+        <li class="{{ $left_area_tab=='at'?'active':'' }}"><a href="?view={{ $current_view }}&latab=at&ver={{ app('request')->input('ver') }}">Attachments ({{ count($attachments) }})</a></li>
+        <li class="{{ $left_area_tab=='rd'?'active':'' }}"><a href="?view={{ $current_view }}&latab=rd">References ({{ count($references) }})</a></li>
     </ul>
 </div>
 @switch($left_area_tab)
@@ -26,7 +26,7 @@
         @break
         
     @case('rd')
-        @include('manage.document.view_src.left-area.tabs.reference_documents')
+        @include('manage.document.view_src.left-area.tabs.references')
         @break
 
     @case('ev')

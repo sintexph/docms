@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
     <title>{{ $document->title }}</title>
+    
     @if(isset($download) && $download==true)
     <!--Change fonts if the content is for download-->
     <style>
@@ -12,6 +13,17 @@
             padding: 10px;
             font-family: 'Arial';
             font-size: 17px;
+            margin: 0;
+        }
+
+
+
+        @page {
+            margin: 0;
+        }
+
+        html {
+            margin: 0
         }
 
         .header {
@@ -107,16 +119,8 @@
             clear: both;
             display: table;
         }
+ 
 
-        .watermark {
-            position: fixed;
-            bottom: 0px;
-            color: #ff7d7d;
-            font-size: 15px;
-            margin-left: 35%;
-            /** Your watermark should be behind every content**/
-            z-index: -1000;
-        }
 
         /*Imported from the source of document_content.css*/
         table.ordered-list tr td.ol-label,
@@ -135,16 +139,20 @@
 
     </style>
 
+
+    <script>
+        function resizeIframe(obj) {
+            obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+        }
+
+    </script>
+
 </head>
 
 <body>
-    @if(isset($download) && $download==true)
-    <div class="watermark">
-        <strong>
-            <center>This document is uncontrolled if printed</center>
-        </strong>
-    </div>
-    @endif
+
+   
+    
     <table class="table">
         <tbody>
 
@@ -209,7 +217,7 @@
                     {{ $document_version->creator->name }}
                 </td>
                 <th class="fit" colspan="3">Revision Date</th>
-                <td>{{ $document_version->updated_at->format('F d, Y') }}</td>
+                <td>{{ $document_version->creator_modified_at->format('F d, Y') }}</td>
             </tr>
             <tr>
                 <th class="fit">
@@ -253,8 +261,19 @@
     </table>
 
 
+
     <br>
     {!! $document_version->castedContent()->toString() !!}
+
+    @if(!isset($download) || $download==false)
+    <br>
+    <h3>Revision Logs</h3>
+    <iframe scrolling="no" onload="resizeIframe(this)" frameborder="0"
+        src="/content/view/revision-logs/{{ $document->id }}" width="100%"></iframe>
+    @endif
+
+
+
 </body>
 
 </html>

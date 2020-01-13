@@ -80,8 +80,12 @@ class DocumentContentController extends Controller
         $pdf = \PDF::loadHTML($template)->setPaper('letter')->setOrientation('portrait');
 
         $pdf->setOption('dpi',300);
+        $pdf->setOption('margin-top',20);
+        $pdf->setOption('margin-right',20);
+        $pdf->setOption('margin-bottom',20);
+        $pdf->setOption('margin-left',20);
 
-        return $pdf->download($document->document_number.' - '.$document->title.'.pdf');
+        return $pdf->stream($document->document_number.' - '.$document->title.'.pdf');
     }
     /**
      * Download the content to pdf
@@ -95,8 +99,12 @@ class DocumentContentController extends Controller
         # Download in pdf
         $pdf = \PDF::loadHTML($template)->setPaper('letter')->setOrientation('portrait');
         $pdf->setOption('dpi',300);
-        return $pdf->download($document->document_number.' - '.$document->title.'.pdf');
+        $pdf->setOption('margin-top',20);
+        $pdf->setOption('margin-right',20);
+        $pdf->setOption('margin-bottom',20);
+        $pdf->setOption('margin-left',20);
+ 
+        return $pdf->stream($document->document_number.' - '.$document->title.'.pdf');
     }
-
 
 }

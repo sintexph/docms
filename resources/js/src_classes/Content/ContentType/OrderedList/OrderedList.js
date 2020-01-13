@@ -79,7 +79,8 @@ export class OrderedList extends Datum {
         }
 
     }
-    toString(parentStyle) {
+    toString(parentStyle) { 
+     
         return ContentListHelper.list_representation(this, parentStyle);
     }
 }

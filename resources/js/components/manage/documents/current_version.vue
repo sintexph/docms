@@ -97,17 +97,7 @@
                                     <span v-else>----</span>
                                 </td>
                             </tr>
-
-                            <tr>
-                                <th>Revision Logs</th>
-                                <td colspan="3">
-                                    Click <strong><a href="#" data-toggle="modal"
-                                            data-target="#modal-revision">here</a></strong> to view the
-                                    <strong><a href="#" data-toggle="modal" data-target="#modal-revision"><i
-                                                class="fa fa-history" aria-hidden="true"></i> Logs</a></strong>
-                                </td>
-                            </tr>
-
+ 
                         </tbody>
                     </table>
                 </div>
@@ -117,22 +107,7 @@
                     height="600"></iframe>
             </div>
         </div>
-        <div class="modal fade" id="modal-revision">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Revision Logs</h4>
-                    </div>
-                    <div class="modal-body">
-                        <iframe :src="'/content/view/revision-logs/'+document.id" height="700" width="100%"></iframe>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+ 
         <div class="box box-solid">
             <div class="box-header with-border">
                 <h3 class="box-title">Comment Box</h3>

@@ -1,5 +1,5 @@
 <template>
-    <div class="box box-solid">
+    <div v-if="document.locked===false" class="box box-solid">
         <div class=" box-header with-border">
             <h3 class="box-title">Actions</h3>
         </div>
@@ -38,14 +38,9 @@
                 <li><a :href="'/home/view/'+selected_version.id" target="_blank"><i class="fa fa-star"
                             aria-hidden="true"></i>
                         <span>View Online</span></a></li>
+       
                 <li>
-                    <a data-toggle="modal" href='#modal-revision'>
-                        <i class="fa fa-history" aria-hidden="true"></i>
-                        <span>Revision Logs</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="?latab=ev" v-if="selected_version.reviewed==false && selected_version.approved==false">
+                    <a href="?latab=ev" v-if="selected_version.reviewed==false || selected_version.approved==false">
                         <i class="fa fa-pencil" aria-hidden="true"></i>
                         <span>Modify Version</span>
                     </a>
@@ -60,13 +55,15 @@
 
                 <li>
                     <a v-if="selected_version.approved===true && selected_version.released===false" href="#"
-                        @click.prevent="release_version"><i class="fa fa-file-text-o" aria-hidden="true"></i> <span>Release</span></a>
-                    <a class="disabled" v-else><i class="fa fa-file-text-o" aria-hidden="true"></i> <span>Release</span></a>
+                        @click.prevent="release_version"><i class="fa fa-file-text-o" aria-hidden="true"></i>
+                        <span>Release</span></a>
+                    <a class="disabled" v-else><i class="fa fa-file-text-o" aria-hidden="true"></i>
+                        <span>Release</span></a>
                 </li>
                 <li>
                     <a href="#" @click.prevent="$refs.viewVersion.show('/content/view/version/'+selected_version.id)">
                         <i class="fa fa-arrows-alt" aria-hidden="true"></i>
-                        <span>View Full</span></a>
+                        <span>Full View</span></a>
                 </li>
             </ul>
 
@@ -88,9 +85,13 @@
                 if (par.submitted === false) {
                     if (confirm('Are you sure you want to release the version?') === true) {
                         par.submitted = true;
-                        axios.patch('/manage/documents/release/' + par.selected_version.id).then(function (response) {
+                        axios.patch('/manage/documents/release/' + par.selected_version.id).then(function (
+                            response) {
                             par.alert_success(response);
-                            location.reload();
+
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
                         }).catch(function (error) {
                             par.submitted = false;
                             par.alert_failed(error);
@@ -106,7 +107,9 @@
                         par.submitted = true;
                         axios.delete('/manage/documents/roll_back/' + par.document.id).then(function (response) {
                             par.alert_success(response);
-                            location.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
                         }).catch(function (error) {
                             par.submitted = false;
                             par.alert_failed(error);
@@ -126,7 +129,10 @@
                         axios.patch('/manage/documents/for_review/' + par.selected_version.id).then(function (
                             response) {
                             par.alert_success(response);
-                            location.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+
                         }).catch(function (error) {
                             // Hide wait modal
                             par.hide_wait();
@@ -142,11 +148,14 @@
                 if (par.submitted === false) {
                     if (confirm('Do you want to cancel the document version for review?') === true) {
                         par.submitted = true;
-                        axios.patch('/manage/documents/for_review/cancel/' + par.selected_version.id).then(function (
-                            response) {
-                            par.alert_success(response);
-                            location.reload();
-                        }).catch(function (error) {
+                        axios.patch('/manage/documents/for_review/cancel/' + par.selected_version.id).then(
+                            function (
+                                response) {
+                                par.alert_success(response);
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 1000);
+                            }).catch(function (error) {
 
                             par.submitted = false;
                             par.alert_failed(error);
@@ -165,8 +174,11 @@
 
                         axios.patch('/manage/documents/for_approval/' + par.selected_version.id).then(function (
                             response) {
+                            par.hide_wait();
                             par.alert_success(response);
-                            location.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
                         }).catch(function (error) {
                             // Hide wait modal
                             par.hide_wait();
@@ -186,7 +198,9 @@
                             function (
                                 response) {
                                 par.alert_success(response);
-                                location.reload();
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 1000);
                             }).catch(function (error) {
 
                             par.submitted = false;

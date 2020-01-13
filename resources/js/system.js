@@ -1,6 +1,6 @@
 import "@sintexph/vue-lib"
 
-Vue.mixin(httpAlert);
+Vue.mixin(toastHelper);Vue.mixin(httpAlert);
 
 
 Vue.component('manage-system', require('./components/system/list.vue').default);

@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Upload;
+use App\DocumentVersion;
 use App\Observers\UploadObserver;
+use App\Observers\DocumentVersionObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,7 +17,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        Upload::observe(UploadObserver::class);
+
+
     }
 
     /**
@@ -25,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Upload::observe(UploadObserver::class);
+        DocumentVersion::observe(DocumentVersionObserver::class);
     }
 }

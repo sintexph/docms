@@ -2,6 +2,7 @@
 
 namespace App\Helpers\DocumentContent\ContentType;
 use App\Helpers\DocumentContent\Datum;
+use App\Helpers\DocumentContent\ContentType\TableCell;
 
 class Table extends Datum
 {
@@ -15,13 +16,13 @@ class Table extends Datum
         if($header!=null)
             $this->header=$header;
         else
-            $this->header=['', '', ''];
+            $this->header=[new TableCell,new TableCell,new TableCell];
 
         if($rows!=null)
             $this->rows=$rows;
         else
             $this->rows=[
-                ['', '', ''],
+                [new TableCell,new TableCell,new TableCell],
             ];
     }
 
@@ -33,17 +34,24 @@ class Table extends Datum
 
         # Generate the header of the table
         foreach ($this->header as $key => $head) {
-             $display .= '<th>' . $head . '</th>';
+            if($head->fit==true)
+                $display .= '<th style="white-space: nowrap; width: 1%;">' . $head->value . '</th>';
+            else
+                $display .= '<th>' . $head->value . '</th>';
         }
         $display .= '</tr>';
         $display .= '</thead>';
 
         # Generate the table row and its cells
         $display .= '<tbody>';
+
         foreach ($this->rows as $row) {
             $display .= '<tr>';
             foreach ($row as $cell) {
-                $display .= '<td>' . $cell . '</td>';
+                if($cell->fit==true)
+                    $display .= '<td style="white-space: nowrap; width: 1%;">' . $cell->value . '</td>';
+                else
+                    $display .= '<td>' . $cell->value . '</td>';
             }
             $display .= '</tr>';
         }

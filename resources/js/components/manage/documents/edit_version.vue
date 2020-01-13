@@ -1,15 +1,18 @@
 <template>
-    <form @submit.prevent="submit">
-        <version-form :show_version="false" :data_required="false" v-model="version">
-            <template slot="header">Edit version information</template>
-        </version-form>
-        <button class="btn btn-sm btn-warning" @click="submit_only=true" type="submit"
-            title="Save the changes of the document, it will not send notification to the approver and reviewer of the document.">Save Only</button>
-        <button class="btn btn-sm btn-success" @click="submit_only=false" type="submit"
-            title="Submit the document which means it is ready to be reviewed and approved.">Submit Document</button>
-    </form>
+    <div>
+        <form @submit.prevent="submit">
+            <version-form :show_version="false" :data_required="false" v-model="version">
+                <template slot="header">Edit version information</template>
+            </version-form>
+            <button class="btn btn-sm btn-warning" @click="submit_only=true" type="submit"
+                title="Save the changes of the document, it will not send notification to the approver and reviewer of the document.">Save
+                Only</button>
+            <button class="btn btn-sm btn-success" @click="submit_only=false" type="submit"
+                title="Submit the document which means it is ready to be reviewed and approved.">Submit
+                Document</button>
+        </form>
+    </div>
 </template>
-
 
 <script>
     export default {
@@ -31,17 +34,7 @@
         },
         data: function () {
             return {
-                version: {
-                    number: '',
-                    content: new Content,
-                    description: new Content,
-                    for_review: false,
-                    for_approval: false,
-                    reviewers: [],
-                    approvers: [],
-                    effective_date: '',
-                    expiry_date: '',
-                },
+                version: new DocumentVersion,
                 submitted: false,
                 submit_only: false,
                 idle: null,
@@ -61,14 +54,19 @@
                     // Show wait modal
                     parent.show_wait("Please wait while the system is saving the document...");
                     axios.patch('/manage/documents/update_version/' + parent.version_id, {
-                        version: this.version,
+                        version: this.version.toObject(),
                         submit_only: this.submit_only,
                     }).then(function (response) {
+                        parent.hide_wait();
                         parent.alert_success(response);
-                        if (parent.submit_only === true)
-                            location.reload();
-                        else
-                            location.replace("/manage/documents/view/" + parent.document_id);
+
+                        setTimeout(() => {
+                            if (parent.submit_only === true)
+                                location.reload();
+                            else
+                                location.replace("/manage/documents/view/" + parent.document_id);
+                        }, 1000);
+
                     }).catch(function (error) {
                         // Hide wait modal
                         parent.hide_wait();
@@ -84,19 +82,13 @@
                     // Show wait modal
                     parent.show_wait("Auto saving the document.....");
                     axios.patch('/manage/documents/update_version/' + parent.version_id, {
-                        version: this.version,
+                        version: this.version.toObject(),
                         submit_only: true,
                     }).then(function (response) {
                         parent.hide_wait();
                         setTimeout(function () {
-                            if (confirm(
-                                    "You are being timed out due to inactivity\nDo you still want to continue?"
-                                )) {
-                                location.reload();
-                            } else
-                                window.location.replace("/");
-
-                        }, 2000);
+                            location.reload();
+                        }, 1000);
                     }).catch(function (error) {
                         // Hide wait modal
                         parent.hide_wait();
@@ -117,7 +109,12 @@
 
         mounted: function () {
 
+
+
+
             var par = this;
+
+
             par.$nextTick(function () {
 
                 par.version.effective_date = par.effective_date;
@@ -133,9 +130,10 @@
 
                 par.idle = idleTimeout(par.auto_save, {
                     element: document,
-                    timeout: 60000*2,
+                    timeout: 60000 * 5,
                     loop: true
                 });
+
 
             });
 
@@ -146,6 +144,7 @@
 
 
         },
+
 
 
 

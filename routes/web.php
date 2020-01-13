@@ -28,10 +28,7 @@ Route::post('/save/{factory}',function(\Illuminate\Http\Request $request){
 
 */
 
-
-
-
-
+//Route::get('/test','DocumentContentController@test');
 
 Route::get('/','HomeController@index');
 
@@ -60,8 +57,7 @@ Route::prefix('home')->name('home')->group(function(){
 
 Route::prefix('content')->name('content')->group(function(){
     
-    Route::get('view/{id}','DocumentContentController@view_content')->name('.view')
-                                                                    ->middleware('document-viewing');
+    Route::get('view/{id}','DocumentContentController@view_content')->name('.view')->middleware('document-viewing');
 
     // No permission yet
     Route::get('view/version/{id}','DocumentContentController@view_version_content')->name('.view.version');
@@ -83,11 +79,16 @@ Route::prefix('util')->name('util')->group(function(){
     Route::post('section_list', 'UtilityController@section_list')->name('.section_list');
     Route::post('get_document', 'UtilityController@get_document')->name('.get_document');
     Route::post('find_documents', 'UtilityController@find_documents')->name('.find_documents');
+    
 
     Route::middleware('auth')->group(function(){
+
+        Route::post('serial-exists', 'UtilityController@serial_exits')->name('.serial_exits');
         Route::post('reviewers', 'UtilityController@reviewers')->name('.reviewers');
         Route::post('approvers', 'UtilityController@approvers')->name('.approvers');
         Route::post('users', 'UtilityController@users')->name('.users');
+        Route::post('users-select2', 'UtilityController@users_select2')->name('.users_select2');
+
     });
 
     
@@ -102,6 +103,7 @@ Route::prefix('manage')->name('manage')->group(function(){
 
         Route::get('', 'ManageDocumentController@index');
         Route::post('list', 'ManageDocumentController@list')->name('.list');
+        Route::get('download', 'ManageDocumentController@download')->name('.download');
         Route::get('create','ManageDocumentController@create')->name('.create');
         Route::get('view/{id}', 'ManageDocumentController@view')->name('.view');
 
@@ -124,7 +126,7 @@ Route::prefix('manage')->name('manage')->group(function(){
                 
 
         Route::put('remove_reference/{id}','DocumentActionController@remove_reference')->name('.remove_reference')->middleware('document-action:reference');
-
+        
 
         // Administrator document actions
         Route::patch('archive_document/{id}','DocumentAdminActionController@archive_document')

@@ -197,7 +197,6 @@ DMS - @yield('title','Document Management System')
 
 @slot('end_script')
 <script src="http://cdn.sportscity.com.ph/loading-modal/js/jquery.loadingModal.js"></script>
-
 @yield('bottom_script')
 @endslot
 

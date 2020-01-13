@@ -13,7 +13,7 @@ use App\Document;
 use App\Category;
 use App\DocumentDraft;
 use App\DocumentAccessor;
-use App\ReferenceDocument;
+use App\Reference;
 use App\DocumentModerator;
 use App\DocumentVersionAttachment;
 use App\Helpers\UploadHelper;
@@ -70,7 +70,7 @@ class DocumentActionController extends Controller
                     if($accessor==null)
                     {
                         DB::rollBack();
-                        abort(442,'User could not be found on the system!');
+                        abort(422,'User could not be found on the system!');
                     }
                     
                     $document_accessor=DocumentAccessor::firstOrNew([
@@ -154,7 +154,7 @@ class DocumentActionController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            abort(442,$e->getMessage());
+            abort(422,$e->getMessage());
         }
 
 
@@ -174,7 +174,7 @@ class DocumentActionController extends Controller
             'document.section'=>'required',
             'document.system'=>'required',
             'document.category'=>'required',
-            'document.keywords'=>'required',
+            'document.keywords'=>'nullable|string',
             'version.content'=>'required',
             'version.description'=>'required',
             'version.for_approval'=>'required',
@@ -199,9 +199,9 @@ class DocumentActionController extends Controller
         $category=Category::where('code','=',$doc_request['category'])->first();
 
         # Check if data exist
-        abort_if($section==null || $section->system_code!=$system->code, 442,'Section is not exist on the system!');
-        abort_if($system==null, 442,'System is not exist on the system!');
-        abort_if($category==null, 442,'Category is not exist on the system!');
+        abort_if($section==null || $section->system_code!=$system->code, 422,'Section is not exist on the system!');
+        abort_if($system==null, 422,'System is not exist on the system!');
+        abort_if($category==null, 422,'Category is not exist on the system!');
         
         try {
 
@@ -269,7 +269,7 @@ class DocumentActionController extends Controller
                     if($accessor==null)
                     {
                         DB::rollBack();
-                        abort(442,'User could not be found on the system!');
+                        abort(422,'User could not be found on the system!');
                     }
                     
                     DocumentAccessor::create([
@@ -295,13 +295,13 @@ class DocumentActionController extends Controller
             DB::commit();
 
             return response()->json([
-                'message'=>'Document has been successfully created and you will now redirected to document viewing!',
+                'message'=>'Document has been successfully created please wait for a moment and you will be redirected to the other page!',
                 'url'=>route('manage.documents.view',$document->id),
             ]);        
         } catch (\Exception $e) {
 
             DB::rollBack();
-            abort(442,$e->getMessage());
+            abort(422,$e->getMessage());
         }
     }
 
@@ -312,28 +312,31 @@ class DocumentActionController extends Controller
      */
     public function update_document(Request $request,$id)
     {
-        
-        $this->validate($request,[
+        $validation=[
             'title'=>'required',
             'section'=>'required',
             'system'=>'required',
             'category'=>'required',
-            'keywords'=>'required',
-        ]);
-        
-        
-        $user=auth()->user();
+            'keywords'=>'nullable',
+        ];
 
+        $user=auth()->user();
+        $document=Document::find($id);
+        abort_if(empty($document),404,'Document could not be found!');
         
+        # Set the validation for creator
+        if($user->can('initiate_action',$document))
+        {
+            $validation['created_by']='required';
+            $validation['serial']='required';
+        }
+
+
+        $this->validate($request,$validation);
+
         try {
             
             DB::beginTransaction();
-            
-            $document=Document::find($id);
-            if(empty($document))
-                return response()->json([
-                    'message'=>'Document is not found!'
-                ]);
             
             $document->title=$request['title'];
             $document->system_code=$request['system'];
@@ -342,33 +345,54 @@ class DocumentActionController extends Controller
             $document->keywords=explode(",",$request['keywords']);
             $document->comment=$request['comment'];
 
+            # Change the creator if the user is permitted to change
+            if($user->can('initiate_action',$document))
+            {
+                $document->created_by=$request['created_by'];
+                $document->serial=$request['serial'];
+            }
+            
+            # Check changes
+            if($document->isDirty())
+            {
+                if($document->isDirty('serial'))
+                    abort_if(DocumentHelper::check_serial_exists($document->category,$document->serial),422,'Serial has been used already on the selected category!');
+
+                # Record modification history
+                DocumentActionHistoryHelper::edit_document($document,$user);
+                # Update the document number if there are changes with the sequences like system, section....
+                DocumentHelper::update_document_number($document,$user);
  
-            DocumentActionHistoryHelper::edit_document($document,$user);
+                # reset the status of the current version approver and reviewer
+                DocumentHelper::reset_status($document->current_version()->first());
+                
+                $document->save();
+                DB::commit();
 
-            # Update the document number if there are changes with the sequences like system, section....
-            DocumentHelper::update_document_number($document);
-
-
-            $document->save();
-
+                return response()->json(['message'=>'Document has successfully saved!']);
+            }
+            else
+            {
+                DB::rollBack();
+                return response()->json(['message'=>'No changes has been made!']);
+            }
             
-            
-            
-            
-            DB::commit();
-
-            return response()->json([
-                'message'=>'Document has successfully saved!'
-            ]);
-
-        
         } catch (\Exception $e) {
 
             DB::rollBack();
 
-            return response()->json([
-                'message'=>$e->getMessage()
-            ],442);
+            switch($e->getCode())
+            {
+                case 23000:
+                    return response()->json(['message'=>'Failed to save the document due to the document number has already been used!'],422);
+                break;
+                default:
+                    return response()->json(['message'=>$e->getMessage()],422);
+                break;
+            }
+            
+
+            
         }
 
     }
@@ -379,23 +403,12 @@ class DocumentActionController extends Controller
     public function add_reference(Request $request,$id)
     {
         $this->validate($request,[
-            'document_number'=>'required',
-            'public'=>'required|boolean',
+            'reference'=>'required',
         ]);
         
         
         $document=Document::find($id);
         abort_if($document==null,404,'Document could not be found!');
-
-        $referred_document=Document::where('document_number','=',$request['document_number'])->first();
-
-
-        abort_if($referred_document==null,404,'Document number is not exists on the system!');
-        # Cannot reference the document to itself
-        abort_if($document->id==$referred_document->id,442,'You cannot add the document as reference to it self.');
-
-        # Check if the referred document is exists to the current document reference list
-        abort_if($document->reference_exists($referred_document)==true,404,'Document is already exists on the reference list.');
 
         $user=auth()->user();
 
@@ -403,11 +416,10 @@ class DocumentActionController extends Controller
                 
             DB::beginTransaction();
 
-            $reference_document=new ReferenceDocument;
+            $reference_document=new Reference;
             $reference_document->document_id=$document->id;
-            $reference_document->public=$request['public']=="true" || $request['public']==true?true:false;
             $reference_document->created_by=$user->name;
-            $reference_document->reference_document_id=$referred_document->id;
+            $reference_document->reference=$request['reference'];
             $reference_document->save();
 
             DocumentActionHistoryHelper::add_reference($reference_document,$user);
@@ -417,17 +429,17 @@ class DocumentActionController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            abort(442,$e->getMessage());
+            abort(422,$e->getMessage());
         }
     }
 
     /**
-     * Remove the reference document
-     * @param $id The database id of the reference document
+     * Remove the reference
+     * @param $id The database id of the reference
      */
     public function remove_reference(Request $request,$id)
     {
-        $reference_document=ReferenceDocument::find($id);    
+        $reference_document=Reference::find($id);    
         abort_if($reference_document==null,404,'Reference document could not be found!');
 
         $user=auth()->user();
@@ -443,7 +455,7 @@ class DocumentActionController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            abort(442,$e->getMessage());
+            abort(422,$e->getMessage());
         }
     }
 
@@ -483,7 +495,7 @@ class DocumentActionController extends Controller
             }
             else {
                 DB::rollBack();
-                abort(442,'No old versions available to roll back.');
+                abort(422,'Failed to roll back since there are no available old versions.');
             }
 
             # Save action history
@@ -496,7 +508,7 @@ class DocumentActionController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            abort(442,$e->getMessage());
+            abort(422,$e->getMessage());
         }
     }
 

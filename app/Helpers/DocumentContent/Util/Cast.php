@@ -4,12 +4,15 @@ namespace App\Helpers\DocumentContent\Util;
 
 use App\Helpers\DocumentContent\ContentType\Paragraph;
 use App\Helpers\DocumentContent\ContentType\Table;
+use App\Helpers\DocumentContent\ContentType\TableCell;
 use App\Helpers\DocumentContent\ContentType\Image;
 use App\Helpers\DocumentContent\ContentType\OrderedList\OrderedList;
 use App\Helpers\DocumentContent\ContentType\OrderedList\ListItem;
 use App\Helpers\DocumentContent\Datum;
 use App\Helpers\DocumentContent\Content;
 use App\Helpers\DocumentContent\ContentItem;
+
+
 
 
 class Cast
@@ -83,12 +86,17 @@ class Cast
         
         $list->has_parent=$data['has_parent'];
         $list->meta=$data['meta'];
+
+        //if($data['type']=='image')
+        //    $list->type='list';
         
         foreach ($data['list_items'] as $list_item) {
             
             # Instantiate new list item
             $temp_list_item = new ListItem();
+            $temp_list_item->data = static::cast_to_datum($list_item['data']);
 
+            /*
             switch ($list_item['data']['type']) {
                 case 'table':
                     $temp_list_item->data = static::cast_to_table($list_item['data']);
@@ -100,12 +108,15 @@ class Cast
                     $temp_list_item->data = static::cast_to_image($list_item['data']);
                     break;
             }
+            */
+          
 
             $temp_list_item->is_list = $list_item['is_list'];
             $temp_list_item->meta = $list_item['meta'];
             $temp_list=$list_item['ordered_list'];
 
             foreach ($temp_list as $li) {
+                //$temp_list_item->ordered_list[]=static::cast_to_datum($li);
                 $temp_list_item->ordered_list[]=static::cast_to_list($li);
             }
             $list->list_items[]=$temp_list_item;
@@ -115,12 +126,33 @@ class Cast
     }
     
     public static function cast_to_table($data) {
-            $temp = new Table;
-            $temp->header = $data['header'];
-            $temp->rows = $data['rows'];
+        
+        $rows=[];
+        $header=[];
+
+            foreach ($data['header'] as $value) {
+                $header[]=static::cast_to_cell($value);
+            }
+            foreach ($data['rows'] as $cells) {
+                $row=[];
+                foreach ($cells as $cell) {
+                    $row[]=static::cast_to_cell($cell);
+                }
+
+                $rows[]=$row;
+            }
+            
+
+            $temp = new Table($header,$rows);
+
             return $temp;
     }
+    public static function cast_to_cell($data) {
 
+            //$temp = new TableCell($data,false); // Enabled temporarily during maintenance
+            $temp = new TableCell($data['value'],$data['fit']); // Disabled temporarily during maintenance
+            return $temp;
+    }
     public static function cast_to_paragraph($data) {
             $temp = new Paragraph;
             $temp->value = $data['value'];

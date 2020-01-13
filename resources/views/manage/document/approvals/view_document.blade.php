@@ -20,7 +20,7 @@
 <div id="app-document">
     @if($document->obsolete==true)
     <div class="alert-custom alert-custom-warning">
-        <span>This document is obsolete.</span>
+        <span>The document that you are viewing is <strong>obsolete</strong>.</span>
     </div>
     @endif
 
@@ -105,7 +105,7 @@
                         <th>Prepared By</th>
                         <td colspan="5">
                             <u>{{ $current_version->creator->name }}</u>&nbsp;<a title="Reviewed" class="text-green">-
-                                <small>{{ $current_version->updated_at }}</small></a>
+                                <small>{{ $current_version->creator_modified_at }}</small></a>
                             <br>
                             {{ $current_version->creator->position }}
                         </td>
@@ -147,12 +147,7 @@
                         </td>
                     </tr>
 
-                    <tr>
-                        <td>Revision Logs</td>
-                        <td colspan="5">
-                            <a data-toggle="modal" href='#modal-revision'>View Revision Logs</a>
-                        </td>
-                    </tr>
+
                 </tbody>
             </table>
         </div>
@@ -202,23 +197,7 @@
             <comments version_id="{{ $current_version->id }}"></comments>
         </div>
     </div>
-
-    <div class="modal fade" id="modal-revision">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Revision Logs</h4>
-                </div>
-                <div class="modal-body">
-                    <iframe src="/content/view/revision-logs/{{ $document->id }}" height="700" width="100%"></iframe>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+ 
 
 
 </div>

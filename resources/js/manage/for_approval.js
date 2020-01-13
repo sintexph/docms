@@ -1,5 +1,5 @@
 import "@sintexph/vue-lib"
-Vue.mixin(httpAlert);
+Vue.mixin(toastHelper);Vue.mixin(httpAlert);
 
 Vue.component('doc-for-approval', require('.././components/manage/for_approval/list.vue').default);
 Vue.component('comments', require('.././components/manage/documents/comments.vue').default);

@@ -71,7 +71,7 @@
                         label: 'Name',
                         name: 'name',
                         data: 'name',
-                        className: 'nowrap',
+                        className: 'fit',
                     },
                     {
                         label: 'Created By',
@@ -111,7 +111,7 @@
                         label: 'Actions',
                         name: 'id',
                         data: 'id',
-                        className: 'nowrap',
+                        className: 'fit',
                         render: function (data, meta, row) {
                             
                             if (row.deleted_at !== null) {

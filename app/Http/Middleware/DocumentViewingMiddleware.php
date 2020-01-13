@@ -34,8 +34,9 @@ class DocumentViewingMiddleware
                 return $next($request);
         }
         
-        # Cannot view if not approved
-        if($document_version->released==false || $document_version->approved==false || $document_version->reviewed==false)
+
+        # Cannot view if not approved or document archived
+        if($document->archived==true || $document_version->released==false || $document_version->approved==false || $document_version->reviewed==false)
             abort(403,'Document is not available for viewing.');
 
         # Cannot view based on the type of access of the document

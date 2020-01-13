@@ -114,7 +114,7 @@ class ManageSectionController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            abort(442,$e->getMessage());
+            abort(422,$e->getMessage());
         }
     }
 
@@ -126,9 +126,23 @@ class ManageSectionController extends Controller
     {
         $section=Section::find($id);
         abort_if($section==null,404,'Section could not be found!');
-        $section->delete();
+        
+        try {
+            DB::beginTransaction();
 
-        return response()->json(['message'=>'Section has been successfully put to archived!']);
+            $section->edited_by=auth()->user()->name;
+            $section->save();
+
+            $section->delete();
+
+            DB::commit();
+
+            return response()->json(['message'=>'Section has been successfully put to archived!']);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            abort(422,$th->getMessage());
+        }
     }
 
     /**
@@ -139,9 +153,25 @@ class ManageSectionController extends Controller
     {
         $section=Section::withTrashed()->where('id',$id);
         abort_if($section==null,404,'Section could not be found!');
-        $section->restore();
 
-        return response()->json(['message'=>'Section has been successfully restored!']);
+        try {
+            DB::beginTransaction();
+
+            $section->restore();
+            
+
+            $section=Section::find($id);
+            $section->edited_by=auth()->user()->name;
+            $section->save();
+
+            DB::commit();
+
+            return response()->json(['message'=>'Section has been successfully restored!']);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            abort(422,$th->getMessage());
+        }
     }
     /**
      * Permanently delete the data from the section

@@ -34,6 +34,7 @@ DMS - @yield('title','Document Management System')
 <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
     <ul class="nav navbar-nav">
         <li class="@yield('nav-1')"><a href="/">Home <span class="sr-only">(current)</span></a></li>
+        <li><a href="/?guide=true">Guide</a></li> 
     </ul>
 
 

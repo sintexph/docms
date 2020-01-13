@@ -1,5 +1,5 @@
 import "@sintexph/vue-lib"
-Vue.mixin(httpAlert);
+Vue.mixin(toastHelper);Vue.mixin(httpAlert);
 
 
 Vue.component('manage-account', require('./components/account/list.vue').default);

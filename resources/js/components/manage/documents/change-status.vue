@@ -7,7 +7,8 @@
             <div class="box-body">
                 <div class="form-group" style="min-width: 150px;">
                     <label class="control-label">Status</label>
-                    <select2 :options="status_data" style_name="width:100%;" placeholder="Please choose a status" :required="true" @selected="status_selected"></select2>
+                    <select2 v-model="status" :options="status_data" style_name="width:100%;" placeholder="Please choose a status"
+                        :required="true"></select2>
                 </div>
             </div>
             <div class="box-footer">
@@ -26,6 +27,10 @@
                 status_data: [
 
                     {
+                        id: '',
+                        text: '-- Choose --',
+                    },
+                    {
                         id: 'obsolete',
                         text: 'OBSOLETE',
                     },
@@ -39,9 +44,7 @@
             }
         },
         methods: {
-            status_selected: function (val) {
-                this.status = val[0].id;
-            },
+            
             submit: function () {
 
                 let parent = this;

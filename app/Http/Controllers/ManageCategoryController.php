@@ -108,7 +108,7 @@ class ManageCategoryController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            abort(442,$e->getMessage());
+            abort(422,$e->getMessage());
         }
     }
     /**
@@ -119,9 +119,23 @@ class ManageCategoryController extends Controller
     {
         $category=Category::find($id);
         abort_if($category==null,404,'Category could not be found!');
-        $category->delete();
+        
+        try {
+            DB::beginTransaction();
 
-        return response()->json(['message'=>'Category has been successfully put to archived!']);
+            $category->edited_by=auth()->user()->name;
+            $category->save();
+
+            $category->delete();
+
+            DB::commit();
+
+            return response()->json(['message'=>'Category has been successfully put to archived!']);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            abort(422,$th->getMessage());
+        }
     }
 
     /**
@@ -132,9 +146,25 @@ class ManageCategoryController extends Controller
     {
         $category=Category::withTrashed()->where('id',$id);
         abort_if($category==null,404,'Category could not be found!');
-        $category->restore();
 
-        return response()->json(['message'=>'Category has been successfully restored!']);
+        try {
+            DB::beginTransaction();
+
+            $category->restore();
+            
+
+            $category=Category::find($id);
+            $category->edited_by=auth()->user()->name;
+            $category->save();
+
+            DB::commit();
+
+            return response()->json(['message'=>'Category has been successfully restored!']);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            abort(422,$th->getMessage());
+        }
     }
     /**
      * Permanently delete the data from the category

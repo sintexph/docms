@@ -1,5 +1,5 @@
 import "@sintexph/vue-lib"
-Vue.mixin(httpAlert);
+Vue.mixin(toastHelper);Vue.mixin(httpAlert);
 
 
 Vue.component('manage-category', require('./components/category/list.vue').default);

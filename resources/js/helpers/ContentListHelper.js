@@ -11,11 +11,18 @@ export class ContentListHelper {
     static list_representation(ordered_list, parent_label) {
         var count = 0;
 
+         var list_items = ordered_list.list_items;
+         if(list_items===undefined || list_items===null)
+            return '';
         var result = '<table class="ordered-list"><tbody>';
-        var list_items = ordered_list.list_items;
-
+       
+ 
+   
         for (var i = 0; i < list_items.length; i++) {
             var list_item = ordered_list.list_items[i];
+
+           
+
             result += '<tr>';
 
             var item_label = this.generate_before_label(ordered_list.meta.style, count + 1);
@@ -31,7 +38,7 @@ export class ContentListHelper {
             }
 
             result += '<td class="ol-content">' + list_item.data.toString();
-            var temp_list = list_item.ordered_list;
+            var temp_list = list_item.ordered_list; 
 
             for (var j = 0; j < temp_list.length; j++) {
                 result += this.list_representation(temp_list[j], item_label);

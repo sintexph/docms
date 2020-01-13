@@ -6,7 +6,7 @@ use Closure;
 use Auth;
 use App\Document;
 use App\DocumentVersion;
-use App\ReferenceDocument;
+use App\Reference;
 use App\DocumentVersionAttachment;
 
 class DocumentActionMiddleware
@@ -47,7 +47,7 @@ class DocumentActionMiddleware
             
         }
         elseif($model=='reference') {
-            $reference_document=ReferenceDocument::find($request['id']);
+            $reference_document=Reference::find($request['id']);
             abort_if($reference_document==null,404,'Could not find the the document version.');
 
             $document=$reference_document->document;
@@ -63,11 +63,11 @@ class DocumentActionMiddleware
 
 
         if($document->archived)
-             abort(442,'The document is archived and could not do any further action.'); 
+             abort(422,'The document is archived and could not do any further action.'); 
         if($document->obsolete)
-             abort(442,'The document is obsolete and could not do any further action.'); 
+             abort(422,'The document is obsolete and could not do any further action.'); 
         if($document->locked)
-             abort(442,'The document is locked and could not do any further action.'); 
+             abort(422,'The document is locked and could not do any further action.'); 
 
 
         # Cannot view if not administrator, creator or moderator of the document

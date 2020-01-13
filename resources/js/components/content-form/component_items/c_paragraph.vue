@@ -1,10 +1,8 @@
 <template>
     <div>
-
-
         <div class="form-group">
-            <textarea class="form-control" ref="textarea" @keypress.enter="increment_height"
-                @keydown.8="decrease_height" v-model="paragraph.value" :rows="rows"></textarea>
+            <textarea-autosize class="form-control" placeholder="Type something here..." ref="textarea"
+                v-model="paragraph.value" :min-height="50" :max-height="350"></textarea-autosize>
             <div style="padding-top:5px">
                 <a href="#" class="btn btn-xs btn-default text-primary" title="Make it bold" @click.prevent="bold"><i
                         class="fa fa-bold" aria-hidden="true"></i></a>
@@ -18,12 +16,16 @@
     </div>
 </template>
 <script>
+    import VueTextareaAutosize from 'vue-textarea-autosize'
     export default {
+        components: {
+            VueTextareaAutosize
+        },
         props: {
             rows: {
                 type: [String, Number],
                 default: function () {
-                    return 10;
+                    return 2;
                 }
             },
             value: {
@@ -42,10 +44,12 @@
         methods: {
             replace_highlight: function (toReplace, element) {
 
+                element = element.$el;
                 // obtain the index of the first selected character
                 var start = element.selectionStart;
                 // obtain the index of the last selected character
                 var finish = element.selectionEnd;
+
                 //obtain all Text
                 var allText = element.value;
 
@@ -67,26 +71,16 @@
             reset: function () {
                 this.paragraph = new Paragraph;
                 this.$emit('input', this.paragraph);
-                this.isChunk=false;
+                this.isChunk = false;
             },
-            increment_height: function () {
-                this.$refs.textarea.rows += this.textAreaAutoHeight();
-            },
-            decrease_height: function () {
-                if (this.$refs.textarea.rows > 1) {
-                    this.$refs.textarea.rows -= this.textAreaAutoHeight() - 1;
-                }
-            },
-            textAreaAutoHeight: function () {
-                return this.paragraph.value.replace(/\s/g, '').split("\n").length + (this.$refs.textarea
-                    .scrollHeight / this.$refs.textarea.offsetHeight);
-            },
+
+
             chunk: function () {
                 if (this.isChunk === true) {
                     var par_array = new Array;
                     var split_value = this.paragraph.value.split('\n');
 
-                    
+
                     split_value.forEach(function (val) {
                         par_array.push(new Paragraph(val));
                     });
@@ -94,22 +88,28 @@
                 }
                 return new Array;
 
-            }
+            },
+
+
         },
         watch: {
             paragraph: {
                 deep: true,
                 handler: function (val) {
+
                     this.$emit('input', val);
+
                 }
             },
             value: {
                 deep: true,
                 handler: function (val) {
                     this.paragraph = val;
+
+
                 }
             }
-        }
+        },
     }
 
 </script>

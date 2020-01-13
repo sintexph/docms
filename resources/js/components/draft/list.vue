@@ -51,7 +51,7 @@
                         label: 'Title',
                         name: 'document_title',
                         data: 'document_title',
-                        className: "nowrap"
+                        className: 'fit'
                     },
 
 
@@ -65,7 +65,7 @@
                         label: 'Action',
                         name: 'id',
                         data: 'id',
-                        className: "nowrap",
+                        className: 'fit',
                         render: function (data) {
                             var btn_modify = `<a href="/manage/documents/create?draft=` + data +
                                 `" target="_blank"><i class="fa fa-pencil" aria-hidden="true"></i> Modify</a>`;

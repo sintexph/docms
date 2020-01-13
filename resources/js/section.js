@@ -1,5 +1,5 @@
 import "@sintexph/vue-lib"
-Vue.mixin(httpAlert);
+Vue.mixin(toastHelper);Vue.mixin(httpAlert);
 
 Vue.component('manage-section', require('./components/section/list.vue').default);
 Vue.component('create-section', require('./components/section/create.vue').default);

@@ -1,6 +1,6 @@
 <template>
     <modal :name="'view-version'+_uid" ref="modal" :extended_width="true">
-        <template slot="header">View Full</template>
+        <template slot="header">Full View</template>
         <template slot="body">
           <iframe :src="src" width="100%" height="600"></iframe>
         </template>
