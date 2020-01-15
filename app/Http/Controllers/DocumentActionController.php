@@ -21,6 +21,7 @@ use App\Helpers\DocumentHelper;
 use App\Helpers\DocumentActionHistoryHelper;
 use Illuminate\Support\Facades\Input;
 use App\Helpers\DocumentContent\Util\Cast;
+use App\Helpers\DocumentVersionHelper;
 
 class DocumentActionController extends Controller
 {
@@ -177,8 +178,6 @@ class DocumentActionController extends Controller
             'document.keywords'=>'nullable|string',
             'version.content'=>'required',
             'version.description'=>'required',
-            'version.for_approval'=>'required',
-            'version.for_review'=>'required',
             'version.reviewers.*'=>'required',
             'version.approvers.*'=>'required',
             'version.effective_date'=>'date',
@@ -224,10 +223,9 @@ class DocumentActionController extends Controller
                 Cast::generalize_keys($version_request['content']),
                 Cast::generalize_keys($version_request['description']),
                 $version_request['effective_date'],
-                $version_request['expiry_date'],
-                $version_request['for_review'],
-                $version_request['for_approval']
+                $version_request['expiry_date']
             );
+
 
 
             # Save a new list
@@ -235,17 +233,19 @@ class DocumentActionController extends Controller
                 $user_rev=User::find($value);
                 if($user_rev==null)
                     abort(404,'Reviewer not could not be found on the system');
-
-                DocumentHelper::save_reviewer($user_rev,$version);
+                DocumentHelper::save_reviewer($user_rev,$version,true);
             }
+
+            if($version->reviewers->count()!=0) # If there are reviewers
+                DocumentVersionHelper::for_review($version); # Set the document version for review
+
 
             # Save a new list
             foreach ($version_request['approvers'] as $value) {
                 $user_rev=User::find($value);
                 if($user_rev==null)
                     abort(404,'Approver not could not be found on the system');
-
-                DocumentHelper::save_approver($user_rev,$version);
+                DocumentHelper::save_approver($user_rev,$version,false);
             }
 
             # Remove the draft if the current saving has a linked draft
@@ -291,6 +291,7 @@ class DocumentActionController extends Controller
             # ------------------------------
             # ------ END SET THE ACCESSORS------
             # ------------------------------
+
 
             DB::commit();
 
@@ -364,7 +365,7 @@ class DocumentActionController extends Controller
                 DocumentHelper::update_document_number($document,$user);
  
                 # reset the status of the current version approver and reviewer
-                DocumentHelper::reset_status($document->current_version()->first());
+                DocumentVersionHelper::reset_status($document->current_version()->first());
                 
                 $document->save();
                 DB::commit();

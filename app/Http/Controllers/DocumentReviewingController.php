@@ -17,7 +17,6 @@ class DocumentReviewingController extends Controller
     
     public function index()
     {
-
         return view('manage.document.reviews.index');
     }
 

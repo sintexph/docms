@@ -71,21 +71,6 @@ export default {
                 var temp_list_item = new ListItem();
                 temp_list_item.data = vm.cast_to_datum(list_item.data);
 
-                /*
-                switch (list_item.data.type) {
-                    case 'table':
-                        temp_list_item.data = vm.cast_to_datum(list_item.data);
-                        break;
-                    case 'paragraph':
-                        temp_list_item.data = vm.cast_to_datum(list_item.data);
-                        break;
-                    case 'image':
-                        console.log(list_item.data);
-                        temp_list_item.data = vm.cast_to_datum(list_item.data);
-                        break;
-                }
-                */
-
                 temp_list_item.is_list = list_item.is_list;
 
                 if (list_item.meta !== undefined)

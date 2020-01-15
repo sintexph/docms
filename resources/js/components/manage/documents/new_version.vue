@@ -16,8 +16,6 @@
                     number: '',
                     content: new Content,
                     description: new Content,
-                    for_review: false,
-                    for_approval: false,
                     reviewers: [],
                     approvers: [],
                     effective_date: '',
@@ -38,7 +36,7 @@
 
 
                     axios.patch('/manage/documents/new_version/' + parent.document_id, {
-                        version: this.version
+                        version: this.version.toObject()
                     }).then(function (response) {
                         parent.hide_wait();
                         parent.alert_success(response);

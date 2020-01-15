@@ -15,8 +15,6 @@ class ReviewerMiddleware
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
-        
         $user=auth()->user();
         if($user==null)
             return redirect()->route('login');

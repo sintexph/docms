@@ -120,8 +120,6 @@
                 this.version.number = this.value.number;
                 this.version.content = this.value.content;
                 this.version.description = this.value.description;
-                this.version.for_review = this.value.for_review;
-                this.version.for_approval = this.value.for_approval;
                 this.version.reviewers = this.value.reviewers;
                 this.version.approvers = this.value.approvers;
                 this.version.effective_date = this.value.effective_date;

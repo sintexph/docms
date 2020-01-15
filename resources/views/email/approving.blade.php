@@ -4,7 +4,7 @@
 @slot('content')
 <p>Hi {{ $receiver }},</p>
 
-<p>You have been set as <strong>Approver</strong> of the document that was been created by {{$creator}} and below are the details.</p>
+<p>A document that was created by {{$creator}} is needed for your approval, please see the details below.</p>
 <span><strong>Document No.:</strong> {{ $document_number }}</span><br>
 <span><strong>Version:</strong> {{ $version_number }}</span><br>
 <span><strong>Title:</strong> {{ $title }}</span><br>

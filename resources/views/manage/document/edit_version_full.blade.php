@@ -22,8 +22,7 @@
         :reviewers="{{ $selected_version->reviewers->map(function($user_r){return $user_r->user->id;}) }}"
         :approvers="{{ $selected_version->approvers->map(function($user_r){return $user_r->user->id;}) }}"
         version_id="{{ $selected_version->id }}"
-        :for_approval="{{ $selected_version->for_approval==true?'true':'false' }}"
-        :for_review="{{ $selected_version->for_review==true?'true':'false' }}">
+        >
     </edit-version>
     @endif
 </div>

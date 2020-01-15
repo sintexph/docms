@@ -32,12 +32,8 @@ class DocumentVersionHelper
             $document_version->reviewed=true;
             $document_version->save();
 
-           
-            # Send email notification to the approvers
-            foreach ($document_version->approvers as $approver) {
-                MailHelper::send_email_approver($approver);
-            }
-           
+            # update for approval next process
+            static::for_approve($document_version);
         }
 
         return $document_version;
@@ -74,15 +70,52 @@ class DocumentVersionHelper
         return $document_version;
     }
 
-    /*
-    public static function update_test()
+    public static function for_review(DocumentVersion $document_version)
     {
-        $versions=\App\DocumentVersion::all();
-        foreach ($versions as $version) {
-
-            static::update_review_status($version);
-            static::update_approve_status($version);
+        $document_version->for_review=true;
+        $document_version->save();
+        
+        foreach ($document_version->reviewers as $reviewer) {
+            MailHelper::send_email_reviewer($reviewer);
         }
     }
-    */
+
+    public static function for_approve(DocumentVersion $document_version)
+    {
+        $document_version->for_approval=true;
+        $document_version->save();
+
+        foreach ($document_version->approvers as $reviewer) {
+            MailHelper::send_email_approver($reviewer);
+        }
+    }
+
+    /**
+     * RESET THE STATUS OF THE VERSION APPROVAL AND REVIEW
+     */
+    public static function reset_status(DocumentVersion $version)
+    {
+        
+        $version->reviewed=false;
+        $version->approved=false;
+        $version->for_approval=false;
+        $version->for_review=false;
+        $version->save();
+
+        foreach($version->approvers as $approver)
+        {
+            $approver->approved=false;
+            $approver->approved_at=null;
+            $approver->save();
+        }
+        
+        foreach($version->reviewers as $reviewer)
+        {
+            $reviewer->reviewed=false;
+            $reviewer->reviewed_at=null;
+            $reviewer->save();
+        }
+
+        return $version;
+    }
 }

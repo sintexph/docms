@@ -36,9 +36,7 @@
                     if (parent.draft !== null)
                         link = '/manage/documents/save?draft=' + parent.draft.id;
 
-                    // By default set the send for approval and send for review to true when submitting the document
-                    parent.version.for_review = false;
-                    parent.version.for_approval = false;
+
 
                     axios.put(link, {
                         document: parent.document.toObject(),
@@ -107,8 +105,6 @@
                     this.version.reviewers = this.draft.version_reviewer_ids;
                     this.version.approvers = this.draft.version_approver_ids;
                     this.version.effective_date = this.draft.version_effective_date;
-                    this.version.for_review = this.draft.version_for_review;
-                    this.version.for_approval = this.draft.version_for_approval;
                     this.version.content = this.cast_to_content(this.draft.version_content);
                     this.version.description = this.cast_to_content(this.draft.version_description);
 

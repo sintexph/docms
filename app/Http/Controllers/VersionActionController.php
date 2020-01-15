@@ -13,8 +13,7 @@ use App\Helpers\DocumentHelper;
 use App\Helpers\DocumentActionHistoryHelper;
 use App\Helpers\MailHelper;
 use App\Helpers\DocumentContent\Util\Cast;
-use App\DocumentApprover;
-use App\DocumentReviewer;
+use App\Helpers\DocumentVersionHelper;
 
 class VersionActionController extends Controller
 {
@@ -76,14 +75,11 @@ class VersionActionController extends Controller
             'version.effective_date'=>'date',
             'version.content'=>'required',
             'version.description'=>'required',
-            'version.for_review'=>'required',
-            'version.for_approval'=>'required',
             'version.reviewers.*'=>'required',
             'version.approvers.*'=>'required',
-            
         ];
         
-        //$this->validate($request,$validation);
+        $this->validate($request,$validation);
 
         $version_data=(object)$request['version'];
       
@@ -113,31 +109,12 @@ class VersionActionController extends Controller
                 Cast::generalize_keys($version_data->content), // Cast again to verify
                 Cast::generalize_keys($version_data->description), // Cast again to verify
                 $version_data->effective_date,
-                $version_data->expiry_date,
-                $version_data->for_review,
-                $version_data->for_approval
+                $version_data->expiry_date
             );
           
 
-            //DB::rollBack();
-            //die();
- 
-
             $document->version=$version->version;
             $document->save();
-
-
-            # Save the changes and revisions
-            /*
-            $changes=new \App\Helpers\TextDiff($current_version->content,$version->content);
-            if($changes->hasChanges())
-                DocumentHelper::save_revision($version,$user,$changes->getResult());
-            else
-            {
-                DB::rollBack();
-                abort(422,'There are no changes of the document!');
-            }
-            */
 
 
             # Save a new list
@@ -149,6 +126,9 @@ class VersionActionController extends Controller
                 DocumentHelper::save_reviewer($user_rev,$version);
             }
 
+            if($version->reviewers->count()!=0) # If there are reviewers
+                DocumentVersionHelper::for_review($version); # Set the document version for review
+
             # Save a new list
             foreach ($version_data->approvers as $value) {
                 $user_rev=User::find($value);
@@ -157,6 +137,8 @@ class VersionActionController extends Controller
 
                 DocumentHelper::save_approver($user_rev,$version);
             }
+
+
 
             
 
@@ -180,10 +162,8 @@ class VersionActionController extends Controller
             'version.description'=>'required',
             'version.reviewers.*'=>'nullable',
             'version.approvers.*'=>'nullable',
-            'version.for_review'=>'required',
-            'version.for_approval'=>'required',
             'version.effective_date'=>'required|date',
-            'submit_only'=>'required',
+            'save_only'=>'required|boolean',
 
         ];
         
@@ -215,48 +195,41 @@ class VersionActionController extends Controller
             $document_version->description=Cast::generalize_keys($version_data->description);
             $document_version->effective_date=$version_data->effective_date;
             $document_version->expiry_date=$version_data->expiry_date;
-            $document_version->for_approval=$version_data->for_approval;
-            $document_version->for_review=$version_data->for_review;
             
-
-            if($request->submit_only==false) # Update only if it is submitted officially
+            if($request->save_only==false) # Update only if it is submitted officially
                 $document_version->creator_modified_at=\Carbon\Carbon::now();
- 
-            $dirty=$document_version->isDirty();
+
             $document_version->save();
 
-            if($dirty==true)
-                DocumentHelper::reset_status($document_version);
-
+            
             # Delete first the list
             $document_version->reviewers()->whereNotIn('user_id',$version_data->reviewers)->delete();
             # Save a new list
-            foreach ($version_data->reviewers as $value) {
+            foreach ($version_data->reviewers as $reviewer_user_id) {
 
                 # Add the user as reviewer if not exists on the document version as reviewer
-                if(!$document_version->reviewers()->where('user_id',$value)->exists())
+                if(!$document_version->reviewers()->where('user_id',$reviewer_user_id)->exists())
                 {
-                    $user_rev=User::find($value);
+                    $user_rev=User::find($reviewer_user_id);
                     if($user_rev==null)
                         abort(404,'Reviewer not could not be found on the system');
                     else {
-                        DocumentHelper::save_reviewer($user_rev,$document_version,$request->submit_only);
+                        DocumentHelper::save_reviewer($user_rev,$document_version);
                     }
                 }
                 else
                 {
-                    if($dirty==true)
+                    if($request->save_only==false)
                     {
-                        
                         # Send notification to reviewer that the document was changed.
-                        $reviewer=$document_version->reviewers->where('user_id',$value)->first();
-                        MailHelper::document_version_changed_reviewer($reviewer);
+                        $reviewer=$document_version->reviewers->where('user_id',$reviewer_user_id)->first();
+                        MailHelper::document_version_changed_reviewer($reviewer); # Required to notify every time there are changes
                     }
                     
                 }
 
             }
-            
+
             # Delete first the approver list
             $document_version->approvers()->whereNotIn('user_id',$version_data->approvers)->delete();
             # Save a new list
@@ -269,22 +242,15 @@ class VersionActionController extends Controller
                     if($user_rev==null)
                         abort(404,'Approver not could not be found on the system');
                     else
-                        DocumentHelper::save_approver($user_rev,$document_version,$request->submit_only);   
+                        DocumentHelper::save_approver($user_rev,$document_version,$request->save_only);   
                 }
-                else
-                {
-                    if($dirty==true)
-                    {
-                        # Send notification to reviewer that the document was changed.
-                        $approver=$document_version->approvers->where('user_id',$value)->first();
-                        MailHelper::document_version_changed_approver($approver);
-                    }
-                    
-                }
-                
             }
 
-            
+            # Reset the status of the version
+            DocumentVersionHelper::reset_status($document_version);
+
+            if($request->save_only==false)
+                DocumentVersionHelper::for_review($document_version);
             
             DB::commit();
 
@@ -297,121 +263,6 @@ class VersionActionController extends Controller
         }
 
     }
-
-    /**
-     * Send the document version for review
-     */
-    public function for_review($id)
-    {
-        try {
-
-            $document_version=DocumentVersion::find($id);
-            abort_if($document_version==null,404,'Could not find the document version');
-            abort_if($document_version->reviewed==true,422,'Document version is already reviewed!');
-            abort_if($document_version->for_review==true,422,'Document version is already send for review');
-
-            DB::beginTransaction();
-
-            $document_version->for_review=true;
-            $document_version->save();
-            
-            foreach ($document_version->reviewers as $reviewer) {
-                # Send email to the reviewer
-                MailHelper::send_email_reviewer($reviewer);
-            }
-
-
-            DB::commit();
-
-            return response()->json(['message'=>'Document has been successfully sent out for review!']);
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            abort(422,$e->getMessage());
-        }
-    }
-    /**
-     * Send the document version for review
-     */
-    public function cancel_for_review($id)
-    {
-        try {
-
-            $document_version=DocumentVersion::find($id);
-            abort_if($document_version==null,404,'Could not find the document version');
-            abort_if($document_version->reviewed==true,422,'Document version is already reviewed!');
-            abort_if($document_version->for_review==false,422,'Document version is already cancelled the for review!');
-
-            
-            $document_version->for_review=false;
-            $document_version->save();
-            
-
-            return response()->json(['message'=>'Document has been successfully cancelled the for review!']);
-
-        } catch (\Exception $e) {
-
-            abort(422,$e->getMessage());
-        }
-    }
-    /**
-     * Send the document version for approval
-     */
-    public function for_approval($id)
-    {
-        try {
-
-            $document_version=DocumentVersion::find($id);
-            abort_if($document_version==null,404,'Could not find the document version');
-            abort_if($document_version->approved==true,422,'Document version is already approved!');
-            abort_if($document_version->for_approval==true,422,'Document version is already send for approval');
-
-            DB::beginTransaction();
-
-            $document_version->for_approval=true;
-            $document_version->save();
-            
-            foreach ($document_version->approvers as $approver) {
-                # Send email to the approver
-                MailHelper::send_email_approver($approver);
-            }
-
-
-
-            DB::commit();
-
-            return response()->json(['message'=>'Document has been successfully sent out for approval!']);
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            abort(422,$e->getMessage());
-        }
-    }
-    /**
-     * Send the document version for approval
-     */
-    public function cancel_for_approval($id)
-    {
-        try {
-
-            $document_version=DocumentVersion::find($id);
-            abort_if($document_version==null,404,'Could not find the document version');
-            abort_if($document_version->approved==true,422,'Document version is already approved!');
-            abort_if($document_version->for_approval==false,422,'Document version is already cancelled the for approval!');
-
-            
-            $document_version->for_approval=false;
-            $document_version->save();
-            
-
-            return response()->json(['message'=>'Document has been successfully cancelled the for approval!']);
-
-        } catch (\Exception $e) {
-
-            abort(422,$e->getMessage());
-        }
-    }
-
 
     /**
      * Upload files to the document attachment

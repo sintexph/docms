@@ -92,8 +92,6 @@ class DocumentHelper
         $description,
         $effective_date,
         $expiry_date,
-        $for_review=false,
-        $for_approval=false,
         $version_number=null)
     {
         # Initialize new version of the document
@@ -126,8 +124,8 @@ class DocumentHelper
         $version->description=$description;
         $version->effective_date=$effective_date;
         $version->expiry_date=$expiry_date;
-        $version->for_approval=$for_approval;
-        $version->for_review=$for_review;
+        $version->for_approval=false;
+        $version->for_review=false;
         $version->current=true;
         $version->active=false;
         $version->creator_modified_at=\Carbon\Carbon::now();
@@ -138,28 +136,21 @@ class DocumentHelper
 
         return $version;
     }
-    public static function save_reviewer(User $reviewer,DocumentVersion $version,$send_email=true)
+    public static function save_reviewer(User $reviewer,DocumentVersion $version)
     {
         $data=DocumentReviewer::create([
             'user_id'=>$reviewer->id,
             'version_id'=>$version->id,
         ]);
-        
-        if($send_email==true)
-            MailHelper::send_email_reviewer($data);
 
         return $data;
     }
-    public static function save_approver(User $approver,DocumentVersion $version,$send_email=true)
+    public static function save_approver(User $approver,DocumentVersion $version)
     {
         $data=DocumentApprover::create([
             'user_id'=>$approver->id,
             'version_id'=>$version->id,
         ]);
-        
-        if($send_email==true)
-            MailHelper::send_email_approver($data);
-        
         return $data;
     }
 
@@ -218,26 +209,7 @@ class DocumentHelper
         }
     }
 
-    /**
-     * RESET THE STATUS OF THE VERSION APPROVAL AND REVIEW
-     */
-    public static function reset_status(DocumentVersion $version)
-    {
-        foreach($version->approvers as $approver)
-        {
-            $approver->approved=false;
-            $approver->approved_at=null;
-            $approver->save();
-        }
-        foreach($version->reviewers as $reviewer)
-        {
-            $reviewer->reviewed=false;
-            $reviewer->reviewed_at=null;
-            $reviewer->save();
-        }
 
-        return $version;
-    }
 
     
 }

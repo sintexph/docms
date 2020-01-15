@@ -5,32 +5,8 @@
         </div>
         <div class="box-body no-padding">
             <ul class="nav nav-pills nav-stacked">
-                <li>
-                    <a href="#" v-if="selected_version.for_review===false && selected_version.reviewed===false"
-                        @click.prevent="send_for_review">
-                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
-                        <span>Send for Review</span>
-                    </a>
-                    <a href="#" v-if="selected_version.for_review===true && selected_version.reviewed===false"
-                        @click.prevent="cancel_send_for_review">
-                        <i class="fa fa-close" aria-hidden="true"></i>
-                        <span>Cancel for Review</span>
-                    </a>
-                </li>
-
-                <li>
-
-                    <a href="#" v-if="selected_version.for_approval===false && selected_version.approved===false"
-                        @click.prevent="send_for_approval">
-                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
-                        <span>Send for Approval</span>
-                    </a>
-                    <a href="#" v-if="selected_version.for_approval===true && selected_version.approved===false"
-                        @click.prevent="cancel_send_for_approval">
-                        <i class="fa fa-close" aria-hidden="true"></i>
-                        <span>Cancel for Approval</span>
-                    </a>
-                </li>
+         
+ 
 
                 <li><a :href="'/content/download/version/'+selected_version.id">
                         <i class="fa fa-download" aria-hidden="true"></i>
@@ -118,98 +94,7 @@
                 }
 
             },
-            send_for_review: function () {
-                var par = this;
-                if (par.submitted === false) {
-                    if (confirm('Do you want to send the document version for review?') === true) {
-                        par.submitted = true;
-                        // Show wait modal
-                        par.show_wait("Please wait while the system is sending the emails to the reviewers...");
-
-                        axios.patch('/manage/documents/for_review/' + par.selected_version.id).then(function (
-                            response) {
-                            par.alert_success(response);
-                            setTimeout(() => {
-                                location.reload();
-                            }, 1000);
-
-                        }).catch(function (error) {
-                            // Hide wait modal
-                            par.hide_wait();
-                            par.submitted = false;
-                            par.alert_failed(error);
-                        });
-                    }
-                }
-
-            },
-            cancel_send_for_review: function () {
-                var par = this;
-                if (par.submitted === false) {
-                    if (confirm('Do you want to cancel the document version for review?') === true) {
-                        par.submitted = true;
-                        axios.patch('/manage/documents/for_review/cancel/' + par.selected_version.id).then(
-                            function (
-                                response) {
-                                par.alert_success(response);
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 1000);
-                            }).catch(function (error) {
-
-                            par.submitted = false;
-                            par.alert_failed(error);
-                        });
-                    }
-                }
-
-            },
-            send_for_approval: function () {
-                var par = this;
-                if (par.submitted === false) {
-                    if (confirm('Do you want to send the document version for approval?') === true) {
-                        par.submitted = true;
-                        // Show wait modal
-                        par.show_wait("Please wait while the system is sending the emails to the approvers...");
-
-                        axios.patch('/manage/documents/for_approval/' + par.selected_version.id).then(function (
-                            response) {
-                            par.hide_wait();
-                            par.alert_success(response);
-                            setTimeout(() => {
-                                location.reload();
-                            }, 1000);
-                        }).catch(function (error) {
-                            // Hide wait modal
-                            par.hide_wait();
-                            par.submitted = false;
-                            par.alert_failed(error);
-                        });
-                    }
-                }
-
-            },
-            cancel_send_for_approval: function () {
-                var par = this;
-                if (par.submitted === false) {
-                    if (confirm('Do you want to cancel the document version for approval?') === true) {
-                        par.submitted = true;
-                        axios.patch('/manage/documents/for_approval/cancel/' + par.selected_version.id).then(
-                            function (
-                                response) {
-                                par.alert_success(response);
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 1000);
-                            }).catch(function (error) {
-
-                            par.submitted = false;
-                            par.alert_failed(error);
-                        });
-                    }
-                }
-
-            }
+         
         }
     }
 

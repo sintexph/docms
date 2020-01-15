@@ -163,8 +163,6 @@
         },
         mounted() {
             this.selected_version_id = this.selected_version.id;
-
-
         }
     }
 

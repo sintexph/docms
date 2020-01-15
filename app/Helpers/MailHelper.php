@@ -7,7 +7,6 @@ use App\Mail\ApprovedMailable;
 use App\Mail\CommentMailable;
 use App\Mail\DocumentReviewedMailable;
 use App\Mail\VersionChangeReviewerMailable;
-use App\Mail\VersionChangeApproverMailable;
 
 use App\DocumentReviewer;
 use App\DocumentApprover;
@@ -25,17 +24,9 @@ class MailHelper
     public static function document_version_changed_reviewer(DocumentReviewer $document_reviewer)
     {
         $user=$document_reviewer->user;
-        Mail::to($user->email)->queue(new VersionChangeReviewerMailable($document_reviewer));
+        Mail::to($user->email)->send(new VersionChangeReviewerMailable($document_reviewer));
     }
-    /**
-     * Send email to approver that the document version was changed
-     * @param $document_approver The instance model of the document approver
-     */
-    public static function document_version_changed_approver(DocumentApprover $document_approver)
-    {
-        $user=$document_approver->user;
-        Mail::to($user->email)->queue(new VersionChangeApproverMailable($document_approver));
-    }
+
     /**
      * Send email to reviewer and handles the logic for send the email
      * @param $document_reviewer The instance model of the document reviewer
@@ -44,13 +35,8 @@ class MailHelper
     {
         $user=$document_reviewer->user;
         $version=$document_reviewer->document_version;
-        
-        # Send only the email to reviewer if it was ready to be reviewed
-        if($version->for_review==true)
-        {
-            Mail::to($user->email)->queue(new ReviewingMailable($document_reviewer));
-        }
 
+        Mail::to($user->email)->send(new ReviewingMailable($document_reviewer));
     }
     /**
      * Send email to approver and handles the logic for send the email
@@ -60,13 +46,7 @@ class MailHelper
     {
         $user=$document_approver->user;
         $version=$document_approver->document_version;
-
-        # Send only the email to approver if it was ready for approval and reviewed already
-        if($version->for_approval==true && $version->reviewed==true)
-        {
-            Mail::to($user->email)->queue(new ApprovingMailable($document_approver));
-        }
-
+        Mail::to($user->email)->send(new ApprovingMailable($document_approver));
     }
 
     /**
@@ -78,7 +58,7 @@ class MailHelper
         # Send only the email to creator it has been approved
         if($document_version->approved==true)
         {
-            Mail::to($user->email)->queue(new ApprovedMailable($user,$document_version));
+            Mail::to($user->email)->send(new ApprovedMailable($user,$document_version));
         }
     }
     
@@ -88,7 +68,7 @@ class MailHelper
     public static function send_email_reviewed_creator(DocumentReviewer $reviewer)
     {
         $user=$reviewer->document_version->creator;
-        Mail::to($user->email)->queue(new DocumentReviewedMailable($user,$reviewer));
+        Mail::to($user->email)->send(new DocumentReviewedMailable($user,$reviewer));
     }
     
     /**
@@ -109,7 +89,7 @@ class MailHelper
         # Send the notification to the users
         foreach ($users as $user) {
             if(!empty($user->email))
-                Mail::to($user->email)->queue(new CommentMailable($document_version,$commenter)); 
+                Mail::to($user->email)->send(new CommentMailable($document_version,$commenter)); 
         }
     }
 }

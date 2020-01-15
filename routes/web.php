@@ -153,16 +153,6 @@ Route::prefix('manage')->name('manage')->group(function(){
         Route::patch('update_version/{id}','VersionActionController@update_version')->name('.update_version')->middleware('document-action:version');
         Route::patch('release/{id}','VersionActionController@release')->name('.release')->middleware('document-action:version,release');
 
-        Route::prefix('for_review')->name('.file')->group(function(){
-            Route::patch('{id}','VersionActionController@for_review');
-            Route::patch('cancel/{id}','VersionActionController@cancel_for_review')->name('.cancel');
-        });
-
-        Route::prefix('for_approval')->name('.file')->group(function(){
-            Route::patch('{id}','VersionActionController@for_approval');
-            Route::patch('cancel/{id}','VersionActionController@cancel_for_approval')->name('.cancel');
-        });
-
         Route::prefix('file')->name('.file')->group(function(){
             
             Route::put('upload/{id}','VersionActionController@upload_files')->name('.upload')->middleware('document-action:version');
