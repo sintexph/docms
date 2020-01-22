@@ -15,7 +15,7 @@ DMS - @yield('title','Document Management System')
 
 <a href="/" class="navbar-brand">
     <img src="{{ asset('img/brand-icon.png') }}" class="brand-logo">
-    <b>Document Management</b> System
+    <b>Document Management System</b>
 </a>
 
 @endslot

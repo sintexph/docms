@@ -17,6 +17,8 @@ class CreateDocumentReviewersTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->integer('version_id')->unsigned();
+
+            $table->boolean('submitted')->default(false);
             $table->boolean('reviewed')->default(false);
             $table->timestamp('reviewed_at')->nullable();
             $table->timestamps();

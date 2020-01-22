@@ -24,9 +24,8 @@
                             <option value="obsolete">Obsolete</option>
                             <option value="active">Active</option>
                             <option value="1">Pending</option>
-                            <option value="6">For Review</option>
-                            <option value="4">Reviewed</option>
-                            <option value="5">For Approval</option>
+                            <option value="5">For Review</option>
+                            <option value="4">For Approval</option>
                             <option value="3">Approved</option>
                             <option value="2">Released</option>
                         </select>

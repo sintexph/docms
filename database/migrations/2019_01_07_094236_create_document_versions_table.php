@@ -23,9 +23,9 @@ class CreateDocumentVersionsTable extends Migration
             $table->date('effective_date');
             $table->date('expiry_date')->nullable();
 
-            $table->boolean('for_approval')->default(false)->comment('Flag for sending of for approval to user');
             $table->boolean('for_review')->default(false)->comment('Flag for sending of for review to user');
-            
+            $table->boolean('for_approval')->default(false)->comment('Flag for sending of for approval to user');
+                        
             $table->boolean('reviewed')->default(false);
             $table->boolean('approved')->default(false);
             $table->boolean('released')->default(false);

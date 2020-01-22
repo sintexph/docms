@@ -1,6 +1,8 @@
 <template>
     <form @submit.prevent="submit">
-        <document-form ref="docForm" v-model="document"></document-form>
+        <document-form ref="docForm" v-model="document">
+            <access-form v-model="document.access_data"></access-form>
+        </document-form>
         <version-form :show_version="false" v-model="version"></version-form>
         <button class="btn btn-sm btn-success" type="submit">Submit Document</button>
         <button class="btn btn-sm btn-warning" type="button" @click.prevent="save_draft">Save Draft</button>

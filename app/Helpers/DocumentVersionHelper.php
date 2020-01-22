@@ -74,9 +74,9 @@ class DocumentVersionHelper
     {
         $document_version->for_review=true;
         $document_version->save();
-        
         foreach ($document_version->reviewers as $reviewer) {
-            MailHelper::send_email_reviewer($reviewer);
+            $reviewer->submitted=true;
+            $reviewer->save();
         }
     }
 
@@ -85,8 +85,8 @@ class DocumentVersionHelper
         $document_version->for_approval=true;
         $document_version->save();
 
-        foreach ($document_version->approvers as $reviewer) {
-            MailHelper::send_email_approver($reviewer);
+        foreach ($document_version->approvers as $approver) {
+            MailHelper::send_email_approver($approver);
         }
     }
 

@@ -150,9 +150,10 @@ Route::prefix('manage')->name('manage')->group(function(){
 
         // Version actions
         Route::patch('new_version/{id}','VersionActionController@new_version')->name('.new_version')->middleware('document-action');
+        Route::patch('submit-version/{id}','VersionActionController@submit_version')->name('.submit_version')->middleware('document-action:version');
         Route::patch('update_version/{id}','VersionActionController@update_version')->name('.update_version')->middleware('document-action:version');
         Route::patch('release/{id}','VersionActionController@release')->name('.release')->middleware('document-action:version,release');
-
+        
         Route::prefix('file')->name('.file')->group(function(){
             
             Route::put('upload/{id}','VersionActionController@upload_files')->name('.upload')->middleware('document-action:version');

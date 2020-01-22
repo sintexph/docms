@@ -4,6 +4,7 @@
             <version-form :show_version="false" :data_required="false" v-model="version">
                 <template slot="header">Edit version information</template>
             </version-form>
+            <a :href="'/manage/documents/view/'+document_id" class="btn btn-sm btn-danger" title="Cancel">Cancel</a>
             <button class="btn btn-sm btn-warning" @click="save_only=true" type="submit"
                 title="Save the changes of the document, it will not send notification to the approver and reviewer of the document.">Save
                 Only</button>
@@ -101,34 +102,19 @@
 
         mounted: function () {
 
-
-
-
-            var par = this;
-
-
-            par.$nextTick(function () {
-
-                par.version.effective_date = par.effective_date;
-                par.version.expiry_date = par.expiry_date;
-                par.version.reviewers = par.reviewers;
-                par.version.approvers = par.approvers;
-                par.version.description = par.cast_to_content(par.description);
-                par.version.content = par.cast_to_content(par.content);
-                par.idle = idleTimeout(par.auto_save, {
+            this.$nextTick(function () {
+                this.version.effective_date = this.effective_date;
+                this.version.expiry_date = this.expiry_date;
+                this.version.reviewers = this.reviewers;
+                this.version.approvers = this.approvers;
+                this.version.description = this.cast_to_content(this.description);
+                this.version.content = this.cast_to_content(this.content);
+                this.idle = idleTimeout(this.auto_save, {
                     element: document,
                     timeout: 60000 * 5,
                     loop: true
                 });
-
-
             });
-
-
-
-
-
-
 
         },
 

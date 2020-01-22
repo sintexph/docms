@@ -24,8 +24,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->command('followup:review')->dailyAt('08:00')
+        ->withoutOverlapping()->onOneServer()->runInBackground();
+        
+        $schedule->command('followup:approval')->dailyAt('08:00')
+        ->withoutOverlapping()->onOneServer()->runInBackground();
     }
 
     /**

@@ -25,7 +25,7 @@ class DocumentVersion extends Model
         'effective_date',
         'expiry_date',
         'for_approval',
-        'for_review',
+        'for_review', 
         'state',
         'creator_modified_at'
     ];

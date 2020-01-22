@@ -54,7 +54,6 @@
                 <label class="control-label">Keywords e.g (document, important)</label>
                 <input-tag v-model="document.keywords"></input-tag>
             </div>
-            <access-form v-model="document.access_data"></access-form>
             <slot></slot>
         </div>
     </div>

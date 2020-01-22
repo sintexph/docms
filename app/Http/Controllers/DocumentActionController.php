@@ -188,7 +188,7 @@ class DocumentActionController extends Controller
 
         
         $doc_request=$request['document'];
-        $version_request=$request['version'];
+        $document_version_request=$request['version'];
 
         $user=Auth::user();
 
@@ -217,36 +217,40 @@ class DocumentActionController extends Controller
                 $doc_request['access_data']['access']
             );
             
-            $version=DocumentHelper::save_version(
+            $document_version=DocumentHelper::save_version(
                 $document,
                 $user,
-                Cast::generalize_keys($version_request['content']),
-                Cast::generalize_keys($version_request['description']),
-                $version_request['effective_date'],
-                $version_request['expiry_date']
+                Cast::generalize_keys($document_version_request['content']),
+                Cast::generalize_keys($document_version_request['description']),
+                $document_version_request['effective_date'],
+                $document_version_request['expiry_date']
             );
 
 
 
             # Save a new list
-            foreach ($version_request['reviewers'] as $value) {
+            foreach ($document_version_request['reviewers'] as $value) {
                 $user_rev=User::find($value);
                 if($user_rev==null)
                     abort(404,'Reviewer not could not be found on the system');
-                DocumentHelper::save_reviewer($user_rev,$version,true);
+                DocumentHelper::save_reviewer($user_rev,$document_version,true);
             }
 
-            if($version->reviewers->count()!=0) # If there are reviewers
-                DocumentVersionHelper::for_review($version); # Set the document version for review
-
-
             # Save a new list
-            foreach ($version_request['approvers'] as $value) {
+            foreach ($document_version_request['approvers'] as $value) {
                 $user_rev=User::find($value);
                 if($user_rev==null)
                     abort(404,'Approver not could not be found on the system');
-                DocumentHelper::save_approver($user_rev,$version,false);
+                DocumentHelper::save_approver($user_rev,$document_version);
             }
+
+            if($document_version->reviewers->count()!=0 && $document_version->approvers->count()!=0) # If there are reviewers and approvers
+            {
+                $document_version->submitted=true;
+                $document_version->save();
+                DocumentVersionHelper::for_review($document_version); # Set the document version for review
+            }
+                
 
             # Remove the draft if the current saving has a linked draft
             $draft=DocumentDraft::find(Input::get('draft'));
@@ -522,12 +526,12 @@ class DocumentActionController extends Controller
     public function save_draft(Request $request)
     {
         $document_data=(Object)$request['document'];
-        $version_data=(Object)$request['version'];
+        $document_version_data=(Object)$request['version'];
 
         
         
 
-        if(!empty($document_data) && !empty($version_data))
+        if(!empty($document_data) && !empty($document_version_data))
         {
             $draft=DocumentDraft::create([
                 'user_id'=>auth()->user()->id, 
@@ -538,15 +542,15 @@ class DocumentActionController extends Controller
                 'document_comment'=>$document_data->comment, 
                 'document_keywords'=>$document_data->keywords, 
 
-                'version_content'=>Cast::generalize_keys($version_data->content), 
-                'version_description'=>Cast::generalize_keys($version_data->description), 
-                'version_effective_date'=>$version_data->effective_date, 
+                'version_content'=>Cast::generalize_keys($document_version_data->content), 
+                'version_description'=>Cast::generalize_keys($document_version_data->description), 
+                'version_effective_date'=>$document_version_data->effective_date, 
 
-                'version_approver_ids'=>$version_data->approvers,
-                'version_reviewer_ids'=>$version_data->reviewers,
+                'version_approver_ids'=>$document_version_data->approvers,
+                'version_reviewer_ids'=>$document_version_data->reviewers,
 
-                'version_for_approval'=>$version_data->for_approval,
-                'version_for_review'=>$version_data->for_review,
+                'version_for_approval'=>$document_version_data->for_approval,
+                'version_for_review'=>$document_version_data->for_review,
                 
             ]);
         }
@@ -571,11 +575,11 @@ class DocumentActionController extends Controller
         abort_if($draft==null,404,'Could not find the saved draft!');
 
         $document_data=(Object)$request['document'];
-        $version_data=(Object)$request['version'];
+        $document_version_data=(Object)$request['version'];
 
         
 
-        if(!empty($document_data) && !empty($version_data))
+        if(!empty($document_data) && !empty($document_version_data))
         {
             $draft->document_title=$document_data->title; 
             $draft->document_system_code=$document_data->system; 
@@ -584,16 +588,16 @@ class DocumentActionController extends Controller
             $draft->document_comment=$document_data->comment; 
             $draft->document_keywords=$document_data->keywords; 
 
-            $draft->version_content=Cast::generalize_keys($version_data->content);
-            $draft->version_description=Cast::generalize_keys($version_data->description);
+            $draft->version_content=Cast::generalize_keys($document_version_data->content);
+            $draft->version_description=Cast::generalize_keys($document_version_data->description);
 
-            $draft->version_for_approval=$version_data->for_approval;  
-            $draft->version_for_review=$version_data->for_review;   
+            $draft->version_for_approval=$document_version_data->for_approval;  
+            $draft->version_for_review=$document_version_data->for_review;   
 
-            $draft->version_effective_date=$version_data->effective_date; 
+            $draft->version_effective_date=$document_version_data->effective_date; 
 
-            $draft->version_approver_ids=$version_data->approvers;
-            $draft->version_reviewer_ids=$version_data->reviewers;
+            $draft->version_approver_ids=$document_version_data->approvers;
+            $draft->version_reviewer_ids=$document_version_data->reviewers;
             
             
             $draft->save();

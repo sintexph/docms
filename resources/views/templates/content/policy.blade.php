@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
     <title>{{ $document->title }}</title>
-    
+
     @if(isset($download) && $download==true)
     <!--Change fonts if the content is for download-->
     <style>
@@ -119,7 +119,7 @@
             clear: both;
             display: table;
         }
- 
+
 
 
         /*Imported from the source of document_content.css*/
@@ -151,8 +151,8 @@
 
 <body>
 
-   
-    
+
+
     <table class="table">
         <tbody>
 
@@ -194,7 +194,7 @@
                 <th class="fit">Document Title</th>
                 <td>{{ $document->title }}</td>
                 <th class="fit" colspan="3">Document No.</th>
-                <td>{{ $document->document_number }}</td>
+                <td >{{ $document->document_number }}</td>
             </tr>
             <tr>
                 <th class="fit">Effectivity Date</th>
@@ -206,14 +206,20 @@
                     @else
                     <span>---</span>
                     @endif
+
+                    @if($document_version->expiry_date!=null)
+                    <span>
+                        to {{$document_version->expiry_date_formatted}}
+                    </span>
+                    @endif
                 </td>
-                <th class="fit" colspan="3">Version</th>
+                <th class="fit"  colspan="3">Version</th>
                 <td>{{ $document_version->version }}</td>
             </tr>
+
             <tr>
                 <th class="fit">Prepared By</th>
                 <td>
-
                     {{ $document_version->creator->name }}
                 </td>
                 <th class="fit" colspan="3">Revision Date</th>

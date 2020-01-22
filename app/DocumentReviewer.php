@@ -11,10 +11,12 @@ class DocumentReviewer extends Model
         'version_id', 
         'reviewed', 
         'reviewed_at',
+        'submitted',
     ];
 
     protected $casts=[
         'reviewed'=>'boolean',
+        'submitted'=>'boolean',
     ];
     protected $dates=[
         'reviewed_at',
