@@ -126,13 +126,16 @@ class DocumentApprovalController extends Controller
 
         $user=auth()->user();
         # Check if the user is the reviewer of the document version
-        abort_if($document_approver==null,403,'You have no permission to access the page');
-
+        abort_if($document_approver==null || $document_approver->user_id!=$user->id,403,'You have no permission to access the page');
         $current_version=$document_approver->document_version;
+        abort_if($current_version->reviewed==false || $current_version->for_approval==false,422,'The document is not ready for approval, please check again later.');
+
         $document=$current_version->document;
         $current_version_revision=$current_version->revision;
         $references=$document->references;
 
+        $document_approver->viewed=true;
+        $document_approver->save();
 
         return view('manage.document.approvals.view_document',[
             'document'=>$document,

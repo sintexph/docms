@@ -221,7 +221,7 @@ class VersionActionController extends Controller
                     $reviewer=$document_version->reviewers->where('user_id',$reviewer_user_id)->first();
                     $reviewers_to_notify[]=$reviewer;
 
-                    if($reviewer->submitted==true) # Submit notification that it was changed
+                    if($reviewer->viewed==true) # Submit notification that it was changed
                         MailHelper::document_version_changed_reviewer($reviewer); # Required to notify every time there are changes
                 }
             }
@@ -239,6 +239,13 @@ class VersionActionController extends Controller
                         abort(404,'Approver not could not be found on the system');
                     else
                         DocumentHelper::save_approver($user_rev,$document_version,$request->save_only);   
+                }
+                elseif($request->save_only==false)
+                {
+                    # Send notification to approver that the document was changed.
+                    $approver=$document_version->approvers->where('user_id',$approver_user_id)->first();
+                    if($approver->viewed==true) # Submit notification that it was changed
+                        MailHelper::document_version_changed_approver($approver); # Required to notify every time there are changes
                 }
             }
 
@@ -280,7 +287,7 @@ class VersionActionController extends Controller
 
             foreach ($document_version->reviewers as $reviewer) {
                 
-                if($reviewer->submitted==true) # Submit notification that it was changed
+                if($reviewer->viewed==true) # Submit notification that it was changed
                     MailHelper::document_version_changed_reviewer($reviewer); # Required to notify every time there are changes
 
                 MailHelper::send_email_reviewer($reviewer);

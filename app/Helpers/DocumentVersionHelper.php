@@ -12,6 +12,7 @@ class DocumentVersionHelper
     {
         $reviewer->reviewed=true;
         $reviewer->reviewed_at=\Carbon\Carbon::now();
+        $reviewer->viewed=true;
         $reviewer->save();
 
         # Send email to creator that the document is reviewed by reviewer
@@ -44,6 +45,7 @@ class DocumentVersionHelper
     {
         $approver->approved=true;
         $approver->approved_at=\Carbon\Carbon::now();
+        $approver->viewed=true;
         $approver->save();
 
         static::update_approve_status($approver->document_version);
@@ -74,10 +76,6 @@ class DocumentVersionHelper
     {
         $document_version->for_review=true;
         $document_version->save();
-        foreach ($document_version->reviewers as $reviewer) {
-            $reviewer->submitted=true;
-            $reviewer->save();
-        }
     }
 
     public static function for_approve(DocumentVersion $document_version)

@@ -136,12 +136,11 @@ class DocumentHelper
 
         return $version;
     }
-    public static function save_reviewer(User $reviewer,DocumentVersion $version,$submitted=false)
+    public static function save_reviewer(User $reviewer,DocumentVersion $version)
     {
         $data=DocumentReviewer::create([
             'user_id'=>$reviewer->id,
-            'version_id'=>$version->id,
-            'submitted'=>$submitted,
+            'version_id'=>$version->id
         ]);
 
         return $data;

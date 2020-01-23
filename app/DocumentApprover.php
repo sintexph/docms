@@ -11,10 +11,12 @@ class DocumentApprover extends Model
         'version_id', 
         'approved', 
         'approved_at',
+        'viewed',
     ];
 
     protected $casts=[
-        'approved'=>'boolean'
+        'approved'=>'boolean',
+        'viewed'=>'boolean',
     ];
     protected $dates=[
         'approved_at',

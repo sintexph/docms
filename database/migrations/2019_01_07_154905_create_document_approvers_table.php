@@ -17,7 +17,7 @@ class CreateDocumentApproversTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->integer('version_id')->unsigned();
-            $table->boolean('submitted')->default(false);
+            $table->boolean('viewed')->default(false);
             $table->boolean('approved')->default(false);
             $table->timestamp('approved_at')->nullable();
 

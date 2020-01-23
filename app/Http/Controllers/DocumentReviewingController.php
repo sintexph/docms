@@ -127,7 +127,10 @@ class DocumentReviewingController extends Controller
 
         $user=auth()->user();
         # Check if the user is the reviewer of the document version
-        abort_if($document_reviewer==null,403,'You have no permission to access the page');
+        abort_if($document_reviewer==null || $document_reviewer->user_id!=$user->id,403,'You have no permission to access the page');
+
+        $document_reviewer->viewed=true;
+        $document_reviewer->save();
 
         if(!empty($request->ver))
         {
