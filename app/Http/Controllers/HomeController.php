@@ -30,21 +30,20 @@ class HomeController extends Controller
         # Get the url parameter
         $url_system = Input::get('system', false);
         $url_section = Input::get('sec', false);
-        $url_search = Input::get('search', false);
+        $url_find = Input::get('find', false);
 
-
-         $system_db=null;
-         $section_db=null;
+        $system_db=null;
+        $section_db=null;
 
 
         $approved_documents=[];
         $search_result=[];
         $documents=[];
 
-        if(($url_section!=false || $url_system!=false) && $url_search==false)
+        if(($url_section!=false || $url_system!=false) && $url_find==false)
         {
-            $section_db=Section::find($url_section);
-            $system_db=System::find($url_system);
+            $section_db=Section::where('code',$url_section)->first();
+            $system_db=System::where('code',$url_system)->first();
 
             $documents=EloquentHelper::document_public();
             if(!empty($section_db))
@@ -54,11 +53,11 @@ class HomeController extends Controller
             
             $documents=$documents->paginate(10);
         }
-        elseif (!empty($url_search)) {
-            $search_result=EloquentHelper::document_public()->where(function($condition)use($url_search){
-                $condition->orWhere('document_number','like','%'.$url_search.'%')
-                ->orWhere('keywords','like','%'.$url_search.'%')
-                ->orWhere('title','like','%'.$url_search.'%');
+        elseif (!empty($url_find)) {
+            $search_result=EloquentHelper::document_public()->where(function($condition)use($url_find){
+                $condition->orWhere('document_number','like','%'.$url_find.'%')
+                ->orWhere('keywords','like','%'.$url_find.'%')
+                ->orWhere('title','like','%'.$url_find.'%');
             })->paginate(10);
         }
         else
@@ -77,7 +76,7 @@ class HomeController extends Controller
             'url_section'=>$url_section,
             'documents'=>$documents,
             'approved_documents'=>$approved_documents,
-            'url_search'=>$url_search,
+            'url_find'=>$url_find,
             'search_result'=>$search_result,
             'section_db'=>$section_db,
             'system_db'=>$system_db,

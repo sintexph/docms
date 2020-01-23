@@ -94,6 +94,7 @@
             },
             system_changed: function () {
                 let parent = this;
+                parent.document.section='';
                 axios.post('/util/section_list', {
                     system_code: parent.document.system
                 }).then(function (response) {
