@@ -41,7 +41,7 @@ class ApprovalFollowUpCommand extends Command
     {
         $document_approvers=DocumentApprover::where('approved',false)
         ->whereHas('document_version',function($version){ 
-            $version->where('reviewed',true)->whereHas('document'); 
+            $version->where('for_approval',true)->whereHas('document'); 
         })->get();
 
         

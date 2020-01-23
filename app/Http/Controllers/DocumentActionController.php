@@ -245,11 +245,7 @@ class DocumentActionController extends Controller
             }
 
             if($document_version->reviewers->count()!=0 && $document_version->approvers->count()!=0) # If there are reviewers and approvers
-            {
-                $document_version->submitted=true;
-                $document_version->save();
                 DocumentVersionHelper::for_review($document_version); # Set the document version for review
-            }
                 
 
             # Remove the draft if the current saving has a linked draft

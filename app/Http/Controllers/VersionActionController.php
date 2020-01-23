@@ -240,11 +240,6 @@ class VersionActionController extends Controller
                     else
                         DocumentHelper::save_approver($user_rev,$document_version,$request->save_only);   
                 }
-                elseif($request->save_only==false)
-                {
-                    $approver=$document_version->approvers->where('user_id',$approver_user_id)->first();
-                    MailHelper::document_version_changed_approver($approver);
-                }
             }
 
             # Reset the status of the version
