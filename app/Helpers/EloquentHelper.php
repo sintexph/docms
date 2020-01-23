@@ -29,7 +29,7 @@ class EloquentHelper
 
         # Get the approved document based on approver
         $approved_documents=DB::table($tbl_approver)
-                                ->select([$tbl_doc.'.id',$tbl_doc.'.title'])
+                                ->select([$tbl_doc.'.id'])
                                 ->join($tbl_doc_ver,$tbl_approver.'.version_id','=',$tbl_doc_ver.'.id')
                                 ->join($tbl_doc,$tbl_doc_ver.'.document_id','=',$tbl_doc.'.id')
                                 ->where($tbl_doc_ver.'.approved','=',true)

@@ -11,6 +11,7 @@ use App\Helpers\EloquentHelper;
 use App\Helpers\SiteVisitHelper;
 use Cache;
 use App\DocumentVersion;
+use App\Category;
 
 class HomeController extends Controller
 {
@@ -30,42 +31,66 @@ class HomeController extends Controller
         # Get the url parameter
         $url_system = Input::get('system', false);
         $url_section = Input::get('sec', false);
+        $url_category = Input::get('cat', false);
         $url_find = Input::get('find', false);
+        $url_status=Input::get('status',false);
 
         $system_db=null;
         $section_db=null;
+        $category_db=null;
 
 
         $approved_documents=[];
         $search_result=[];
         $documents=[];
 
-        if(($url_section!=false || $url_system!=false) && $url_find==false)
+        if($url_section!=false || $url_system!=false || $url_category!=false || $url_status!=false || $url_find!=false)
         {
-            $section_db=Section::where('code',$url_section)->first();
-            $system_db=System::where('code',$url_system)->first();
+            
+            if(!empty($url_section))
+                $section_db=Section::where('code',$url_section)->first();
+            if(!empty($url_system))
+                $system_db=System::where('code',$url_system)->first();
+            if(!empty($url_category))
+                $category_db=Category::where('code',$url_category)->first();
 
+        
             $documents=EloquentHelper::document_public();
             if(!empty($section_db))
                 $documents->where('section_code','=',$section_db->code);
             if(!empty($system_db))
                 $documents->where('system_code','=',$system_db->code);
-            
-            $documents=$documents->paginate(10);
-        }
-        elseif (!empty($url_find)) {
-            $search_result=EloquentHelper::document_public()->where(function($condition)use($url_find){
-                $condition->orWhere('document_number','like','%'.$url_find.'%')
-                ->orWhere('keywords','like','%'.$url_find.'%')
-                ->orWhere('title','like','%'.$url_find.'%');
-            })->paginate(10);
+
+            if(!empty($category_db))
+                $documents->where('category_code','=',$category_db->code);
+
+
+
+            switch ($url_status) {
+                case 'active':
+                    $documents->where('obsolete',false);
+                    break;
+                case 'obsolete':
+                    $documents->where('obsolete',true);
+                    break;
+            }
+
+            if(!empty($url_find))
+            {
+                $documents->where(function($condition)use($url_find){
+                    $condition->orWhere('document_number','like','%'.$url_find.'%')
+                    ->orWhere('keywords','like','%'.$url_find.'%')
+                    ->orWhere('title','like','%'.$url_find.'%');
+                });
+            }
+
+ 
+            $documents=$documents->paginate(8);
         }
         else
         {
             $documents=[];
             $approved_documents=EloquentHelper::document_public()->paginate(5);
-
-     
         }
 
  
@@ -74,12 +99,18 @@ class HomeController extends Controller
             'systems'=>$systems,
             'url_system'=>$url_system,
             'url_section'=>$url_section,
+            'url_category'=>$url_category,
+            'url_find'=>$url_find,
+            'url_status'=>$url_status,
+
             'documents'=>$documents,
             'approved_documents'=>$approved_documents,
-            'url_find'=>$url_find,
-            'search_result'=>$search_result,
+             
+
             'section_db'=>$section_db,
             'system_db'=>$system_db,
+            'category_db'=>$category_db,
+
             'site_visit'=>$site_visit,
         ]);
     }

@@ -28,19 +28,19 @@
 <div class="row">
     <div id="doc-home" class="col-xs-4">
     <home-filter
-    url_find="{{ app('request')->input('find') }}"
-    url_system="{{ app('request')->input('system') }}"
-    url_section="{{ app('request')->input('sec') }}"
+    url_find="{{ $url_find }}"
+    url_system="{{ $url_system }}"
+    url_section="{{ $url_section }}"
+    url_category="{{ $url_category }}"
+    url_status="{{ $url_status }}"
 
     ></home-filter>
     </div>
     <div class="col-xs-8">
-        @if($url_system==false && $url_section==false && $url_find==false)
+        @if($url_system==false && $url_section==false && $url_category==false && $url_status==false && $url_find==false)
         @include('home.view_src.main')
-        @elseif(!empty( $url_find))
-        @include('home.view_src.search')
         @else
-        @include('home.view_src.documents')
+        @include('home.view_src.search')
         @endif
     </div>
 </div>
