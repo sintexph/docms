@@ -52,7 +52,7 @@
                 </div>
             </div>
         </form>
-        <a href="http://helpdesk.sportscity.com.ph:2020/make-request">I forgot my password</a><br>
+        <a href="{{ route('password.request') }}">I forgot my password</a><br>
 
     </div>
     @include('layouts.sessions')
