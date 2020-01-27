@@ -14,7 +14,6 @@ use App\Category;
 use App\DocumentDraft;
 use App\DocumentAccessor;
 use App\Reference;
-use App\DocumentModerator;
 use App\DocumentVersionAttachment;
 use App\Helpers\UploadHelper;
 use App\Helpers\DocumentHelper;
@@ -114,39 +113,7 @@ class DocumentActionController extends Controller
                 # Remove the accessors
                 $document->accessors()->delete();
             }
-
-            
-            # Save moderators if has moderators
-            if(!empty($request['moderators']))
-            {
-                # Remove first the moderators 
-                $document->moderators()->delete();
-
-                # Save the new moderators
-                foreach($request['moderators'] as $moderator_id)
-                {
-                    $moderator=User::find($moderator_id);
-                    if($moderator==null)
-                    {
-                        DB::rollBack();
-                        abort(404,'Moderator could not be found on the system!');
-                    }
-
-                    DocumentModerator::create([
-                        'document_id'=>$document->id,
-                        'user_id'=>$moderator->id,
-                    ]);
-                }
-            }
-            else
-            {
-                # Remove existing moderators
-                $document->moderators()->delete();
-            }
-
-
-
-            
+ 
 
             DB::commit();
 

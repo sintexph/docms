@@ -8,11 +8,7 @@
 
                 <access-form v-model="doc_access"></access-form>
 
-                <div class="form-group" v-if="!true">
-                    <label class="control-label">Moderators</label>
-                    <select2 v-model="moderators" style_name="width:100%;" :multiple="true" :options="users_data">
-                    </select2>
-                </div>
+           
 
             </div>
             <div class="box-footer">
@@ -44,13 +40,7 @@
                     return [];
                 }
             },
-            current_moderators: {
-                required: true,
-                type: [Array, Object],
-                default: function () {
-                    return [];
-                }
-            },
+            
         },
         data: function () {
             return {
@@ -76,8 +66,7 @@
                         text: 'ONLY ME',
                     },
                 ],
-                submitted: false,
-                moderators: [],
+                submitted: false, 
             }
         },
         methods: {
@@ -99,8 +88,7 @@
                 let parent = this;
                 if (parent.submitted === false) {
                     parent.submitted = true;
-                    axios.patch('/manage/documents/update_access/' + parent.document_id, {
-                        moderators: parent.moderators,
+                    axios.patch('/manage/documents/update_access/' + parent.document_id, { 
                         access: parent.doc_access.access,
                         accessors: parent.doc_access.accessors
                     }).then(function (response) {
@@ -134,13 +122,7 @@
             }
 
 
-            /*
-                            if (vm.current_moderators.length !== 0) {
-                                vm.current_moderators.forEach(function (moderator) {
-                                    vm.moderators.push(moderator.user.id);
-                                });
-                            }
-                            */
+       
 
         }
     }

@@ -229,6 +229,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'SiteVisitHelper' => \App\Helpers\SiteVisitHelper::class,
+        'DocumentAccess'=>\App\Helpers\Access::class,
 
         
 

@@ -5,10 +5,10 @@ namespace App\Helpers;
 
 class Access 
 {
-    const _CONFIDENTIAL="1";
-    const _CUSTOM="2";
-    const _PUBLIC="3";
-    const _ONLY_ME="4";
+    const _CONFIDENTIAL=1;
+    const _CUSTOM=2;
+    const _PUBLIC=3;
+    const _ONLY_ME=4;
 
     public static function text_access($access)
     {

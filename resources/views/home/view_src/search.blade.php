@@ -49,7 +49,12 @@
                                 @if($document->obsolete==true)
                                 <strike>{{ $document->document_number }}</strike>
                                 @else
-                                {{ $document->document_number }}
+                                
+                                    @if(auth()->user()!=null && auth()->user()->can('view',$document))
+                                        <a href="{{ route('home.view_document',$document->active_version->id) }}">{{ $document->document_number }}</a>
+                                    @else
+                                        {{ $document->document_number }}
+                                    @endif
                                 @endif
                             </span>
 

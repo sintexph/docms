@@ -27,7 +27,7 @@ class DocumentAdminActionMiddleware
         abort_if($document==null,404,'Document could not be found!');
         
         if($user->perm_administrator==false)
-            abort(403,'You dont have a permission to do any further action to this document.');
+            abort(403,"You don't have a permission to do any further action to this document.");
 
         # Could not do anything except lock/unlock if the document is locked.
         if($action=='status' || $action=='archived' || $action=='trash')

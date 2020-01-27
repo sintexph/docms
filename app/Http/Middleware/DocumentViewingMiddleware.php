@@ -32,6 +32,9 @@ class DocumentViewingMiddleware
             # Approver and reviewer of the document version can view
             if($document_version->reviewers()->where('user_id','=',$user->id)->exists()==true || $document_version->approvers()->where('user_id','=',$user->id)->exists()==true)
                 return $next($request);
+
+            
+            abort_if($user->can('view',$document)==false,403);
         }
         
 
@@ -39,14 +42,7 @@ class DocumentViewingMiddleware
         if($document->archived==true || $document_version->released==false || $document_version->approved==false || $document_version->reviewed==false)
             abort(403,'Document is not available for viewing.');
 
-        # Cannot view based on the type of access of the document
-        if($document->access==Access::_CONFIDENTIAL)
-            abort_if($user==null,403);
-        elseif ($document->access==Access::_CUSTOM || $document->access==Access::_ONLY_ME) {
-            abort_if($user==null,403);
-            $accessor=$document->accessors()->where('user_id','=',$user->id);
-            abort_if($accessor==null,403);
-        }
+    
          
         return $next($request);
     }

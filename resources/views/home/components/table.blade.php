@@ -16,8 +16,9 @@
                 <a href="#" title="{{ $document->access_type }}">{!! $document->access_icon !!}</a></small>
             </td>
             <td>
+
                 <strong>
-                    @if($document->access=="3")
+                    @if($document->access==DocumentAccess::_PUBLIC)
 
                         @if($key==0)
                             <a data-disable-interaction="1" data-step='6' data-position="bottom-middle-aligned" data-intro='E click ang kining nga numero para makita nimo ang sulod sa documento' href="{{ route('home.view_document',$document->active_version->id) }}">
@@ -37,7 +38,12 @@
                         @if($document->obsolete==true)
                         <strike>{{ $document->document_number }}</strike>
                         @else
-                        {{ $document->document_number }}
+                        
+                            @if(auth()->user()!=null && auth()->user()->can('view',$document))
+                                <a href="{{ route('home.view_document',$document->active_version->id) }}">{{ $document->document_number }}</a>
+                            @else
+                                {{ $document->document_number }}
+                            @endif
                         @endif
                     </span>
 

@@ -63,12 +63,7 @@ class Document extends Model
     {
         return $this->hasMany('App\DocumentActionHistory','document_id');
     }
-
-
-    public function moderators()
-    {
-        return $this->hasMany('App\DocumentModerator','document_id');
-    }
+    
     public function accessors()
     {
         return $this->hasMany('App\DocumentAccessor','document_id');

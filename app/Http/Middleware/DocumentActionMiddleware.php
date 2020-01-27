@@ -70,8 +70,8 @@ class DocumentActionMiddleware
              abort(422,'The document is locked and could not do any further action.'); 
 
 
-        # Cannot view if not administrator, creator or moderator of the document
-        if($user->perm_administrator==false && $document->created_by!=$user->id && $document->moderators()->where('user_id','=',$user->id)->first()==null)
+        # Cannot view if not administrator or creator of the document
+        if($user->perm_administrator==false && $document->created_by!=$user->id)
             abort(403,'You don\'t have a permission to do any further action to this document.');
 
         return $next($request);
