@@ -86,7 +86,7 @@
         </div>
 
 
-        @if($left_area_tab!='ev')
+        @if($left_area_tab!='ev' && auth()->user()->can('initiate_action',$document))
             <document-version-action :document="{{ json_encode($document) }}" :selected_version="{{ json_encode($selected_version) }}"></document-version-action>
         @endif
  

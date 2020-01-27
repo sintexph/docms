@@ -183,8 +183,8 @@ class ManageDocumentController extends Controller
         $user=auth()->user();
 
         # Cannot view if not administrator, creator or moderator of the document
-        if($user->perm_administrator==false && $document->created_by!=$user->id && $document->moderators()->where('user_id','=',$user->id)->first()==null)
-            abort(403,'You dont have a permission to do any further action to this document.');
+        if($user->perm_administrator==false && $document->created_by!=$user->id && $document->moderators()->where('user_id','=',$user->id)->first()==null && $document->accessors()->where('user_id','=',$user->id)->first()==null)
+            abort(403,"You don't have a permission to do any further action to this document.");
 
         
         # Default version to be displayed is the current version

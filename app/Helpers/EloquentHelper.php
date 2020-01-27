@@ -54,6 +54,8 @@ class EloquentHelper
                 $query->orWhere('created_by','=',$user->id)
                 ->orWhereHas('moderators',function($query_mod)use($user){
                     $query_mod->where('user_id', '=',$user->id);
+                })->orWhereHas('accessors',function($accessor)use($user){
+                    $accessor->where('user_id', '=',$user->id);
                 });
             });
 
