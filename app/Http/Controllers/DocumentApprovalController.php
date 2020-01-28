@@ -89,7 +89,7 @@ class DocumentApprovalController extends Controller
         $document_version=$for_approval->document_version;
         
         # Must be reviewed first and must be ready for approval
-        abort_if($document_version->for_approval!=true || $document_version->reviewed!=true,422,'Document version is not ready for approval!');      
+        abort_if($document_version->for_approval==false || $document_version->reviewed==false,422,'Document version is not ready for approval!');      
 
         abort_if($for_approval->approved==true,422,'Document version was been already approved.');      
         # Cannot update if the user is not the approver of the document version
@@ -130,7 +130,7 @@ class DocumentApprovalController extends Controller
         $current_version=$document_approver->document_version;
 
         # Can be viewed only if they already seen the document
-        abort_if($current_version->viewed==false,422,'The document is not ready for approval, please check again later.');
+        abort_if($current_version->for_approval==false && $current_version->viewed==false,422,'The document is not ready for approval, please check again later.');
 
         $document=$current_version->document;
         $current_version_revision=$current_version->revision;
