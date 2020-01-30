@@ -5,9 +5,7 @@
             <icheck-checkbox v-model="account.notify_changes"></icheck-checkbox> Notify when there are changes of
             the document.
         </p>
-        <p>
-            <icheck-checkbox v-model="account.notify_followups"></icheck-checkbox> Send followups if there are documents that need for approval or review
-        </p>
+
         <p>
             <icheck-checkbox v-model="account.notify_comments"></icheck-checkbox> Notify there are comments in
             the documents.
@@ -21,12 +19,15 @@
             <icheck-checkbox v-model="account.notify_approved"></icheck-checkbox> Notify when the documents were
             approved.
         </p>
-
-        <p>
-            <icheck-checkbox v-model="account.notify_to_review"></icheck-checkbox> Notify when there are documents
-            that i needs review.
+        <p v-if="account.perm_reviewer===true || account.perm_approver===true">
+            <icheck-checkbox v-model="account.notify_followups"></icheck-checkbox> Send followups if there are documents
+            that need for approval or review
         </p>
-        <p>
+        <p v-if="account.perm_reviewer===true  ">
+            <icheck-checkbox v-model="account.notify_to_review"></icheck-checkbox> Notify when there are documents
+            that needs to review.
+        </p>
+        <p v-if=" account.perm_approver===true">
             <icheck-checkbox v-model="account.notify_to_approve"></icheck-checkbox> Notify when there are documents
             that needs to approve.
         </p>

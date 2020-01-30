@@ -20,7 +20,7 @@
     export default {
 
         data: function () {
-            return { 
+            return {
                 account: new User,
                 submitted: false,
             }
@@ -67,6 +67,8 @@
                     par.account.notify_approved = response.data.notify_approved;
                     par.account.notify_to_approve = response.data.notify_to_approve;
                     par.account.notify_to_review = response.data.notify_to_review;
+                    par.account.perm_approver = response.data.perm_approver;
+                    par.account.perm_reviewer = response.data.perm_reviewer;
 
                 });
             }

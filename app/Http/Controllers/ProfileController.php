@@ -20,6 +20,8 @@ class ProfileController extends Controller
     {
         $user=auth()->user();
         return \json_encode([
+            'perm_reviewer'=>$user->perm_reviewer,
+            'perm_approver'=>$user->perm_approver,
             'notify_changes'=>$user->notify_changes,
             'notify_followups'=>$user->notify_followups,
             'notify_comments'=>$user->notify_comments,
