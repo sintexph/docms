@@ -4,36 +4,7 @@
             <h3 class="box-title">Notification Settings</h3>
         </div>
         <div class="box-body">
-            <p>
-                <icheck-checkbox v-model="account.notify_changes"></icheck-checkbox> Notify me when there are changes of
-                the document.
-            </p>
-            <p>
-                <icheck-checkbox v-model="account.notify_followups"></icheck-checkbox> Notify me for document approval
-                or review followups.
-            </p>
-            <p>
-                <icheck-checkbox v-model="account.notify_comments"></icheck-checkbox> Notify me if there are comments in
-                the documents.
-            </p>
-
-            <p>
-                <icheck-checkbox v-model="account.notify_reviewed"></icheck-checkbox> Notify me if my documents were
-                reviewed.
-            </p>
-            <p>
-                <icheck-checkbox v-model="account.notify_approved"></icheck-checkbox> Notify me if my documents were
-                approved.
-            </p>
-
-            <p>
-                <icheck-checkbox v-model="account.notify_to_review"></icheck-checkbox> Notify me if there are documents
-                that i need to review.
-            </p>
-            <p>
-                <icheck-checkbox v-model="account.notify_to_approve"></icheck-checkbox> Notify me if there are documents
-                that i need to approve.
-            </p>
+            <notification-form v-model="account"></notification-form>
         </div>
         <div class="box-footer">
             <div class="pull-right">

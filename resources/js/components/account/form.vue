@@ -52,36 +52,7 @@
 
         <div class="form-group">
             <label class="control-label">Notifications</label>
-            <p>
-                <icheck-checkbox v-model="account.notify_changes"></icheck-checkbox> Notify when there are changes of
-                the document.
-            </p>
-            <p>
-                <icheck-checkbox v-model="account.notify_followups"></icheck-checkbox> Notify for document approval
-                or review followups.
-            </p>
-            <p>
-                <icheck-checkbox v-model="account.notify_comments"></icheck-checkbox> Notify if there are comments in
-                the documents.
-            </p>
-
-            <p>
-                <icheck-checkbox v-model="account.notify_reviewed"></icheck-checkbox> Notify if documents were
-                reviewed.
-            </p>
-            <p>
-                <icheck-checkbox v-model="account.notify_approved"></icheck-checkbox> Notify if documents were
-                approved.
-            </p>
-
-            <p>
-                <icheck-checkbox v-model="account.notify_to_review"></icheck-checkbox> Notify if there are documents
-                that needs to review.
-            </p>
-            <p>
-                <icheck-checkbox v-model="account.notify_to_approve"></icheck-checkbox> Notify if there are documents
-                that needs to approve.
-            </p>
+           <notification-form v-model="account"></notification-form>
 
         </div>
 
@@ -116,7 +87,11 @@
             }
         },
 
+        mounted() {
+            if (this.value)
+                this.account = this.value;
 
+        }
     }
 
 </script>
