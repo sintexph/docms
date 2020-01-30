@@ -28,6 +28,14 @@ class CreateUsersTable extends Migration
             $table->boolean('perm_reviewer')->default(false);
             $table->boolean('perm_approver')->default(false);
 
+            $table->boolean('notify_changes')->comment('Notify if there are changes with the document')->default(true);
+            $table->boolean('notify_followups')->comment('Notify if there are documents to followup')->default(true);
+            $table->boolean('notify_comments')->comment('Notify if there are comments with the document')->default(true);
+            $table->boolean('notify_reviewed')->comment('Notify if the created document is reviewed')->default(true);
+            $table->boolean('notify_approved')->comment('Notify if the created document is approved')->default(true);
+            $table->boolean('notify_to_approve')>comment('Notify if there are to be approved')->default(true);
+            $table->boolean('notify_to_review')->comment('Notify if there are to be reviewed')->default(true);
+
             $table->rememberToken();
             $table->timestamps();
         });

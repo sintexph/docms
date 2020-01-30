@@ -32,6 +32,13 @@ class User extends Authenticatable
         'perm_administrator'=>'boolean',
         'perm_reviewer'=>'boolean',
         'perm_approver'=>'boolean',
+        'notify_changes'=>'boolean',
+        'notify_followups'=>'boolean',
+        'notify_comments'=>'boolean',
+        'notify_reviewed'=>'boolean',
+        'notify_approved'=>'boolean',
+        'notify_to_approve'=>'boolean',
+        'notify_to_review'=>'boolean',
     ];
     
     /**

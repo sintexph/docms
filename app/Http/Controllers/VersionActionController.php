@@ -287,15 +287,17 @@ class VersionActionController extends Controller
 
             foreach ($document_version->reviewers as $reviewer) {
                 
-                if($reviewer->viewed==true) # Submit notification that it was changed
+                if($reviewer->viewed==true) # Submit notification that it was changed and user can be notified
                     MailHelper::document_version_changed_reviewer($reviewer); # Required to notify every time there are changes
-
+ 
                 MailHelper::send_email_reviewer($reviewer);
 
             }
+
             foreach ($document_version->approvers as $approver) {
                 MailHelper::document_version_changed_approver($approver);
             }
+
             DocumentVersionHelper::for_review($document_version);
 
             DB::commit();

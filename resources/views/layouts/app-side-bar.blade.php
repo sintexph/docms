@@ -17,6 +17,7 @@ DMS - @yield('title','Document Management System')
 @yield('header_title_sm','System information')
 @endslot
 
+ 
 
 @slot('breadcrumbs')
 
@@ -34,7 +35,7 @@ DMS - @yield('title','Document Management System')
 @slot('navigation')
 
 
-<div class="navbar-custom-menu">
+<div  class="navbar-custom-menu app-profile">
     <ul class="nav navbar-nav">
         @guest
         <li><a href="{{ route('login') }}">Login</a></li>
@@ -46,7 +47,15 @@ DMS - @yield('title','Document Management System')
                 {{ Auth::user()->name }}
             </a>
             <ul class="dropdown-menu">
-                <li><a href="{{ route('drafts') }}">Drafts</a><span class="glyphicon glyphicon-edit pull-right"></span>
+                <li>
+                    <a href="{{ route('profile.notification') }}">Notifications</a>
+                    <span class="glyphicon glyphicon-globe pull-right"></span>
+
+                </li>
+
+                <li>
+                    <a href="{{ route('drafts') }}">Drafts</a>
+                    <span class="glyphicon glyphicon-edit pull-right"></span>
                 </li>
                 <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign
                         Out</a><span class="glyphicon glyphicon-log-out pull-right"></span></li>
@@ -57,13 +66,15 @@ DMS - @yield('title','Document Management System')
         </form>
         @endauth
     </ul>
+
 </div>
+
 
 
 @endslot
 
 @slot('content')
-@yield('content')
+@yield('content') 
 @endslot
 
 @slot('sidebar')
@@ -79,7 +90,6 @@ DMS - @yield('title','Document Management System')
         <a href="#"><i class="fa fa-circle text-success"></i> {{ auth()->user()->position }}</a>
     </div>
 </div>
-
 
 
 <ul class="sidebar-menu" data-widget="tree">
@@ -134,14 +144,14 @@ DMS - @yield('title','Document Management System')
         </a>
     </li>
 
-    
+
     <li class="@yield('nav-9')">
         <a href="{{ route('trashed') }}">
             <i class="fa fa-trash" aria-hidden="true"></i> <span>Trashed Documents</span>
         </a>
     </li>
 
-    
+
 
     <li class="treeview @yield('nav-5')">
         <a href="#">
@@ -163,11 +173,11 @@ DMS - @yield('title','Document Management System')
         </ul>
     </li>
 
-    
+
     <li class="@yield('nav-10')">
         <a href="{{ route('traffic') }}">
-           <i class="fa fa-line-chart" aria-hidden="true"></i> <span>Traffic Monitoring</span>
- 
+            <i class="fa fa-line-chart" aria-hidden="true"></i> <span>Traffic Monitoring</span>
+
         </a>
     </li>
 
@@ -192,6 +202,8 @@ DMS - @yield('title','Document Management System')
 <link rel="stylesheet" href="http://cdn.sportscity.com.ph/loading-modal/css/jquery.loadingModal.min.css">
 <link rel="stylesheet" href="http://cdn.sportscity.com.ph/css/logo.css">
 <link rel="stylesheet" href="{{ asset('css/document.css') }}">
+
+
 @yield('top_script')
 @endslot
 

@@ -8,6 +8,7 @@
     "/js/manage/document.js": "/js/manage/document.js",
     "/js/manage/for_approval.js": "/js/manage/for_approval.js",
     "/js/manage/for_review.js": "/js/manage/for_review.js",
+    "/js/profile.js": "/js/profile.js",
     "/js/section.js": "/js/section.js",
     "/js/site-traffic.js": "/js/site-traffic.js",
     "/js/system.js": "/js/system.js",

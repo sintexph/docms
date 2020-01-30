@@ -23,12 +23,19 @@ class MailHelper
     public static function followup_reviewer(DocumentReviewer $document_reviewer)
     {
         $user=$document_reviewer->user;
-        Mail::to($user->email)->queue(new FollowupReviewerMailable($document_reviewer));
+        if($user->notify_followups==true)
+        {
+            Mail::to($user->email)->queue(new FollowupReviewerMailable($document_reviewer));
+        }
     }
+
     public static function followup_approver(DocumentApprover $document_approver)
     {
         $user=$document_approver->user;
-        Mail::to($user->email)->queue(new FollowupApproverMailable($document_approver));
+        if($user->notify_followups==true)
+        {
+            Mail::to($user->email)->queue(new FollowupApproverMailable($document_approver));
+        }
     }
 
     /**
@@ -38,7 +45,10 @@ class MailHelper
     public static function document_version_changed_approver(DocumentApprover $document_approver)
     {
         $user=$document_approver->user;
-        Mail::to($user->email)->queue(new VersionChangeApproverMailable($document_approver));
+        if($user->notify_changes==true)
+        {
+            Mail::to($user->email)->queue(new VersionChangeApproverMailable($document_approver));
+        }
     }
 
     /**
@@ -48,7 +58,11 @@ class MailHelper
     public static function document_version_changed_reviewer(DocumentReviewer $document_reviewer)
     {
         $user=$document_reviewer->user;
-        Mail::to($user->email)->queue(new VersionChangeReviewerMailable($document_reviewer));
+
+        if($user->notify_changes==true)
+        {
+            Mail::to($user->email)->queue(new VersionChangeReviewerMailable($document_reviewer));
+        }
     }
 
     /**
@@ -58,9 +72,12 @@ class MailHelper
     public static function send_email_reviewer(DocumentReviewer $document_reviewer)
     {
         $user=$document_reviewer->user;
-        $version=$document_reviewer->document_version;
 
-        Mail::to($user->email)->queue(new ReviewingMailable($document_reviewer));
+        if($user->notify_to_review==true)
+        {
+            $version=$document_reviewer->document_version;
+            Mail::to($user->email)->queue(new ReviewingMailable($document_reviewer));
+        }
     }
     /**
      * Send email to approver and handles the logic for send the email
@@ -69,8 +86,11 @@ class MailHelper
     public static function send_email_approver(DocumentApprover $document_approver)
     {
         $user=$document_approver->user;
-        $version=$document_approver->document_version;
-        Mail::to($user->email)->queue(new ApprovingMailable($document_approver));
+        if($user->notify_to_approve==true)
+        {
+            $version=$document_approver->document_version;
+            Mail::to($user->email)->queue(new ApprovingMailable($document_approver));
+        }
     }
 
     /**
@@ -79,11 +99,15 @@ class MailHelper
     public static function send_email_approved_creator(DocumentVersion $document_version)
     {
         $user=$document_version->creator;
-        # Send only the email to creator it has been approved
-        if($document_version->approved==true)
+        if($user->notify_approved==true)
         {
-            Mail::to($user->email)->queue(new ApprovedMailable($user,$document_version));
+            # Send only the email to creator it has been approved
+            if($document_version->approved==true)
+            {
+                Mail::to($user->email)->queue(new ApprovedMailable($user,$document_version));
+            }
         }
+
     }
     
     /**
@@ -92,7 +116,8 @@ class MailHelper
     public static function send_email_reviewed_creator(DocumentReviewer $reviewer)
     {
         $user=$reviewer->document_version->creator;
-        Mail::to($user->email)->queue(new DocumentReviewedMailable($user,$reviewer));
+        if($user->notify_reviewed==true)
+            Mail::to($user->email)->queue(new DocumentReviewedMailable($user,$reviewer));
     }
     
     /**
@@ -113,7 +138,10 @@ class MailHelper
         # Send the notification to the users
         foreach ($users as $user) {
             if(!empty($user->email))
-                Mail::to($user->email)->queue(new CommentMailable($document_version,$commenter)); 
+            {
+                if($user->notify_comments==true)
+                    Mail::to($user->email)->queue(new CommentMailable($document_version,$commenter)); 
+            }   
         }
     }
 }

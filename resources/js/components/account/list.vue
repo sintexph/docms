@@ -39,7 +39,7 @@
 
             </div>
             <div class="box-body">
-                <datatable ref="datatables" :parameters="filters" :columns="columns" url="/accounts/list"></datatable>
+                <datatable fixedRightColumns="1" ref="datatables" :parameters="filters" :columns="columns" url="/accounts/list"></datatable>
                 <create-account ref="createAccount" @created="$refs.datatables.reload()"></create-account>
                 <edit-account ref="editAccount" @updated="$refs.datatables.reload()"></edit-account>
 
@@ -169,9 +169,9 @@
                          export:false,
                         render: function (data, meta, row) {
                             var delbtn = `<a href="#" data-id="` + data +
-                                `" class="btn-delete" ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>`;
+                                `" class="btn-delete text-red" ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>`;
                             var editbtn = `<a href="#" data-id="` + data +
-                                `" class="btn-edit" ><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>`;
+                                `" class="btn-edit text-yellow" ><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>`;
 
                             return editbtn + '<br>' + delbtn;
                         }

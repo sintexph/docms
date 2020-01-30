@@ -48,6 +48,7 @@ class ReviewFollowUpCommand extends Command
 
 
         foreach ($document_reviewers as $document_reviewer) {
+
             MailHelper::followup_reviewer($document_reviewer);
         }
     }

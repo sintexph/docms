@@ -20,17 +20,7 @@
         },
         data: function () {
             return {
-                account: {
-                    email: '',
-                    name: '',
-                    position: '',
-                    username: '',
-                    password: '',
-                    password_confirmation: '',
-                    perm_administrator: false,
-                    perm_approver: false,
-                    perm_reviewer: false,
-                },
+                account:new User,
                 submitted: false,
             }
         },
@@ -56,6 +46,14 @@
                         perm_approver: par.account.perm_approver,
                         perm_reviewer: par.account.perm_reviewer,
 
+                        notify_changes: par.account.notify_changes,
+                        notify_followups: par.account.notify_followups,
+                        notify_comments: par.account.notify_comments,
+                        notify_reviewed: par.account.notify_reviewed,
+                        notify_approved: par.account.notify_approved,
+                        notify_to_approve: par.account.notify_to_approve,
+                        notify_to_review: par.account.notify_to_review,
+
 
                     }).then(function (response) {
                         par.alert_success(response);
@@ -63,16 +61,7 @@
                         par.$emit('created');
 
 
-                        par.account.email = '';
-                        par.account.name = '';
-                        par.account.position = '';
-                        par.account.username = '';
-                        par.account.password = '';
-                        par.account.password_confirmation = '';
-                        par.account.perm_administrator = false;
-
-                        par.account.perm_approver = false;
-                        par.account.perm_reviewer = false;
+                        par.account = new User;
 
 
                         par.$refs.modal.dismiss();

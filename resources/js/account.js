@@ -2,6 +2,9 @@ import "@sintexph/vue-lib"
 Vue.mixin(toastHelper);Vue.mixin(httpAlert);
 
 
+import User from './src_classes/User';
+window.User = User;
+
 Vue.component('manage-account', require('./components/account/list.vue').default);
 Vue.component('create-account', require('./components/account/create.vue').default);
 Vue.component('edit-account', require('./components/account/edit.vue').default);

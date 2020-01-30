@@ -64,6 +64,14 @@ class AccountController extends Controller
             'perm_administrator'=>'required',
             'perm_approver'=>'required',
             'perm_reviewer'=>'required',
+
+            'notify_changes'=>'required',
+            'notify_followups'=>'required',
+            'notify_comments'=>'required',
+            'notify_reviewed'=>'required',
+            'notify_approved'=>'required',
+            'notify_to_approve'=>'required',
+            'notify_to_review'=>'required',
         ]);
 
         User::create([
@@ -77,6 +85,16 @@ class AccountController extends Controller
 
             'perm_approver'=>$request['perm_approver'],
             'perm_reviewer'=>$request['perm_reviewer'],
+
+            'notify_changes'=>$request['notify_changes'],
+            'notify_followups'=>$request['notify_followups'],
+            'notify_comments'=>$request['notify_comments'],
+            'notify_reviewed'=>$request['notify_reviewed'],
+            'notify_approved'=>$request['notify_approved'],
+            'notify_to_approve'=>$request['notify_to_approve'],
+            'notify_to_review'=>$request['notify_to_review'],
+
+
         ]);
 
         return response()->json(['message'=>'Account has been successfully created!']);
@@ -96,6 +114,14 @@ class AccountController extends Controller
             'perm_administrator'=>'required',
             'perm_approver'=>'required',
             'perm_reviewer'=>'required',
+
+            'notify_changes'=>'required',
+            'notify_followups'=>'required',
+            'notify_comments'=>'required',
+            'notify_reviewed'=>'required',
+            'notify_approved'=>'required',
+            'notify_to_approve'=>'required',
+            'notify_to_review'=>'required',
         ]);
 
         $account=User::find($id);
@@ -112,7 +138,14 @@ class AccountController extends Controller
         $account->perm_approver=$request['perm_approver'];
         $account->perm_reviewer=$request['perm_reviewer'];
 
-        
+        $account->notify_changes=$request['notify_changes'];
+        $account->notify_followups=$request['notify_followups'];
+        $account->notify_comments=$request['notify_comments'];
+        $account->notify_reviewed=$request['notify_reviewed'];
+        $account->notify_approved=$request['notify_approved'];
+        $account->notify_to_approve=$request['notify_to_approve'];
+        $account->notify_to_review=$request['notify_to_review'];
+
         if(!empty($request['password']))
             if(\Hash::needsRehash($request['password']))
                 $account->password=bcrypt($request['password']);

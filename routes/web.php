@@ -18,6 +18,13 @@ Route::get('password/reset/{token}','Auth\ResetPasswordController@showResetForm'
 Route::post('password/reset','Auth\ResetPasswordController@reset')->name('password.update');
 
  
+Route::prefix('profile')->name('profile')->group(function(){
+    
+    Route::get('notification-settings', 'ProfileController@show_notification_settings')->name('.notification');
+    Route::post('notification-settings', 'ProfileController@notification_settings')->name('.notification');
+    Route::patch('notification-settings', 'ProfileController@notification_settings_save')->name('.notification');
+
+});
 
 Route::prefix('home')->name('home')->group(function(){
     

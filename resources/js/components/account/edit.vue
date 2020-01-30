@@ -24,17 +24,7 @@
         data: function () {
             return {
                 id: '',
-                account: {
-                    email: '',
-                    name: '',
-                    position: '',
-                    username: '',
-                    password: '',
-                    password_confirmation: '',
-                    perm_administrator: false,
-                    perm_approver: false,
-                    perm_reviewer: false,
-                },
+                account: new User,
                 submitted: false,
             }
         },
@@ -42,16 +32,7 @@
             show: function (id) {
                 this.id = id;
 
-                this.account.email = '';
-                this.account.name = '';
-                this.account.position = '';
-                this.account.username = '';
-                this.account.password = '';
-                this.account.password_confirmation = '';
-                this.account.perm_administrator = false;
-                this.account.perm_approver = false;
-                this.account.perm_reviewer = false;
-
+                this.account = new User;
 
 
                 this.fetch();
@@ -75,6 +56,16 @@
 
                         perm_approver: par.account.perm_approver,
                         perm_reviewer: par.account.perm_reviewer,
+
+
+                        notify_changes: par.account.notify_changes,
+                        notify_followups: par.account.notify_followups,
+                        notify_comments: par.account.notify_comments,
+                        notify_reviewed: par.account.notify_reviewed,
+                        notify_approved: par.account.notify_approved,
+                        notify_to_approve: par.account.notify_to_approve,
+                        notify_to_review: par.account.notify_to_review,
+
 
                     }).then(function (response) {
                         par.alert_success(response);
@@ -100,6 +91,15 @@
 
                     par.account.perm_approver = response.data.perm_approver;
                     par.account.perm_reviewer = response.data.perm_reviewer;
+
+                    par.account.notify_changes = response.data.notify_changes;
+                    par.account.notify_followups = response.data.notify_followups;
+                    par.account.notify_comments = response.data.notify_comments;
+                    par.account.notify_reviewed = response.data.notify_reviewed;
+                    par.account.notify_approved = response.data.notify_approved;
+                    par.account.notify_to_approve = response.data.notify_to_approve;
+                    par.account.notify_to_review = response.data.notify_to_review;
+
                 });
             }
         }
