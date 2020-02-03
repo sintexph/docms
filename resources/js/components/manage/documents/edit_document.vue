@@ -129,7 +129,7 @@
             vm.document.comment = vm.comment;
             vm.document.created_by = vm.created_by;
             vm.document.serial = vm.serial;
-            vm.$refs.docForm.system_changed();
+            vm.$refs.docForm.load_sections();
 
 
 

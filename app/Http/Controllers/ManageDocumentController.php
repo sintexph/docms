@@ -20,13 +20,12 @@ class ManageDocumentController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-       
     }
 
     public function index(){
-        $systems=System::all();
-        $sections=Section::all();
-        $categories=Category::all();
+        $systems=System::orderBy('name','asc')->get();
+        $sections=Section::orderBy('name','asc')->get();
+        $categories=Category::orderBy('name','asc')->get();
 
         return view('manage.document.index',[
             'systems'=>$systems,

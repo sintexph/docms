@@ -19,7 +19,8 @@
                         <label class="control-label">System <span class="text-red">*</span></label>
                         <select class="form-control" @change="system_changed" v-model="document.system" required>
                             <option value=""> -- CHOOSE --</option>
-                            <option v-for="(value,key) in systems" :key="key" :value="value.code">{{ value.name }}</option>
+                            <option v-for="(value,key) in systems" :key="key" :value="value.code">{{ value.name }}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -30,7 +31,8 @@
                         <label class="control-label">Section <span class="text-red">*</span></label>
                         <select class="form-control" v-model="document.section" required>
                             <option value=""> -- CHOOSE --</option>
-                            <option v-for="(value,key) in sections" :key="key" :value="value.code">{{ value.name }}</option>
+                            <option v-for="(value,key) in sections" :key="key" :value="value.code">{{ value.name }}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -47,7 +49,8 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Comment</label>
-                <textarea class="form-control" rows="5" placeholder="Comment here..." v-model="document.comment"></textarea>
+                <textarea class="form-control" rows="5" placeholder="Comment here..."
+                    v-model="document.comment"></textarea>
             </div>
 
             <div class="form-group">
@@ -68,7 +71,7 @@
         },
         data: function () {
             return {
-                document:new Document,
+                document: new Document,
                 systems: [],
                 categories: [],
                 sections: [],
@@ -92,14 +95,23 @@
                     parent.systems = response.data;
                 });
             },
-            system_changed: function () {
+            load_sections() {
                 let parent = this;
-                parent.document.section='';
+
+
                 axios.post('/util/section_list', {
                     system_code: parent.document.system
                 }).then(function (response) {
                     parent.sections = response.data;
                 });
+            },
+            system_changed: function () {
+
+
+                this.document.section = '';
+                this.load_sections();
+
+
             }
         },
         mounted() {

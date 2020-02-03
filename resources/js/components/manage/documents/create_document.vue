@@ -101,7 +101,7 @@
                     this.document.keywords = this.draft.document_keywords;
                     this.document.comment = this.draft.document_comment;
                     // Tell document component that there is changes on the system field
-                    this.$refs.docForm.system_changed();
+                    this.$refs.docForm.load_sections();
 
 
                     this.version.reviewers = this.draft.version_reviewer_ids;

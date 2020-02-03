@@ -47,7 +47,7 @@ class DocumentActionPolicy
     }
     public function view(User $user,Document $document)
     {
-        if($user->perm_administrator==true)
+        if($user->perm_administrator==true || $user->id==$document->created_by)
             return true;
         elseif($document->access==DocumentAccess::_CONFIDENTIAL || $document->access==DocumentAccess::_PUBLIC)
             return true;
