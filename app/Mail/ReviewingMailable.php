@@ -54,7 +54,7 @@ class ReviewingMailable extends Mailable
      */
     public function build()
     {
-        return $this->view('email.reviewing')
+        return $this->view('emails.reviewing')
         ->subject($this->document_number.'-'.$this->title.' to be reviewed.');
     }
 }

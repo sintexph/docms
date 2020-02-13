@@ -43,7 +43,7 @@ class ApprovedMailable extends Mailable
      */
     public function build()
     {
-        return $this->view('email.approved')
+        return $this->view('emails.approved')
         ->subject($this->document_number.' - '.$this->title.' has been approved.');
     }
 }

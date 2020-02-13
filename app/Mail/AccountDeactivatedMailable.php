@@ -31,7 +31,7 @@ class AccountDeactivatedMailable extends Mailable
      */
     public function build()
     {
-        return $this->view('email.registration.disabled')
+        return $this->view('emails.registration.disabled')
                     ->subject('DMS Account Deactivated');
     }
 }

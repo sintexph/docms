@@ -31,7 +31,7 @@ class AccountActivatedMailable extends Mailable
      */
     public function build()
     {
-        return $this->view('email.registration.enabled')
+        return $this->view('emails.registration.enabled')
                     ->subject('DMS Account Activated');
     }
 }

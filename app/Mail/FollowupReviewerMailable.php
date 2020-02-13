@@ -54,7 +54,7 @@ class FollowupReviewerMailable extends Mailable
      */
     public function build()
     {
-        return $this->view('email.followup_reviewer')
+        return $this->view('emails.followup_reviewer')
         ->subject($this->document_number.'-'.$this->title.' followup for review.');
     }
 }

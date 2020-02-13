@@ -33,7 +33,7 @@ class AccountApprovalMailable extends Mailable
      */
     public function build()
     {
-        return $this->view('email.registration.approval')
+        return $this->view('emails.registration.approval')
                     ->subject('DMS Account Approval');
     }
 }

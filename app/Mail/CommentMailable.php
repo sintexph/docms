@@ -36,7 +36,7 @@ class CommentMailable extends Mailable
      */
     public function build()
     {
-        return $this->view('email.comment')
+        return $this->view('emails.comment')
         ->subject($this->commenter->name.' has made a comment to '.$this->document_version->document->document_number.'-'.$this->document_version->document->title);
     }
 }

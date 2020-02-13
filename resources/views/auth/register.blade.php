@@ -14,6 +14,7 @@
 @section('content')
 
 @include('layouts.sessions')
+
 <div class="box box-solid ">
 
     <div class="box-header">
@@ -59,9 +60,7 @@
                 <a href="{{ route('register') }}">Click here to login</a><br>
             </div>
             <div class="col-xs-6">
-            <h3>Terms and Agreements</h3>
-            <p>Terms and agreements is based on the Information Technology policy which you can refer to this link.</p>
-                <iframe src="http://127.0.0.1:8000/content/view-raw/version/195" width="100%" height="450"></iframe>
+            
             </div>
         </div>
 

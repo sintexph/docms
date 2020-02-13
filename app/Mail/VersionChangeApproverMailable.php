@@ -54,7 +54,7 @@ class VersionChangeApproverMailable extends Mailable
      */
     public function build()
     {
-        return $this->view('email.version_changed_approver')
+        return $this->view('emails.version_changed_approver')
         ->subject($this->document_number.'-'.$this->title.' was modified.');
     }
 }

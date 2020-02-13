@@ -54,7 +54,7 @@ class FollowupApproverMailable extends Mailable
      */
     public function build()
     {
-        return $this->view('email.followup_approver')
+        return $this->view('emails.followup_approver')
         ->subject($this->document_number.'-'.$this->title.' followup for approval.');
     }
 }

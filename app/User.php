@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Notifications\PasswordReset;
 
 class User extends Authenticatable
 {
@@ -59,5 +60,10 @@ class User extends Authenticatable
     public function getPositionAttribute($val)
     {
         return ucwords(strtolower($val));
+    }
+
+    public function sendPasswordResetNotification($token) {
+ 
+        return $this->notify(new PasswordReset($token, $this));
     }
 }
