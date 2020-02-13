@@ -93,14 +93,8 @@
 
                             var btn_view = `<a href="/for_review/view/` + data +
                                 `" target="_blank"><i aria-hidden="true" class="fa fa-star"></i> View Content</a>`;
-                            var btn_review = `<a href="#" data-id="` +
-                                data +
-                                `" class="btn-review"><i class="fa fa-eye" aria-hidden="true"></i> Update Reviewed</a>`;
-
-                            if (row.reviewed === true)
-                                return btn_view;
-                            else
-                                return btn_view + '<br>' + btn_review;
+                         
+                                return  btn_view;
                         }
                     }
 
@@ -118,54 +112,9 @@
             find_document: function () {
                 this.$refs.datatables.reload();
             },
-            review: function (id) {
-                var par = this;
-                if (par.submitted == false) {
-                    var r = confirm("Do you want to update the document version as reviewed?");
-                    if (r == true) {
-                        par.submitted = true;
-                        // Show wait modal
-                        par.show_wait("Please wait while the system is updating the document...");
-
-                        axios.patch('/for_review/review/' + id).then(function (response) {
-                            // Hide wait modal
-                            par.hide_wait();
-                            par.alert_success(response);
-                            par.submitted = false;
-
-
-                            par.$refs.datatables.reload();
-
-                        }).catch(function (error) {
-                            // Hide wait modal
-                            par.hide_wait();
-
-                            par.submitted = false;
-                            par.alert_failed(error);
-                        });
-
-
-                    }
-                }
-
-
-            }
+         
         },
-        mounted() {
-            let parent = this;
-            parent.$nextTick(function () {
-
-                $(document).on('click', '.btn-review', function () {
-                    var id = $(this).data("id");
-                    parent.review(id);
-                });
-
-
-
-
-
-            })
-        }
+       
     }
 
 </script>

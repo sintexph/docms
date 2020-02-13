@@ -98,14 +98,8 @@
 
                             var btn_view = `<a href="/for_approval/view/` + data +
                                 `" target="_blank"><i aria-hidden="true" class="fa fa-star"></i> View Content</a>`;
-                            var btn_approve = `<a href="#" data-id="` +
-                                data +
-                                `" class="btn-approve"><i class="fa fa-eye" aria-hidden="true"></i> Update Approved</a>`;
-
-                            if (row.approved === true)
-                                return btn_view;
-                            else
-                                return btn_view + '<br>' + btn_approve;
+                          
+                                return  btn_view;
                         }
                     }
 
@@ -123,56 +117,9 @@
             find_document: function () {
                 this.$refs.datatables.reload();
             },
-            approve: function (id) {
-                var par = this;
-                if (par.submitted == false) {
-                    var r = confirm("Do you want to update the document version as approved?");
-                    if (r == true) {
-                        par.submitted = true;
-                        // Show wait modal
-                        par.show_wait("Please wait while the system is updating the document...");
-
-                        axios.patch('/for_approval/approve/' + id).then(function (response) {
-
-                            // Hide wait modal
-                            par.hide_wait();
-
-                            par.alert_success(response);
-                            par.submitted = false;
-                            par.$refs.datatables.reload();
-
-
-
-                        }).catch(function (error) {
-                            // Hide wait modal
-                            par.hide_wait();
-
-                            par.submitted = false;
-                            par.alert_failed(error);
-                        });
-
-
-                    }
-                }
-
-
-            }
+            
         },
-        mounted() {
-            let parent = this;
-            parent.$nextTick(function () {
-
-                $(document).on('click', '.btn-approve', function () {
-                    var id = $(this).data("id");
-                    parent.approve(id);
-                });
-
-
-
-
-
-            })
-        }
+       
     }
 
 </script>
