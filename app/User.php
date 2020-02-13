@@ -25,7 +25,8 @@ class User extends Authenticatable
         'edited_by',
         'perm_administrator',
         'perm_reviewer',
-        'perm_approver'
+        'perm_approver',
+        'active',
     ];
 
     protected $casts=[
@@ -39,6 +40,7 @@ class User extends Authenticatable
         'notify_approved'=>'boolean',
         'notify_to_approve'=>'boolean',
         'notify_to_review'=>'boolean',
+        'active'=>'boolean',
     ];
     
     /**

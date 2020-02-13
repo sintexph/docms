@@ -15,18 +15,11 @@
 </template>
 
 <script>
-    import SystemForm from './form.vue';
-
     export default {
-        components: {
-            'system-form': SystemForm
-        },
+
         data: function () {
             return {
-                system: {
-                    name: '',
-                    code: '',
-                },
+                system: new SystemClass,
                 submitted: false,
             }
         },
@@ -41,13 +34,15 @@
                     par.submitted = true;
                     axios.put('/systems/save', {
                         code: par.system.code,
-                        name: par.system.name
+                        name: par.system.name,
+                        reviewer_ids: par.system.reviewer_ids,
+                        approver_ids: par.system.approver_ids,
                     }).then(function (response) {
                         par.alert_success(response);
                         par.submitted = false;
                         par.$emit('created');
-                        par.system.code='';
-                        par.system.name='';
+                        par.system.code = '';
+                        par.system.name = '';
                         par.$refs.modal.dismiss();
                     }).catch(function (error) {
                         par.submitted = false;

@@ -47,12 +47,7 @@ DMS - @yield('title','Document Management System')
                 {{ Auth::user()->name }}
             </a>
             <ul class="dropdown-menu">
-                <li>
-                    <a href="{{ route('profile.notification') }}">Notifications</a>
-                    <span class="glyphicon glyphicon-globe pull-right"></span>
-
-                </li>
-
+              
                 <li>
                     <a href="{{ route('drafts') }}">Drafts</a>
                     <span class="glyphicon glyphicon-edit pull-right"></span>

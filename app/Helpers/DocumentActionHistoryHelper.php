@@ -20,6 +20,18 @@ class DocumentActionHistoryHelper
         ]);
     }
 
+    public static function submit_version(DocumentVersion $document_version,User $user)
+    {
+        $document=$document_version->document;
+        self::create_history($document,$user,$user->name.' has submitted the document, versioned ('.$document_version->version.') for review.');
+    }
+
+    public static function cancel_submission(DocumentVersion $document_version,User $user)
+    {
+        $document=$document_version->document;
+        self::create_history($document,$user,$user->name.' has cancelled the submission of the document, versioned ('.$document_version->version.').');
+    }
+
     public static function create_document(Document $document,User $user)
     {
         self::create_history($document,$user,$user->name.' has created the document.');

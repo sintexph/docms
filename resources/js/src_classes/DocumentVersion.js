@@ -63,9 +63,11 @@ export class DocumentVersion {
 
 
 
+      
+
     }
 
-     toObject() {
+    toObject() {
         return {
             number: this.number,
             content: this.content,
@@ -79,6 +81,8 @@ export class DocumentVersion {
         }
     }
 
+
+ 
 
     get expiry_date() {
         return this._expiry_date;

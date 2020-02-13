@@ -14,30 +14,23 @@
 </template>
 
 <script>
-    import SystemForm from './form.vue';
-
     export default {
-        components: {
-            'system-form': SystemForm
-        },
+
         data: function () {
             return {
                 id: '',
-                system: {
-                    name: '',
-                    code: '',
-                },
+                system: new SystemClass,
                 submitted: false,
             }
         },
         methods: {
             show: function (id) {
                 this.id = id;
-                this.system.code='';
-                this.system.name='';
-                 this.fetch();
+                this.system.code = '';
+                this.system.name = '';
+                this.fetch();
                 this.$refs.modal.show();
-               
+
             },
             save: function () {
                 var par = this;
@@ -46,7 +39,9 @@
                     par.submitted = true;
                     axios.patch('/systems/update/' + par.id, {
                         code: par.system.code,
-                        name: par.system.name
+                        name: par.system.name,
+                        reviewer_ids: par.system.reviewer_ids,
+                        approver_ids: par.system.approver_ids,
                     }).then(function (response) {
                         par.alert_success(response);
                         par.submitted = false;
@@ -60,11 +55,14 @@
 
 
             },
-            fetch:function(){
-                var par=this;
-                axios.post('/systems/fetch/'+par.id).then(function(response){
-                    par.system.code=response.data.code;
-                    par.system.name=response.data.name;
+            fetch: function () {
+                var par = this;
+                axios.post('/systems/fetch/' + par.id).then(function (response) {
+                    par.system.code = response.data.code;
+                    par.system.name = response.data.name;
+                    par.system.reviewer_ids = response.data.reviewer_ids;
+                    par.system.approver_ids = response.data.approver_ids;
+ 
                 });
             }
         }

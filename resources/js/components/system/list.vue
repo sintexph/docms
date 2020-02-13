@@ -39,7 +39,7 @@
 
             </div>
             <div class="box-body">
-                <datatable ref="datatables" :parameters="filters" :columns="columns" url="/systems/list"></datatable>
+                <datatable ref="datatables" :fixedRightColumns="1" :parameters="filters" :columns="columns" url="/systems/list"></datatable>
                 <create-system ref="createSystem" @created="$refs.datatables.reload()"></create-system>
                 <edit-system ref="editSystem" @updated="$refs.datatables.reload()"></edit-system>
 
@@ -61,11 +61,13 @@
                         label: '#',
                         name: 'id',
                         data: 'id',
+                        className: 'fit',
                     },
                     {
                         label: 'Code',
                         name: 'code',
                         data: 'code',
+                        className: 'fit',
                     },
                     {
                         label: 'Name',
@@ -73,32 +75,70 @@
                         data: 'name',
                         className: 'fit',
                     },
+
+                      {
+                        label: 'reviewers',
+                        name: 'reviewer_ids',
+                        data: 'reviewer_ids',
+                        className: 'fit',
+                        render(data,meta,row)
+                        {
+                            
+                            var display=``;
+                            row.reviewer_names.forEach(element => {
+                                display+=`<span class="label label-default">`+element.name+`</span>&nbsp;`;
+                            });
+                            return display;
+                        }
+                    },
+                      {
+                        label: 'approvers',
+                        name: 'approver_ids',
+                        data: 'approver_ids',
+                        className: 'fit',
+                        render(data,meta,row)
+                        {
+                            
+                            var display=``;
+                            row.approver_names.forEach(element => {
+                                display+=`<span class="label label-default">`+element.name+`</span>&nbsp;`;
+                            });
+                            return display;
+                        }
+                    },
+
+
                     {
                         label: 'Created By',
                         name: 'created_by',
                         data: 'created_by',
+                        className: 'fit',
                     },
                     {
                         label: 'Created At',
                         name: 'created_at',
                         data: 'created_at',
+                        className: 'fit',
                     },
                     {
                         label: 'Edited By',
                         name: 'edited_by',
                         data: 'edited_by',
+                        className: 'fit',
                     },
 
                     {
                         label: 'Edited At',
                         name: 'updated_at',
                         data: 'updated_at',
+                        className: 'fit',
                     },
 
                     {
                         label: 'Archived',
                         name: 'deleted_at',
                         data: 'deleted_at',
+                        className: 'fit',
                         render(data) {
                             if (data !== null)
                                 return `<span class="text-red">` + data + `</span>`;

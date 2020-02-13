@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use App\Helpers\MailHelper;
+use DB;
 
 class RegisterController extends Controller
 {
@@ -28,7 +31,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -49,9 +52,11 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'name'=>'required',
+            'email'=>'required|unique:users,email',
+            'password'=>'required|confirmed',
+            'position'=>'required',
+            'username'=>'required|unique:users,username',
         ]);
     }
 
@@ -67,6 +72,34 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'username'=>$data['username'],
+            'position'=>$data['position'],
+            'created_by'=>'Registration',
+            'active'=>false,
         ]);
+    }
+
+    public function register(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $validator = $this->validator($request->all());
+
+            if ($validator->fails())
+                return redirect()->back()->withInput()->withErrors($validator->errors());
+
+            $user=$this->create($request->all());
+
+            MailHelper::user_registered($user);
+            MailHelper::account_approval($user);
+
+            DB::commit();
+
+            return redirect()->back()->with('success','Thank you for applying for an account. Your account is currently pending approval by the site administrator. We will be sending you a message once your application will be approved.');
+        } catch (\Throwable $th) {
+
+            DB::rollBack();
+            return redirect()->back()->withInput()->with('error',$th->getMessage());
+        }
     }
 }

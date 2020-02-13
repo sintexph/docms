@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Document;
 use App\DocumentVersion;
-use App\DocumentVersionRevision;
 use App\Helpers\DocumentHelper;
 use App\Helpers\DocumentContent\Util;
 use Spipu\Html2Pdf\Html2Pdf;
@@ -52,7 +51,19 @@ class DocumentContentController extends Controller
         $document=$document_version->document;
         return $this->content_view($document_version,$document);
     }
-    
+    public function view_version_raw_content($id)
+    {
+        $document_version=DocumentVersion::find($id);
+        abort_if($document_version==null,404);
+        $document=$document_version->document;
+
+        return view('templates.content.raw_content',[
+            'document_version'=>$document_version,
+            'document'=>$document,
+            'download'=>false,
+        ]);
+
+    }
     
     /**
      * View the revision logs in table format

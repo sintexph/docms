@@ -3,7 +3,7 @@
         <document-form ref="docForm" v-model="document">
             <access-form v-model="document.access_data"></access-form>
         </document-form>
-        <version-form :show_version="false" v-model="version"></version-form>
+        <version-form :document="document" :show_version="false" v-model="document.current_version"></version-form> 
         <button class="btn btn-sm btn-success" type="submit">Submit Document</button>
         <button class="btn btn-sm btn-warning" type="button" @click.prevent="save_draft">Save Draft</button>
     </form>
@@ -21,8 +21,7 @@
         data: function () {
             return {
                 submitted: false,
-                document: new Document,
-                version:new DocumentVersion,
+                document: new Document, 
             }
         },
         methods: {
@@ -42,7 +41,7 @@
 
                     axios.put(link, {
                         document: parent.document.toObject(),
-                        version: parent.version.toObject(),
+                        version: parent.document.current_version.toObject(),
                     }).then(function (response) {
                         parent.hide_wait();
                         parent.alert_success(response);
@@ -72,7 +71,7 @@
 
                     axios.put(link, {
                         document: parent.document.toObject(),
-                        version: parent.version.toObject(),
+                        version: parent.document.current_version.toObject(),
                     }).then(function (response) {
                         parent.hide_wait();
                         parent.alert_success(response);
@@ -104,15 +103,15 @@
                     this.$refs.docForm.load_sections();
 
 
-                    this.version.reviewers = this.draft.version_reviewer_ids;
-                    this.version.approvers = this.draft.version_approver_ids;
-                    this.version.effective_date = this.draft.version_effective_date;
-                    this.version.content = this.cast_to_content(this.draft.version_content);
-                    this.version.description = this.cast_to_content(this.draft.version_description);
+                    this.document.current_version.reviewers = this.draft.version_reviewer_ids;
+                    this.document.current_version.approvers = this.draft.version_approver_ids;
+                    this.document.current_version.effective_date = this.draft.version_effective_date;
+                    this.document.current_version.content = this.cast_to_content(this.draft.version_content);
+                    this.document.current_version.description = this.cast_to_content(this.draft.version_description);
 
                 } else {
-                    this.version.content.addContentItem();
-                    this.version.description.addContentItem();
+                    this.document.current_version.content.addContentItem();
+                    this.document.current_version.description.addContentItem();
                 }
 
             });

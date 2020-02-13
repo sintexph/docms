@@ -2,17 +2,11 @@
 
 namespace App\Helpers;
 use App\Document;
-use App\DocumentVersionAttachment;
 use App\User;
 use App\DocumentVersion;
 use App\DocumentApprover;
-use App\DocumentReviewer;
-use App\DocumentVersionRevision;
-use App\Helpers\MailHelper;
-use App\Section;
-use App\System;
-use App\Category;
 use DB;
+use App\Helpers\Access;
 
 class EloquentHelper 
 {
@@ -22,6 +16,8 @@ class EloquentHelper
      */
     public static function document_public()
     {
+        $user=auth()->user();
+
         # Get the table names
         $tbl_approver=with(new DocumentApprover)->getTable();
         $tbl_doc_ver=with(new DocumentVersion)->getTable();
@@ -36,14 +32,20 @@ class EloquentHelper
                                 ->where($tbl_doc_ver.'.released','=',true)
                                 ->where($tbl_doc_ver.'.reviewed','=',true)
                                 ->where($tbl_doc.'.archived','=',false)
-                                ->orderBy($tbl_approver.'.approved_at','desc')
-                                ->get();
+                                ->orderBy($tbl_approver.'.approved_at','desc');
+
+
+        $approved_documents=$approved_documents->get();
                                 
 
         # Strip down the ids of the documents
-        $document_ids=$approved_documents->map(function($q){return $q->id;})->toArray(); 
+        $document_ids=$approved_documents->map(function($q){return $q->id;})->toArray();
+        $documents=Document::whereIn('id',$approved_documents->map(function($q){return $q->id;}))->orderByRaw(DB::raw("FIELD(id,".implode(",",$document_ids).")"));
 
-        return Document::whereIn('id',$approved_documents->map(function($q){return $q->id;}))->orderByRaw(DB::raw("FIELD(id,".implode(",",$document_ids).")"));
+        if($user==null)
+            $documents->where('access',Access::_PUBLIC);
+            
+        return $documents;
     }
     
     public static function document(User $user)

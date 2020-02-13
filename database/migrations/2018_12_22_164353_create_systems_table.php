@@ -19,6 +19,9 @@ class CreateSystemsTable extends Migration
             $table->string('name');
             $table->string('created_by');
             $table->string('edited_by')->nullable();
+            $table->json('reviewer_ids')->nullable();
+            $table->json('approver_ids')->nullable();
+            
             $table->timestamps();
 
             $table->softDeletes();

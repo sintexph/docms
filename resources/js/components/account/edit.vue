@@ -31,18 +31,16 @@
         methods: {
             show: function (id) {
                 this.id = id;
-
                 this.account = new User;
-
-
                 this.fetch();
                 this.$refs.modal.show();
-
             },
             save: function () {
                 var par = this;
 
                 if (par.submitted === false) {
+                    par.show_wait("Please wait while the system is processing your request....");
+
                     par.submitted = true;
                     axios.patch('/accounts/update/' + par.id, {
 
@@ -65,6 +63,7 @@
                         notify_approved: par.account.notify_approved,
                         notify_to_approve: par.account.notify_to_approve,
                         notify_to_review: par.account.notify_to_review,
+                        active: par.account.active,
 
 
                     }).then(function (response) {
@@ -75,6 +74,8 @@
                     }).catch(function (error) {
                         par.submitted = false;
                         par.alert_failed(error);
+                    }).finally(() => {
+                        par.hide_wait();
                     });
                 }
 
@@ -99,6 +100,7 @@
                     par.account.notify_approved = response.data.notify_approved;
                     par.account.notify_to_approve = response.data.notify_to_approve;
                     par.account.notify_to_review = response.data.notify_to_review;
+                    par.account.active = response.data.active;
 
                 });
             }

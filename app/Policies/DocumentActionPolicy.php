@@ -21,6 +21,7 @@ class DocumentActionPolicy
         else
             return ($user->perm_administrator==true || $document->created_by==$user->id);
     }
+    
     /**
      * For creator policy
      */
@@ -31,6 +32,7 @@ class DocumentActionPolicy
         else
             return $user->perm_administrator;
     }
+    
     public function status(User $user,Document $document)
     {
         if($document->locked==true || $document->archived==true)
@@ -38,6 +40,7 @@ class DocumentActionPolicy
         else
             return $user->perm_administrator;
     }
+    
     public function archive(User $user,Document $document)
     {
         if($document->locked==true)
@@ -45,6 +48,7 @@ class DocumentActionPolicy
         else
             return $user->perm_administrator;
     }
+    
     public function view(User $user,Document $document)
     {
         if($user->perm_administrator==true || $user->id==$document->created_by)

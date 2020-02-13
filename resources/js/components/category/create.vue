@@ -38,6 +38,7 @@
                 var par = this;
 
                 if (par.submitted === false) {
+                    par.show_wait("Please wait while the system is processing your request....");
                     par.submitted = true;
                     axios.put('/categories/save', {
                         code: par.category.code,
@@ -46,12 +47,14 @@
                         par.alert_success(response);
                         par.submitted = false;
                         par.$emit('created');
-                        par.category.code='';
-                        par.category.name='';
+                        par.category.code = '';
+                        par.category.name = '';
                         par.$refs.modal.dismiss();
                     }).catch(function (error) {
                         par.submitted = false;
                         par.alert_failed(error);
+                    }).finally(() => {
+                        par.hide_wait();
                     });
                 }
 

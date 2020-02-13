@@ -39,7 +39,8 @@
 
             </div>
             <div class="box-body">
-                <datatable fixedRightColumns="1" ref="datatables" :parameters="filters" :columns="columns" url="/accounts/list"></datatable>
+                <datatable fixedRightColumns="1" ref="datatables" :parameters="filters" :columns="columns"
+                    url="/accounts/list"></datatable>
                 <create-account ref="createAccount" @created="$refs.datatables.reload()"></create-account>
                 <edit-account ref="editAccount" @updated="$refs.datatables.reload()"></edit-account>
 
@@ -51,8 +52,8 @@
     export default {
         data: function () {
             return {
-                filters:{
-                    find:'',
+                filters: {
+                    find: '',
                 },
                 submitted: false,
                 columns: [
@@ -69,22 +70,17 @@
                         data: 'name',
                         className: 'fit',
                     },
-
                     {
                         label: 'Position',
                         name: 'position',
                         data: 'position',
+                        className: 'fit',
                     },
-
-
                     {
                         label: 'Username',
                         name: 'username',
                         data: 'username',
                     },
-
-
-
                     {
                         label: 'Email',
                         name: 'email',
@@ -92,8 +88,19 @@
                         className: 'fit',
 
                     },
+                    {
+                        label: 'Active',
+                        name: 'active',
+                        data: 'active',
+                        className: 'fit',
+                        render: function (data) {
+                            if (data === true)
+                                return '<span class="label label-success">ACTIVE</span>';
+                            else
+                                return '<span class="label label-default">IN ACTIVE</span>';
+                        }
 
-
+                    },
                     {
                         label: 'Administrator',
                         name: 'perm_administrator',
@@ -143,22 +150,26 @@
                         label: 'Created By',
                         name: 'created_by',
                         data: 'created_by',
+                        className: 'fit',
                     },
                     {
                         label: 'Created At',
                         name: 'created_at',
                         data: 'created_at',
+                        className: 'fit',
                     },
                     {
                         label: 'Edited By',
                         name: 'edited_by',
                         data: 'edited_by',
+                        className: 'fit',
                     },
 
                     {
                         label: 'Edited At',
                         name: 'updated_at',
                         data: 'updated_at',
+                        className: 'fit',
                     },
 
 
@@ -166,14 +177,15 @@
                         label: 'Actions',
                         name: 'id',
                         data: 'id',
-                         export:false,
+                        export: false,
+                        className: 'fit',
                         render: function (data, meta, row) {
                             var delbtn = `<a href="#" data-id="` + data +
                                 `" class="btn-delete text-red" ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>`;
                             var editbtn = `<a href="#" data-id="` + data +
                                 `" class="btn-edit text-yellow" ><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>`;
 
-                            return editbtn + '<br>' + delbtn;
+                            return editbtn + '&nbsp;&nbsp;&nbsp;' + delbtn;
                         }
                     }
 

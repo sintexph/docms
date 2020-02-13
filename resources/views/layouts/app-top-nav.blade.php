@@ -64,6 +64,7 @@ DMS - @yield('title','Document Management System')
     <ul class="nav navbar-nav">
         @guest
         <li><a href="{{ route('login') }}">Login</a></li>
+        <li><a href="{{ route('register') }}">Register</a></li>
         @endguest
         @auth
 

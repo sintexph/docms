@@ -7,7 +7,6 @@ use App\User;
 use App\DocumentVersion;
 use App\DocumentApprover;
 use App\DocumentReviewer;
-use App\DocumentVersionRevision;
 use App\Helpers\MailHelper;
 use App\Section;
 use App\System;
@@ -81,61 +80,7 @@ class DocumentHelper
         else
             return $document->serial+1;
     }
-
-    /**
-     * Save the document version to the database
-     */
-    public static function save_version(
-        Document $doc,
-        User $user,
-        $content,
-        $description,
-        $effective_date,
-        $expiry_date,
-        $version_number=null)
-    {
-        # Initialize new version of the document
-        $version=new DocumentVersion;
-        $version->document_id=$doc->id;
-
-        # Auto version if the $version_number is empty
-        if($version_number==null)
-        {
-            # Get the active version of the document
-            $old_version=$doc->active_version;
-
-            if($old_version==null)
-                $version->version='1'; # Set the version to one if no old version
-            else {
-                $version->version=(int)$old_version->version+1; # Increment the version based on the old version
-            }
-        }else {
-            # Set the version based on the $version_number
-            $version->version=$version_number;
-        }
-
-        # Get all the versions and reset the current to false since the newest version will be the current one
-        DocumentVersion::where('document_id','=',$doc->id)->where('current','=',true)->update([
-            'current'=>false,
-        ]);
-        
-        $version->content=$content;
-        $version->created_by=$user->id;
-        $version->description=$description;
-        $version->effective_date=$effective_date;
-        $version->expiry_date=$expiry_date;
-        $version->for_approval=false;
-        $version->for_review=false;
-        $version->current=true;
-        $version->active=false;
-        $version->creator_modified_at=\Carbon\Carbon::now();
-        $version->save();
-
-        DocumentActionHistoryHelper::new_version($version,$user);
-        
-
-        return $version;
-    }
+    
     public static function save_reviewer(User $reviewer,DocumentVersion $version)
     {
         $data=DocumentReviewer::create([
@@ -153,63 +98,4 @@ class DocumentHelper
         ]);
         return $data;
     }
-
-    
-    public static function save_revision(DocumentVersion $version,User $user,$content)
-    {
-        $document=$version->document;
-        $revision=DocumentVersionRevision::firstOrCreate(['version_id'=>$version->id]);
-        $revision->content=$content;
-        $revision->save();
-        return $revision;
-    }
-
-
-    public static function save_document(User $user,$title,System $system,Section $section,Category $category,$keywords,$comment,$access)
-    {
-        $generated_document_number=self::generate_document_number($system,$section,$category);
-        $document=new Document;
-        
-        $document->document_number=$generated_document_number->document_number;
-        $document->serial=$generated_document_number->serial;
-
-        $document->version=1; // Set default version to 1
-        $document->title=$title;
-        $document->system_code=$system->code;
-        $document->section_code=$section->code;
-        $document->category_code=$category->code;
-        $document->access=$access;
-        
-        $document->keywords=explode(",",$keywords);
-
-        $document->comment=$comment;
-        $document->created_by=$user->id;
-        $document->save();
-
-        DocumentActionHistoryHelper::create_document($document,$user);
-
-        return $document;
-    }
-
-    public static function save_accessors($accessors_id)
-    {
-        # Save the new accessors
-        foreach($request['accessors'] as $accessor_id)
-        {
-            $accessor=User::find($accessor_id);
-            if($accessor==null)
-            {
-                DB::rollBack();
-                abort(422,'User could not be found on the system!');
-            }
-            DocumentAccessor::create([
-                'document_id'=>$document->id,
-                'user_id'=>$accessor->id
-            ]);
-        }
-    }
-
-
-
-    
 }

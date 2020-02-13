@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\DocumentApprover;
 use App\Helpers\MailHelper;
+use DB;
+use Carbon\Carbon;
 
 class ApprovalFollowUpCommand extends Command
 {
@@ -40,6 +42,7 @@ class ApprovalFollowUpCommand extends Command
     public function handle()
     {
         $document_approvers=DocumentApprover::where('approved',false)
+        ->where(DB::raw("date(created_at)='".Carbon::now()->subDays(2)->format('Y-m-d')."'")) # 2 days from creation
         ->whereHas('document_version',function($version){ 
             $version->where('for_approval',true)->whereHas('document'); 
         })->get();

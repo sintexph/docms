@@ -36,6 +36,9 @@ class CreateUsersTable extends Migration
             $table->boolean('notify_to_approve')>comment('Notify if there are to be approved')->default(true);
             $table->boolean('notify_to_review')->comment('Notify if there are to be reviewed')->default(true);
 
+
+            $table->boolean('active')->default(false);
+
             $table->rememberToken();
             $table->timestamps();
         });

@@ -10,7 +10,7 @@
                         class="fa fa-trash" aria-hidden="true"></i></a>
                 <a href="#" title="Move Order" class="btn btn-xs btn-default text-blue citem-drag" @click.prevent="">
                     <i class="fa fa-arrows" aria-hidden="true"></i></a>
-                <a href="#" title="Hid/Show item" @click.prevent="hide" class="btn btn-xs btn-default">
+                <a href="#" title="Hide/Show item" @click.prevent="hide" class="btn btn-xs btn-default">
                     <i class="fa fa-minus"></i>
                 </a>
             </div>

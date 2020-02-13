@@ -93,11 +93,12 @@
             auto_save() {
                 this.idle.pause();
                 this.save();
-
-
+            },
+            get_document() {
+                axios.post('/util/get-doc-system/' + this.document_id).then(response => {
+                    EVENT_BUS.$emit("SYSTEM_LOADED", response.data);
+                });
             }
-
-
         },
 
         mounted: function () {
@@ -114,7 +115,10 @@
                     timeout: 60000 * 5,
                     loop: true
                 });
+
+                this.get_document();
             });
+
 
         },
 

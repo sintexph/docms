@@ -44,6 +44,7 @@
                 var par = this;
 
                 if (par.submitted === false) {
+                    par.show_wait("Please wait while the system is processing your request....");
                     par.submitted = true;
                     axios.patch('/categories/update/' + par.id, {
                         code: par.category.code,
@@ -56,6 +57,8 @@
                     }).catch(function (error) {
                         par.submitted = false;
                         par.alert_failed(error);
+                    }).finally(() => {
+                        par.hide_wait();
                     });
                 }
 

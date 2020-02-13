@@ -141,12 +141,7 @@ class DocumentVersion extends Model
     {
         return $this->hasMany('App\DocumentApprover','version_id');
     }
-
-    public function revision()
-    {
-        return $this->hasOne('App\DocumentVersionRevision','version_id');
-    }
-
+    
     public function last_version()
     {
         $last_version=DocumentVersion::where('document_id','=',$this->document_id)->where('version','<',$this->version)->first();

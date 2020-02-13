@@ -24,6 +24,9 @@ Vue.use(IdleVue, {
 })
 
 
+window.EVENT_BUS = new Vue()
+
+
 Vue.component('version-form', require('.././components/manage/documents/forms/version-form.vue').default);
 Vue.component('document-form', require('.././components/manage/documents/forms/document-form.vue').default);
 Vue.component('access-form', require('.././components/manage/documents/forms/access-form.vue').default);

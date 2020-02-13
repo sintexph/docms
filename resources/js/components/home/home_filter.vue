@@ -20,7 +20,8 @@
                 <li><strong>Filters</strong>
                     <ul>
                         <li v-if="filters.status">Status <a href="#" @click.prevent="true">{{ filters.status }}</a></li>
-                        <li v-if="filters.category">Category <a href="#" @click.prevent="true">{{ category_name }}</a></li>
+                        <li v-if="filters.category">Category <a href="#" @click.prevent="true">{{ category_name }}</a>
+                        </li>
                         <li v-if="filters.system">System <a href="#" @click.prevent="true">{{ system_name }}</a></li>
                         <li v-if="filters.section">Section <a href="#" @click.prevent="true">{{ section_name }}</a></li>
                     </ul>
@@ -61,6 +62,7 @@
                 <label class="control-label">Section</label>
                 <select class="form-control" v-model="filters.section" required>
                     <option value=""> -- CHOOSE --</option>
+                    <option value="" v-if="sections.length==0" disabled> -- choose first a system --</option>
                     <option v-for="(value,key) in sections" :key="key" :value="value.code">{{ value.name }}</option>
                 </select>
             </div>
@@ -129,12 +131,16 @@
             },
             system_changed: function () {
                 let parent = this;
+                parent.sections = [];
                 parent.filters.section = '';
-                axios.post('/util/section_list', {
-                    system_code: parent.filters.system
-                }).then(function (response) {
-                    parent.sections = response.data;
-                });
+                if (parent.filters.system) {
+                    axios.post('/util/section_list', {
+                        system_code: parent.filters.system
+                    }).then(function (response) {
+                        parent.sections = response.data;
+                    });
+                }
+
             },
             find() {
                 window.location = this.url;

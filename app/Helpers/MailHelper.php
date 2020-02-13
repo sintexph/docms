@@ -10,6 +10,10 @@ use App\Mail\VersionChangeReviewerMailable;
 use App\Mail\VersionChangeApproverMailable;
 use App\Mail\FollowupApproverMailable;
 use App\Mail\FollowupReviewerMailable;
+use App\Mail\AccountRegistrationMailable;
+use App\Mail\AccountApprovalMailable;
+use App\Mail\AccountActivatedMailable;
+use App\Mail\AccountDeactivatedMailable;
 
 use App\DocumentReviewer;
 use App\DocumentApprover;
@@ -19,6 +23,26 @@ use App\User;
 
 class MailHelper 
 {
+    public static function account_activated(User $registered_user)
+    {
+        Mail::to($registered_user->email)->queue(new AccountActivatedMailable($registered_user));
+    }
+    public static function account_deactivated(User $registered_user)
+    {
+        Mail::to($registered_user->email)->queue(new AccountDeactivatedMailable($registered_user));
+    }
+
+    public static function account_approval(User $registered_user)
+    {
+        foreach (User::where('perm_administrator',true)->get() as $user) {
+            Mail::to($user->email)->queue(new AccountApprovalMailable($user,$registered_user));
+        }
+    }
+
+    public static function user_registered(User $registered_user)
+    {
+        Mail::to($registered_user->email)->queue(new AccountRegistrationMailable($registered_user));
+    }
 
     public static function followup_reviewer(DocumentReviewer $document_reviewer)
     {

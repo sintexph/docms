@@ -32,6 +32,7 @@
                 var par = this;
 
                 if (par.submitted === false) {
+                    par.show_wait("Please wait while the system is processing your request....");
                     par.submitted = true;
                     axios.put('/accounts/save', {
 
@@ -53,6 +54,7 @@
                         notify_approved: par.account.notify_approved,
                         notify_to_approve: par.account.notify_to_approve,
                         notify_to_review: par.account.notify_to_review,
+                        active: par.account.active,
 
 
                     }).then(function (response) {
@@ -68,6 +70,8 @@
                     }).catch(function (error) {
                         par.submitted = false;
                         par.alert_failed(error);
+                    }).finally(() => {
+                        par.hide_wait();
                     });
                 }
 

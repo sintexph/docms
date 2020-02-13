@@ -136,19 +136,16 @@ class DocumentReviewingController extends Controller
         {
             $current_version=DocumentVersion::find($request->ver);
             $document=$current_version->document;
-            $current_version_revision=$current_version->revision;
         }else
         {
             $current_version=$document_reviewer->document_version;
             $document=$current_version->document;
-            $current_version_revision=$current_version->revision;
         }
 
 
         return view('manage.document.reviews.view_document',[
             'document'=>$document,
             'current_version'=>$current_version,
-            'current_version_revision'=>$current_version_revision,
             'document_reviewer'=>$document_reviewer,
         ]);
     }

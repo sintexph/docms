@@ -56,12 +56,16 @@ class ManageSystemController extends Controller
         $this->validate($request,[
             'name'=>'required',
             'code'=>'required|unique:systems',
+            'reviewer_ids'=>'required',
+            'approver_ids'=>'required',
         ]);
 
         System::create([
             'name'=>$request['name'],
             'code'=>strtoupper($request['code']),
-            'created_by'=>auth()->user()->name
+            'created_by'=>auth()->user()->name,
+            'reviewer_ids'=>$request['reviewer_ids'],
+            'approver_ids'=>$request['approver_ids']
         ]);
 
         return response()->json(['message'=>'System has been successfully created!']);
@@ -76,6 +80,8 @@ class ManageSystemController extends Controller
         $this->validate($request,[
             'name'=>'required',
             'code'=>'required|unique:systems,code,'.$id,
+            'reviewer_ids'=>'required',
+            'approver_ids'=>'required',
         ]);
 
 
@@ -110,6 +116,8 @@ class ManageSystemController extends Controller
             $system->code=strtoupper($request['code']);
             $system->name=$request['name'];
             $system->edited_by=auth()->user()->name;
+            $system->reviewer_ids=$request['reviewer_ids'];
+            $system->approver_ids=$request['approver_ids'];
             $system->save();
 
 

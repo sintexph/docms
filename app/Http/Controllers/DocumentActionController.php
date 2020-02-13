@@ -7,23 +7,27 @@ use Illuminate\Http\Request;
 use DB;
 use Auth;
 use App\User;
-use App\System;
-use App\Section;
+
 use App\Document;
-use App\Category;
+
 use App\DocumentDraft;
 use App\DocumentAccessor;
 use App\Reference;
-use App\DocumentVersionAttachment;
-use App\Helpers\UploadHelper;
 use App\Helpers\DocumentHelper;
 use App\Helpers\DocumentActionHistoryHelper;
-use Illuminate\Support\Facades\Input;
 use App\Helpers\DocumentContent\Util\Cast;
 use App\Helpers\DocumentVersionHelper;
+use App\Helpers\MailHelper;
+use App\Helpers\Traits\VersionCreationTrait;
+use App\Helpers\Traits\VersionAuthorizationTrait;
+use App\Helpers\Traits\DocumentCreationTrait;
 
 class DocumentActionController extends Controller
 {
+    use VersionCreationTrait;
+    use VersionAuthorizationTrait;
+    use DocumentCreationTrait;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -159,105 +163,29 @@ class DocumentActionController extends Controller
 
         $user=Auth::user();
 
-        # Get the system and the section from the database
-        $section=Section::where('code','=',$doc_request['section'])->first();
-        $system=System::where('code','=',$doc_request['system'])->first();
-        $category=Category::where('code','=',$doc_request['category'])->first();
 
-        # Check if data exist
-        abort_if($section==null || $section->system_code!=$system->code, 422,'Section is not exist on the system!');
-        abort_if($system==null, 422,'System is not exist on the system!');
-        abort_if($category==null, 422,'Category is not exist on the system!');
         
         try {
 
             DB::beginTransaction();
             
-            $document=DocumentHelper::save_document(
-                $user,
-                $doc_request['title'],
-                $system,
-                $section,
-                $category,
-                $doc_request['keywords'],
-                $doc_request['comment'],
-                $doc_request['access_data']['access']
-            );
+            $document=$this->save_document($request);
+            $document_version=$this->save_new_version($document,$request);
+
+            $this->version_save_reviewer($document_version,$request);
+            $this->version_save_approver($document_version,$request);
             
-            $document_version=DocumentHelper::save_version(
-                $document,
-                $user,
-                Cast::generalize_keys($document_version_request['content']),
-                Cast::generalize_keys($document_version_request['description']),
-                $document_version_request['effective_date'],
-                $document_version_request['expiry_date']
-            );
-
-
-
-            # Save a new list
-            foreach ($document_version_request['reviewers'] as $value) {
-                $user_rev=User::find($value);
-                if($user_rev==null)
-                    abort(404,'Reviewer not could not be found on the system');
-                DocumentHelper::save_reviewer($user_rev,$document_version,true);
-            }
-
-            # Save a new list
-            foreach ($document_version_request['approvers'] as $value) {
-                $user_rev=User::find($value);
-                if($user_rev==null)
-                    abort(404,'Approver not could not be found on the system');
-                DocumentHelper::save_approver($user_rev,$document_version);
-            }
-
-            if($document_version->reviewers->count()!=0 && $document_version->approvers->count()!=0) # If there are reviewers and approvers
-                DocumentVersionHelper::for_review($document_version); # Set the document version for review
-                
-
-            # Remove the draft if the current saving has a linked draft
-            $draft=DocumentDraft::find(Input::get('draft'));
-            if($draft!=null)
-                $draft->delete();
-
-
-            
-            # ------------------------------
-            # ------ SET THE ACCESSORS------
-            # ------------------------------
-
-            # Check if the access is custom
-            if($document->access=="2")
+            if($document_version->reviewers->count()!=0 && $document_version->approvers->count()!=0)
             {
-                # Save the new accessors
-                foreach($doc_request['access_data']['accessors'] as $accessor_id)
-                {
-                    $accessor=User::find($accessor_id);
-                    if($accessor==null)
-                    {
-                        DB::rollBack();
-                        abort(422,'User could not be found on the system!');
-                    }
-                    
-                    DocumentAccessor::create([
-                        'document_id'=>$document->id,
-                        'user_id'=>$accessor->id
-                    ]);
+                # If there are reviewers and approvers
+                DocumentVersionHelper::for_review($document_version,$user); # Set the document version for review
+
+                # Notify the reviewers
+                foreach ($document_version->reviewers as $reviewer) {
+                    MailHelper::send_email_reviewer($reviewer);
                 }
-
             }
-            elseif($document->access=="4")
-            {
-                # Set the authenticated user as the accessor only
-                DocumentAccessor::create([
-                    'document_id'=>$document->id,
-                    'user_id'=>Auth::user()->id
-                ]);
-
-            }
-            # ------------------------------
-            # ------ END SET THE ACCESSORS------
-            # ------------------------------
+                
 
 
             DB::commit();
@@ -332,7 +260,7 @@ class DocumentActionController extends Controller
                 DocumentHelper::update_document_number($document,$user);
  
                 # reset the status of the current version approver and reviewer
-                DocumentVersionHelper::reset_status($document->current_version()->first());
+                DocumentVersionHelper::reset_status($document->current_version()->first(),$user);
                 
                 $document->save();
                 DB::commit();

@@ -5,6 +5,8 @@ use App\DocumentVersion;
 use App\DocumentReviewer;
 use App\DocumentApprover;
 use App\Helpers\MailHelper;
+use App\Helpers\DocumentActionHistoryHelper;
+use App\User;
 
 class DocumentVersionHelper 
 {
@@ -72,10 +74,14 @@ class DocumentVersionHelper
         return $document_version;
     }
 
-    public static function for_review(DocumentVersion $document_version)
+    public static function for_review(DocumentVersion $document_version,User $user)
     {
         $document_version->for_review=true;
         $document_version->save();
+
+        DocumentActionHistoryHelper::submit_version($document_version,$user);
+
+
     }
 
     public static function for_approve(DocumentVersion $document_version)
@@ -91,7 +97,7 @@ class DocumentVersionHelper
     /**
      * RESET THE STATUS OF THE VERSION APPROVAL AND REVIEW
      */
-    public static function reset_status(DocumentVersion $version)
+    public static function reset_status(DocumentVersion $version,User $user)
     {
         
         $version->reviewed=false;
@@ -113,6 +119,9 @@ class DocumentVersionHelper
             $reviewer->reviewed_at=null;
             $reviewer->save();
         }
+
+        DocumentActionHistoryHelper::cancel_submission($version,$user);
+        
 
         return $version;
     }

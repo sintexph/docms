@@ -135,14 +135,11 @@ class HomeController extends Controller
         $document=$document_version->document;
 
         $references=$document->references;
- 
-        $document_version_revision=$document_version->revision;
 
         return view('home.view_document',[
             'document'=>$document,
             'document_version'=>$document_version,
             'references'=>$references,
-            'document_version_revision'=>$document_version_revision,
         ]);
     }
 }

@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\DocumentReviewer;
 use App\Helpers\MailHelper;
+use DB;
+use Carbon\Carbon;
 
 class ReviewFollowUpCommand extends Command
 {
@@ -40,6 +42,7 @@ class ReviewFollowUpCommand extends Command
     public function handle()
     {
         $document_reviewers=DocumentReviewer::where('reviewed',false)
+        ->where(DB::raw("date(created_at)='".Carbon::now()->subDays(2)->format('Y-m-d')."'")) # 2 days from creation
         ->whereHas('document_version',function($version){ 
 
             $version->where('for_review',true)->whereHas('document'); 

@@ -263,6 +263,7 @@ class ManageDocumentController extends Controller
         ->first();
 
         abort_if($selected_version->reviewed==true && $selected_version->approved==true,403,'The document is not available for editing.');
+        abort_if($selected_version->for_review==true,422,'The document was already submitted, if you want to modify the document, please cancel the submission first!');
 
         return view('manage.document.edit_version_full',[
             'document'=>$document,

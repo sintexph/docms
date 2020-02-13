@@ -74,8 +74,16 @@
          else
              this._serial = '';
 
+         this._current_version = new DocumentVersion;
+
+     }
 
 
+     get current_version() {
+         return this._current_version;
+     }
+     set current_version(current_version) {
+         this._current_version = current_version;
      }
 
 

@@ -16,6 +16,8 @@ export default class User {
 
         this._remember_token = '';
 
+        this._active = false;
+
         this._notify_changes = false;
         this._notify_followups = false;
         this._notify_comments = false;
@@ -92,6 +94,12 @@ export default class User {
         return this._updated_at;
     }
 
+    get active() {
+        return this._active;
+    }
+    set active(value) {
+        this._active = value;
+    }
     set id(value) {
         this._id = value;
     }

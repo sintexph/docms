@@ -87,30 +87,35 @@
         },
         methods: {
             load_list: function () {
-                let parent = this;
+                let vm = this;
                 axios.post('/util/category_list').then(function (response) {
-                    parent.categories = response.data;
+                    vm.categories = response.data;
                 });
                 axios.post('/util/system_list').then(function (response) {
-                    parent.systems = response.data;
+                    vm.systems = response.data;
                 });
             },
             load_sections() {
-                let parent = this;
+                let vm = this;
 
 
                 axios.post('/util/section_list', {
-                    system_code: parent.document.system
+                    system_code: vm.document.system
                 }).then(function (response) {
-                    parent.sections = response.data;
+                    vm.sections = response.data;
                 });
             },
             system_changed: function () {
 
+                var temp_system = this.systems.find(system => {
+                    return system.code === this.document.system;
+
+                });
+
+                EVENT_BUS.$emit("SYSTEM_CHANGED",temp_system);
 
                 this.document.section = '';
                 this.load_sections();
-
 
             }
         },

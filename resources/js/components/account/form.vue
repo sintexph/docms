@@ -1,6 +1,10 @@
 <template>
 
     <div>
+
+
+
+
         <div class="form-group">
             <label class="label-control">Name</label>
             <input class="form-control  text-uppercase" v-model="account.name">
@@ -29,8 +33,10 @@
             <input type="password" class="form-control" v-model="account.password_confirmation">
         </div>
 
-
-        <br><br>
+        <div class="form-group">
+            <label class="label-control">Enable Account</label><br>
+            <toogle on_text="Activate" v-model="account.active" size="small" off_text="Disabled" on_style="success"></toogle>
+        </div>
         <div class="form-group">
             <label class="control-label">Permissions</label>
 
@@ -52,7 +58,7 @@
 
         <div class="form-group">
             <label class="control-label">Notifications</label>
-           <notification-form v-model="account"></notification-form>
+            <notification-form v-model="account"></notification-form>
 
         </div>
 

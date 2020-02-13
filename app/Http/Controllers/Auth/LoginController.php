@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -40,6 +41,13 @@ class LoginController extends Controller
     public function username()
     {
         return 'username';
+    }
+
+    public function credentials(Request $request)
+    {
+        $rq=$request->only($this->username(), 'password');
+        $rq['active']=true;
+        return $rq;
     }
 
 }

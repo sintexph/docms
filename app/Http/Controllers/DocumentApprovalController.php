@@ -133,7 +133,6 @@ class DocumentApprovalController extends Controller
         abort_if($current_version->for_approval==false && $current_version->viewed==false,422,'The document is not ready for approval, please check again later.');
 
         $document=$current_version->document;
-        $current_version_revision=$current_version->revision;
         $references=$document->references;
 
         $document_approver->viewed=true;
@@ -143,7 +142,6 @@ class DocumentApprovalController extends Controller
             'document'=>$document,
             'current_version'=>$current_version,
             'references'=>$references,
-            'current_version_revision'=>$current_version_revision,
             'document_approver'=>$document_approver,
         ]);
     }

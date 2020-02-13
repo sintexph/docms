@@ -3,21 +3,12 @@
  
 Route::get('/','HomeController@index');
 
+Route::auth();
+
 # File route
 Route::get('file/{id}','FileController@get_file')->name('file');
 Route::get('file/download/{id}','FileController@download')->name('file.download');
 
-
-Route::get('login','Auth\LoginController@showLoginForm')->name('login');
-Route::post('login','Auth\LoginController@login')->name('login');
-Route::post('logout','Auth\LoginController@logout')->name('logout');
-
-Route::get('password/reset','Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
-Route::post('password/email','Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-Route::get('password/reset/{token}','Auth\ResetPasswordController@showResetForm')->name('password.reset');
-Route::post('password/reset','Auth\ResetPasswordController@reset')->name('password.update');
-
- 
 Route::prefix('profile')->name('profile')->group(function(){
     
     Route::get('notification-settings', 'ProfileController@show_notification_settings')->name('.notification');
@@ -47,7 +38,9 @@ Route::prefix('content')->name('content')->group(function(){
 
     // No permission yet
     Route::get('view/version/{id}','DocumentContentController@view_version_content')->name('.view.version');
+    Route::get('view-raw/version/{id}','DocumentContentController@view_version_raw_content')->name('.view.version.raw');
     Route::get('view/revision-logs/{id}','DocumentContentController@view_revision_logs')->name('.view.revision.logs');
+
 
     Route::get('download/{id}','DocumentContentController@download_content')->name('.download');
     Route::get('download/version/{id}','DocumentContentController@download_content_version')->name('.download.version');
@@ -63,12 +56,12 @@ Route::prefix('util')->name('util')->group(function(){
 
 
     Route::post('section_list', 'UtilityController@section_list')->name('.section_list');
-    Route::post('get_document', 'UtilityController@get_document')->name('.get_document');
     Route::post('find_documents', 'UtilityController@find_documents')->name('.find_documents');
     
 
     Route::middleware('auth')->group(function(){
 
+        Route::post('get-doc-system/{id}', 'UtilityController@get_document_system')->name('.get_document_system');
         Route::post('serial-exists', 'UtilityController@serial_exits')->name('.serial_exits');
         Route::post('reviewers', 'UtilityController@reviewers')->name('.reviewers');
         Route::post('approvers', 'UtilityController@approvers')->name('.approvers');
@@ -137,6 +130,7 @@ Route::prefix('manage')->name('manage')->group(function(){
         // Version actions
         Route::patch('new_version/{id}','VersionActionController@new_version')->name('.new_version')->middleware('document-action');
         Route::patch('submit-version/{id}','VersionActionController@submit_version')->name('.submit_version')->middleware('document-action:version');
+        Route::patch('cancel-submission/{id}','VersionActionController@cancel_submission')->name('.cancel_submission')->middleware('document-action:version');
         Route::patch('update_version/{id}','VersionActionController@update_version')->name('.update_version')->middleware('document-action:version');
         Route::patch('release/{id}','VersionActionController@release')->name('.release')->middleware('document-action:version,release');
         

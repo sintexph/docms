@@ -87,19 +87,14 @@ class UtilityController extends Controller
      * @param $document_number The document number of the document
      * @return JSON type of the document model
      */
-    public function get_document(Request $request)
+    public function get_document_system(Request $request,$id)
     {
-        $this->validate($request,[
-            'document_number'=>'required'
-        ]);
+        $document=\App\Document::find($id);
+        abort_if($document==null,404,'Document could not be found!');
+        
+        $system=\App\System::where('code',$document->system_code)->first();
 
-        $document=\App\Document::where('document_number','=',$request['document_number'])->first();
-        if(empty($document))
-            return response()->json([
-                'message'=>'Document could not be found!'
-            ],404);
-
-        return response()->json($document);
+        return response()->json($system);
     }
 
     public function find_documents(Request $request)
