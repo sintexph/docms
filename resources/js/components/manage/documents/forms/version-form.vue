@@ -177,10 +177,16 @@
             }
 
             EVENT_BUS.$on("SYSTEM_CHANGED", function (system) {
-                vm.system = system;
-                vm.version.reviewers = [];
-                vm.version.approvers = [];
-                vm.load_authorizations();
+                if (system) {
+                    vm.system = system;
+                    vm.version.reviewers = [];
+                    vm.version.approvers = [];
+                    vm.load_authorizations();
+                } else {
+                    // if no system then set system to null to clear up the default list
+                    vm.system = null;
+                }
+
             });
             EVENT_BUS.$on("SYSTEM_LOADED", function (system) {
                 vm.system = system;

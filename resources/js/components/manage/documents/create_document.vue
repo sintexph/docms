@@ -3,7 +3,7 @@
         <document-form ref="docForm" v-model="document">
             <access-form v-model="document.access_data"></access-form>
         </document-form>
-        <version-form :document="document" :show_version="false" v-model="document.current_version"></version-form> 
+        <version-form :document="document" :show_version="false" v-model="document.current_version"></version-form>
         <button class="btn btn-sm btn-success" type="submit">Submit Document</button>
         <button class="btn btn-sm btn-warning" type="button" @click.prevent="save_draft">Save Draft</button>
     </form>
@@ -21,7 +21,7 @@
         data: function () {
             return {
                 submitted: false,
-                document: new Document, 
+                document: new Document,
             }
         },
         methods: {
@@ -86,6 +86,11 @@
                         parent.alert_failed(error);
                     });
                 }
+            },
+            get_system(code) {
+                axios.post('/util/get-system/' + code).then(response => {
+                    EVENT_BUS.$emit("SYSTEM_LOADED", response.data);
+                });
             }
         },
         mounted() {
@@ -107,7 +112,11 @@
                     this.document.current_version.approvers = this.draft.version_approver_ids;
                     this.document.current_version.effective_date = this.draft.version_effective_date;
                     this.document.current_version.content = this.cast_to_content(this.draft.version_content);
-                    this.document.current_version.description = this.cast_to_content(this.draft.version_description);
+                    this.document.current_version.description = this.cast_to_content(this.draft
+                        .version_description);
+
+                    if (this.document.system)
+                        this.get_system(this.document.system);
 
                 } else {
                     this.document.current_version.content.addContentItem();

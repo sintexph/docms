@@ -64,6 +64,7 @@ Route::prefix('util')->name('util')->group(function(){
 
     Route::middleware('auth')->group(function(){
 
+        Route::post('get-system/{code}', 'UtilityController@getSystem')->name('.get_system');
         Route::post('get-doc-system/{id}', 'UtilityController@get_document_system')->name('.get_document_system');
         Route::post('serial-exists', 'UtilityController@serial_exits')->name('.serial_exits');
         Route::post('reviewers', 'UtilityController@reviewers')->name('.reviewers');

@@ -35,6 +35,14 @@ class UtilityController extends Controller
         return "";
     }
 
+
+ 
+    public function getSystem($code)
+    {
+        $system=\App\System::where('code',$code)->first();
+        return response()->json($system);
+    }
+
     /**
      * List of all systems with corresponding codes
      * @return JSON list of systems

@@ -26,23 +26,23 @@ class MailHelper
 {
     public static function account_activated(User $registered_user)
     {
-        Mail::to($registered_user->email)->send(new AccountActivatedMailable($registered_user));
+        Mail::to($registered_user->email)->queue(new AccountActivatedMailable($registered_user));
     }
     public static function account_deactivated(User $registered_user)
     {
-        Mail::to($registered_user->email)->send(new AccountDeactivatedMailable($registered_user));
+        Mail::to($registered_user->email)->queue(new AccountDeactivatedMailable($registered_user));
     }
 
     public static function account_approval(User $registered_user)
     {
         foreach (User::where('perm_administrator',true)->get() as $user) {
-            Mail::to($user->email)->send(new AccountApprovalMailable($user,$registered_user));
+            Mail::to($user->email)->queue(new AccountApprovalMailable($user,$registered_user));
         }
     }
 
     public static function user_registered(User $registered_user)
     {
-        Mail::to($registered_user->email)->send(new AccountRegistrationMailable($registered_user));
+        Mail::to($registered_user->email)->queue(new AccountRegistrationMailable($registered_user));
     }
 
     public static function followup_reviewer(DocumentReviewer $document_reviewer)
@@ -50,7 +50,7 @@ class MailHelper
         $user=$document_reviewer->user;
         if($user->notify_followups==true)
         {
-            Mail::to($user->email)->send(new FollowupReviewerMailable($document_reviewer));
+            Mail::to($user->email)->queue(new FollowupReviewerMailable($document_reviewer));
         }
     }
 
@@ -59,7 +59,7 @@ class MailHelper
         $user=$document_approver->user;
         if($user->notify_followups==true)
         {
-            Mail::to($user->email)->send(new FollowupApproverMailable($document_approver));
+            Mail::to($user->email)->queue(new FollowupApproverMailable($document_approver));
         }
     }
 
@@ -72,7 +72,7 @@ class MailHelper
         $user=$document_approver->user;
         if($user->notify_changes==true)
         {
-            Mail::to($user->email)->send(new VersionChangeApproverMailable($document_approver));
+            Mail::to($user->email)->queue(new VersionChangeApproverMailable($document_approver));
         }
     }
 
@@ -86,7 +86,7 @@ class MailHelper
 
         if($user->notify_changes==true)
         {
-            Mail::to($user->email)->send(new VersionChangeReviewerMailable($document_reviewer));
+            Mail::to($user->email)->queue(new VersionChangeReviewerMailable($document_reviewer));
         }
     }
 
@@ -101,7 +101,7 @@ class MailHelper
         if($user->notify_to_review==true)
         {
             $version=$document_reviewer->document_version;
-            Mail::to($user->email)->send(new ReviewingMailable($document_reviewer));
+            Mail::to($user->email)->queue(new ReviewingMailable($document_reviewer));
         }
     }
     /**
@@ -114,7 +114,7 @@ class MailHelper
         if($user->notify_to_approve==true)
         {
             $version=$document_approver->document_version;
-            Mail::to($user->email)->send(new ApprovingMailable($document_approver));
+            Mail::to($user->email)->queue(new ApprovingMailable($document_approver));
         }
     }
 
@@ -129,7 +129,7 @@ class MailHelper
             # Send only the email to creator it has been approved
             if($document_version->approved==true)
             {
-                Mail::to($user->email)->send(new ApprovedMailable($user,$document_version));
+                Mail::to($user->email)->queue(new ApprovedMailable($user,$document_version));
             }
         }
 
@@ -142,7 +142,7 @@ class MailHelper
     {
         $user=$reviewer->document_version->creator;
         if($user->notify_reviewed==true)
-            Mail::to($user->email)->send(new DocumentReviewedMailable($user,$reviewer));
+            Mail::to($user->email)->queue(new DocumentReviewedMailable($user,$reviewer));
     }
     
     /**
@@ -188,7 +188,7 @@ class MailHelper
                             break; 
                     }
 
-                    Mail::to($user->email)->send(new CommentMailable($document_version,$commenter,$url)); 
+                    Mail::to($user->email)->queue(new CommentMailable($document_version,$commenter,$url)); 
                 }
             }   
         }

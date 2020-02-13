@@ -94,7 +94,7 @@
                 this.idle.pause();
                 this.save();
             },
-            get_document() {
+            get_document_system() {
                 axios.post('/util/get-doc-system/' + this.document_id).then(response => {
                     EVENT_BUS.$emit("SYSTEM_LOADED", response.data);
                 });
@@ -116,7 +116,7 @@
                     loop: true
                 });
 
-                this.get_document();
+                this.get_document_system();
             });
 
 
