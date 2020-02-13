@@ -17,7 +17,7 @@ DMS - @yield('title','Document Management System')
 @yield('header_title_sm','System information')
 @endslot
 
- 
+
 
 @slot('breadcrumbs')
 
@@ -35,7 +35,7 @@ DMS - @yield('title','Document Management System')
 @slot('navigation')
 
 
-<div  class="navbar-custom-menu app-profile">
+<div class="navbar-custom-menu app-profile">
     <ul class="nav navbar-nav">
         @guest
         <li><a href="{{ route('login') }}">Login</a></li>
@@ -47,7 +47,12 @@ DMS - @yield('title','Document Management System')
                 {{ Auth::user()->name }}
             </a>
             <ul class="dropdown-menu">
-              
+
+                <li>
+                    <a href="{{ route('profile.change_password') }}">Change Password</a>
+                    <span class="glyphicon glyphicon-lock pull-right"></span>
+                </li>
+
                 <li>
                     <a href="{{ route('drafts') }}">Drafts</a>
                     <span class="glyphicon glyphicon-edit pull-right"></span>
@@ -69,7 +74,7 @@ DMS - @yield('title','Document Management System')
 @endslot
 
 @slot('content')
-@yield('content') 
+@yield('content')
 @endslot
 
 @slot('sidebar')

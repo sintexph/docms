@@ -11,6 +11,28 @@ class ProfileController extends Controller
         $this->middleware('auth');
     }
 
+    public function showChangePasswordForm()
+    {
+        return view('profile.change_password');
+    }
+    public function changePassword(Request $request)
+    {
+        $this->validate($request,[
+            'password'=>'required',
+            'new_password'=>'required|confirmed',
+        ]);
+
+        $user=auth()->user();
+
+        if (\Hash::check($request->password, $user->password)) {
+            $user->password=$request->new_password;
+            $user->save();
+        }else
+            return redirect()->back()->with('error','Failed to authenticate the old password');
+
+        return redirect()->back()->with('success','Password has been successfully changed!'); 
+    }
+
 
     public function show_notification_settings()
     {

@@ -11,6 +11,9 @@ Route::get('file/download/{id}','FileController@download')->name('file.download'
 
 Route::prefix('profile')->name('profile')->group(function(){
     
+    Route::get('change-password', 'ProfileController@showChangePasswordForm')->name('.change_password');
+    Route::post('change-password', 'ProfileController@changePassword')->name('.change_password');
+
     Route::get('notification-settings', 'ProfileController@show_notification_settings')->name('.notification');
     Route::post('notification-settings', 'ProfileController@notification_settings')->name('.notification');
     Route::patch('notification-settings', 'ProfileController@notification_settings_save')->name('.notification');
