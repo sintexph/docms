@@ -17,16 +17,18 @@ class CommentMailable extends Mailable
     
     public $document_version;
     public $commenter; 
+    public $document_url;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(DocumentVersion $document_version,User $commenter)
+    public function __construct(DocumentVersion $document_version,User $commenter,$document_url)
     {
         $this->document_version=$document_version;
         $this->commenter=$commenter;
+        $this->document_url=$document_url;
     }
 
     /**

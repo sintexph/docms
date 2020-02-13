@@ -68,6 +68,12 @@
             <td><strong>Created</strong></td>
             <td style="padding-left:20px;">{{ $document_version->created_at }}</td>
         </tr>
+        @if(!empty($document_url))
+         <tr>
+            <td><strong>Link</strong></td>
+            <td style="padding-left:20px;"><a href="{{ $document_url }}">{{ $document_url }}</a></td>
+        </tr>
+        @endif
     </tbody>
 </table>
 

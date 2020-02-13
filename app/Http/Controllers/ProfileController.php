@@ -25,7 +25,7 @@ class ProfileController extends Controller
         $user=auth()->user();
 
         if (\Hash::check($request->password, $user->password)) {
-            $user->password=$request->new_password;
+            $user->password=bcrypt($request->new_password);
             $user->save();
         }else
             return redirect()->back()->with('error','Failed to authenticate the old password');

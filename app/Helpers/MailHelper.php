@@ -15,6 +15,7 @@ use App\Mail\AccountApprovalMailable;
 use App\Mail\AccountActivatedMailable;
 use App\Mail\AccountDeactivatedMailable;
 
+use App\Helpers\DocumentUserRole;
 use App\DocumentReviewer;
 use App\DocumentApprover;
 use App\DocumentVersion;
@@ -25,23 +26,23 @@ class MailHelper
 {
     public static function account_activated(User $registered_user)
     {
-        Mail::to($registered_user->email)->queue(new AccountActivatedMailable($registered_user));
+        Mail::to($registered_user->email)->send(new AccountActivatedMailable($registered_user));
     }
     public static function account_deactivated(User $registered_user)
     {
-        Mail::to($registered_user->email)->queue(new AccountDeactivatedMailable($registered_user));
+        Mail::to($registered_user->email)->send(new AccountDeactivatedMailable($registered_user));
     }
 
     public static function account_approval(User $registered_user)
     {
         foreach (User::where('perm_administrator',true)->get() as $user) {
-            Mail::to($user->email)->queue(new AccountApprovalMailable($user,$registered_user));
+            Mail::to($user->email)->send(new AccountApprovalMailable($user,$registered_user));
         }
     }
 
     public static function user_registered(User $registered_user)
     {
-        Mail::to($registered_user->email)->queue(new AccountRegistrationMailable($registered_user));
+        Mail::to($registered_user->email)->send(new AccountRegistrationMailable($registered_user));
     }
 
     public static function followup_reviewer(DocumentReviewer $document_reviewer)
@@ -49,7 +50,7 @@ class MailHelper
         $user=$document_reviewer->user;
         if($user->notify_followups==true)
         {
-            Mail::to($user->email)->queue(new FollowupReviewerMailable($document_reviewer));
+            Mail::to($user->email)->send(new FollowupReviewerMailable($document_reviewer));
         }
     }
 
@@ -58,7 +59,7 @@ class MailHelper
         $user=$document_approver->user;
         if($user->notify_followups==true)
         {
-            Mail::to($user->email)->queue(new FollowupApproverMailable($document_approver));
+            Mail::to($user->email)->send(new FollowupApproverMailable($document_approver));
         }
     }
 
@@ -71,7 +72,7 @@ class MailHelper
         $user=$document_approver->user;
         if($user->notify_changes==true)
         {
-            Mail::to($user->email)->queue(new VersionChangeApproverMailable($document_approver));
+            Mail::to($user->email)->send(new VersionChangeApproverMailable($document_approver));
         }
     }
 
@@ -85,7 +86,7 @@ class MailHelper
 
         if($user->notify_changes==true)
         {
-            Mail::to($user->email)->queue(new VersionChangeReviewerMailable($document_reviewer));
+            Mail::to($user->email)->send(new VersionChangeReviewerMailable($document_reviewer));
         }
     }
 
@@ -100,7 +101,7 @@ class MailHelper
         if($user->notify_to_review==true)
         {
             $version=$document_reviewer->document_version;
-            Mail::to($user->email)->queue(new ReviewingMailable($document_reviewer));
+            Mail::to($user->email)->send(new ReviewingMailable($document_reviewer));
         }
     }
     /**
@@ -113,7 +114,7 @@ class MailHelper
         if($user->notify_to_approve==true)
         {
             $version=$document_approver->document_version;
-            Mail::to($user->email)->queue(new ApprovingMailable($document_approver));
+            Mail::to($user->email)->send(new ApprovingMailable($document_approver));
         }
     }
 
@@ -128,7 +129,7 @@ class MailHelper
             # Send only the email to creator it has been approved
             if($document_version->approved==true)
             {
-                Mail::to($user->email)->queue(new ApprovedMailable($user,$document_version));
+                Mail::to($user->email)->send(new ApprovedMailable($user,$document_version));
             }
         }
 
@@ -141,7 +142,7 @@ class MailHelper
     {
         $user=$reviewer->document_version->creator;
         if($user->notify_reviewed==true)
-            Mail::to($user->email)->queue(new DocumentReviewedMailable($user,$reviewer));
+            Mail::to($user->email)->send(new DocumentReviewedMailable($user,$reviewer));
     }
     
     /**
@@ -150,21 +151,45 @@ class MailHelper
     public static function send_email_to_comments(DocumentVersion $document_version,User $commenter)
     {
         # Get the users who commented the document version
-        $user_ids=$document_version->comments()->select(['created_by'])->groupBy('created_by')->get();
-        # Transform to array ids
-        $user_ids=$user_ids->map(function($u){ return $u->created_by; });
+        $user_ids=$document_version->comments()->select(['created_by'])->groupBy('created_by')->get()->map(function($u){ return $u->created_by; });
+
+        # Get approvers and reviewers
+        $reviewer_ids=$document_version->reviewers->map(function($u){ return $u->user_id; });
+        $approver_ids=$document_version->approvers->map(function($u){ return $u->user_id; });
+
+        # Merge arrays
+        $user_ids=\array_merge($reviewer_ids->toArray(),$approver_ids->toArray(),$user_ids->toArray());
+
         # Push the creator so it can receive also a notification
         $user_ids[]=$document_version->created_by;
 
         # Find the users based on the use ids fetched
-        $users=User::find($user_ids);
+        $users=User::whereIn('id',$user_ids)->get();
 
         # Send the notification to the users
         foreach ($users as $user) {
             if(!empty($user->email))
             {
                 if($user->notify_comments==true)
-                    Mail::to($user->email)->queue(new CommentMailable($document_version,$commenter)); 
+                {
+                    # Set different urls based on the role of the user in the document
+                    $url=null;
+                    switch (DocumentUserRole::checkRole($document_version,$user)) {
+                        case DocumentUserRole::CREATOR:
+                            $url=route('manage.documents.view',$document_version->document->id);
+                            break; 
+                        case DocumentUserRole::REVIEWER:
+                            $document_reviewer=$document_version->reviewers()->where('user_id',$user->id)->first();
+                            $url=route('for_review.view',$document_reviewer->id);
+                            break; 
+                        case DocumentUserRole::APPROVER:
+                            $document_approver=$document_version->approvers()->where('user_id',$user->id)->first();
+                            $url=route('for_approval.view',$document_approver->id);
+                            break; 
+                    }
+
+                    Mail::to($user->email)->send(new CommentMailable($document_version,$commenter,$url)); 
+                }
             }   
         }
     }
