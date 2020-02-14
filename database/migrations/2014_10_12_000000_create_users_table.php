@@ -27,6 +27,7 @@ class CreateUsersTable extends Migration
             $table->boolean('perm_administrator')->default(false);
             $table->boolean('perm_reviewer')->default(false);
             $table->boolean('perm_approver')->default(false);
+            $table->boolean('view_confidential')->default(false);
 
             $table->boolean('notify_changes')->comment('Notify if there are changes with the document')->default(true);
             $table->boolean('notify_followups')->comment('Notify if there are documents to followup')->default(true);

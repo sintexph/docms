@@ -28,6 +28,7 @@ class User extends Authenticatable
         'perm_reviewer',
         'perm_approver',
         'active',
+        'view_confidential',
     ];
 
     protected $casts=[
@@ -42,6 +43,7 @@ class User extends Authenticatable
         'notify_to_approve'=>'boolean',
         'notify_to_review'=>'boolean',
         'active'=>'boolean',
+        'view_confidential'=>'boolean',
     ];
     
     /**

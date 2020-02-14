@@ -108,7 +108,7 @@
                         className: 'fit',
                         render: function (data) {
                             if (data === true)
-                                return 'YES';
+                                return '<span class="label label-success">YES</span>';
                             else
                                 return '---';
                         }
@@ -124,7 +124,7 @@
                         className: 'fit',
                         render: function (data) {
                             if (data === true)
-                                return 'YES';
+                                return '<span class="label label-success">YES</span>';
                             else
                                 return '---';
                         }
@@ -138,7 +138,21 @@
                         className: 'fit',
                         render: function (data) {
                             if (data === true)
-                                return 'YES';
+                                return '<span class="label label-success">YES</span>';
+                            else
+                                return '---';
+                        }
+
+                    },
+
+                      {
+                        label: 'Can View Confidential',
+                        name: 'view_confidential',
+                        data: 'view_confidential',
+                        className: 'fit',
+                        render: function (data) {
+                            if (data === true)
+                                return '<span class="label label-success">YES</span>';
                             else
                                 return '---';
                         }

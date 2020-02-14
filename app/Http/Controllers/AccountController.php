@@ -54,6 +54,7 @@ class AccountController extends Controller
             'perm_approver',
             'perm_reviewer',
             'active',
+            'view_confidential',
         ])->toJson();
     }
 
@@ -68,6 +69,7 @@ class AccountController extends Controller
             'perm_administrator'=>'required',
             'perm_approver'=>'required',
             'perm_reviewer'=>'required',
+            'view_confidential'=>'required',
             'active'=>'required',
             'notify_changes'=>'required',
             'notify_followups'=>'required',
@@ -90,6 +92,7 @@ class AccountController extends Controller
             'perm_approver'=>$request['perm_approver'],
             'perm_reviewer'=>$request['perm_reviewer'],
             'active'=>$request['active'],
+            'view_confidential'=>$request['view_confidential'],
 
             'notify_changes'=>$request['notify_changes'],
             'notify_followups'=>$request['notify_followups'],
@@ -120,6 +123,7 @@ class AccountController extends Controller
             'perm_approver'=>'required',
             'perm_reviewer'=>'required',
             'active'=>'required',
+            'view_confidential'=>'required',
             'notify_changes'=>'required',
             'notify_followups'=>'required',
             'notify_comments'=>'required',
@@ -151,6 +155,7 @@ class AccountController extends Controller
             $account->perm_approver=$request['perm_approver'];
             $account->perm_reviewer=$request['perm_reviewer'];
             $account->active=$request['active'];
+            $account->view_confidential=$request['view_confidential'];
 
             $account->notify_changes=$request['notify_changes'];
             $account->notify_followups=$request['notify_followups'];

@@ -64,7 +64,7 @@
                         notify_to_approve: par.account.notify_to_approve,
                         notify_to_review: par.account.notify_to_review,
                         active: par.account.active,
-
+                        view_confidential:par.account.view_confidential,
 
                     }).then(function (response) {
                         par.alert_success(response);
@@ -101,6 +101,7 @@
                     par.account.notify_to_approve = response.data.notify_to_approve;
                     par.account.notify_to_review = response.data.notify_to_review;
                     par.account.active = response.data.active;
+                    par.account.view_confidential=response.data.view_confidential;
 
                 });
             }

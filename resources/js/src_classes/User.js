@@ -13,10 +13,8 @@ export default class User {
         this._perm_administrator = false;
         this._perm_reviewer = false;
         this._perm_approver = false;
-
-        this._remember_token = '';
-
         this._active = false;
+        this._view_confidential=false;
 
         this._notify_changes = false;
         this._notify_followups = false;
@@ -28,6 +26,7 @@ export default class User {
 
         this._created_at = '';
         this._updated_at = '';
+        this._remember_token = '';
 
     }
     get id() {
@@ -93,6 +92,11 @@ export default class User {
     get updated_at() {
         return this._updated_at;
     }
+
+    get view_confidential() {
+        return this._view_confidential;
+    }
+
 
     get active() {
         return this._active;
@@ -164,6 +168,8 @@ export default class User {
         this._updated_at = value;
     }
 
-
+    set view_confidential(value) {
+        this._view_confidential = value;
+    }
 
 }

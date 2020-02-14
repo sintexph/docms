@@ -20,7 +20,7 @@
         },
         data: function () {
             return {
-                account:new User,
+                account: new User,
                 submitted: false,
             }
         },
@@ -55,6 +55,7 @@
                         notify_to_approve: par.account.notify_to_approve,
                         notify_to_review: par.account.notify_to_review,
                         active: par.account.active,
+                        view_confidential: par.account.view_confidential,
 
 
                     }).then(function (response) {

@@ -22598,8 +22598,8 @@ function () {
     this._perm_administrator = false;
     this._perm_reviewer = false;
     this._perm_approver = false;
-    this._remember_token = '';
     this._active = false;
+    this._view_confidential = false;
     this._notify_changes = false;
     this._notify_followups = false;
     this._notify_comments = false;
@@ -22609,6 +22609,7 @@ function () {
     this._notify_to_review = false;
     this._created_at = '';
     this._updated_at = '';
+    this._remember_token = '';
   }
 
   _createClass(User, [{
@@ -22778,6 +22779,14 @@ function () {
     },
     set: function set(value) {
       this._updated_at = value;
+    }
+  }, {
+    key: "view_confidential",
+    get: function get() {
+      return this._view_confidential;
+    },
+    set: function set(value) {
+      this._view_confidential = value;
     }
   }, {
     key: "active",

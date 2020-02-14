@@ -3719,7 +3719,8 @@ __webpack_require__.r(__webpack_exports__);
           notify_approved: par.account.notify_approved,
           notify_to_approve: par.account.notify_to_approve,
           notify_to_review: par.account.notify_to_review,
-          active: par.account.active
+          active: par.account.active,
+          view_confidential: par.account.view_confidential
         }).then(function (response) {
           par.alert_success(response);
           par.submitted = false;
@@ -3807,7 +3808,8 @@ __webpack_require__.r(__webpack_exports__);
           notify_approved: par.account.notify_approved,
           notify_to_approve: par.account.notify_to_approve,
           notify_to_review: par.account.notify_to_review,
-          active: par.account.active
+          active: par.account.active,
+          view_confidential: par.account.view_confidential
         }).then(function (response) {
           par.alert_success(response);
           par.submitted = false;
@@ -3839,6 +3841,7 @@ __webpack_require__.r(__webpack_exports__);
         par.account.notify_to_approve = response.data.notify_to_approve;
         par.account.notify_to_review = response.data.notify_to_review;
         par.account.active = response.data.active;
+        par.account.view_confidential = response.data.view_confidential;
       });
     }
   }
@@ -3855,6 +3858,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4057,7 +4066,7 @@ __webpack_require__.r(__webpack_exports__);
         data: 'perm_administrator',
         className: 'fit',
         render: function render(data) {
-          if (data === true) return 'YES';else return '---';
+          if (data === true) return '<span class="label label-success">YES</span>';else return '---';
         }
       }, {
         label: 'Approver',
@@ -4065,7 +4074,7 @@ __webpack_require__.r(__webpack_exports__);
         data: 'perm_approver',
         className: 'fit',
         render: function render(data) {
-          if (data === true) return 'YES';else return '---';
+          if (data === true) return '<span class="label label-success">YES</span>';else return '---';
         }
       }, {
         label: 'Reviewer',
@@ -4073,7 +4082,15 @@ __webpack_require__.r(__webpack_exports__);
         data: 'perm_reviewer',
         className: 'fit',
         render: function render(data) {
-          if (data === true) return 'YES';else return '---';
+          if (data === true) return '<span class="label label-success">YES</span>';else return '---';
+        }
+      }, {
+        label: 'Can View Confidential',
+        name: 'view_confidential',
+        data: 'view_confidential',
+        className: 'fit',
+        render: function render(data) {
+          if (data === true) return '<span class="label label-success">YES</span>';else return '---';
         }
       }, {
         label: 'Created By',
@@ -10096,6 +10113,23 @@ var render = function() {
             }
           }),
           _vm._v(" Reviewer\n        ")
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "p",
+        [
+          _c("icheck-checkbox", {
+            model: {
+              value: _vm.account.view_confidential,
+              callback: function($$v) {
+                _vm.$set(_vm.account, "view_confidential", $$v)
+              },
+              expression: "account.view_confidential"
+            }
+          }),
+          _vm._v("\n            View Confidential\n        ")
         ],
         1
       )
@@ -23756,8 +23790,8 @@ function () {
     this._perm_administrator = false;
     this._perm_reviewer = false;
     this._perm_approver = false;
-    this._remember_token = '';
     this._active = false;
+    this._view_confidential = false;
     this._notify_changes = false;
     this._notify_followups = false;
     this._notify_comments = false;
@@ -23767,6 +23801,7 @@ function () {
     this._notify_to_review = false;
     this._created_at = '';
     this._updated_at = '';
+    this._remember_token = '';
   }
 
   _createClass(User, [{
@@ -23936,6 +23971,14 @@ function () {
     },
     set: function set(value) {
       this._updated_at = value;
+    }
+  }, {
+    key: "view_confidential",
+    get: function get() {
+      return this._view_confidential;
+    },
+    set: function set(value) {
+      this._view_confidential = value;
     }
   }, {
     key: "active",

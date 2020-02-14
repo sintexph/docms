@@ -35,7 +35,8 @@
 
         <div class="form-group">
             <label class="label-control">Enable Account</label><br>
-            <toogle on_text="Activate" v-model="account.active" size="small" off_text="Disabled" on_style="success"></toogle>
+            <toogle on_text="Activate" v-model="account.active" size="small" off_text="Disabled" on_style="success">
+            </toogle>
         </div>
         <div class="form-group">
             <label class="control-label">Permissions</label>
@@ -49,6 +50,11 @@
             </p>
             <p>
                 <icheck-checkbox v-model="account.perm_reviewer"></icheck-checkbox> Reviewer
+            </p>
+
+            <p>
+                <icheck-checkbox v-model="account.view_confidential"></icheck-checkbox>
+                View Confidential
             </p>
 
         </div>
