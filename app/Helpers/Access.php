@@ -5,9 +5,9 @@ namespace App\Helpers;
 
 class Access 
 {
-    const _CONFIDENTIAL=1;
-    const _PUBLIC=2;
-
+    const _PUBLIC=1;
+    const _CONFIDENTIAL=2;
+    
     public static function text_access($access)
     {
         $type='None';
