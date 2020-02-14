@@ -50,10 +50,8 @@ class DocumentActionPolicy
     }
     
     public function view(User $user,Document $document)
-    {
-        if($document->access==DocumentAccess::_PUBLIC)
-            return true;
-        elseif($document->access==DocumentAccess::_CONFIDENTIAL)
+    { 
+        if($document->access==DocumentAccess::_CONFIDENTIAL)
         {
             if($user->perm_administrator==true || $user->id==$document->created_by || $user->view_confidential==true)
                 return true;
@@ -61,6 +59,6 @@ class DocumentActionPolicy
                 return false;
         }
         else
-            return false;
+            return true;
     }
 }

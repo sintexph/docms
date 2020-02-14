@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use App\DocumentVersion;
 use Auth;
-use App\Helpers\Access;
+use App\Helpers\Access; 
 
 class DocumentViewingMiddleware
 {
@@ -27,14 +27,14 @@ class DocumentViewingMiddleware
        
         $user=auth()->user();
 
+        # If there is a user then check for permission if can view
         if($user!=null)
         {
-            # Approver and reviewer of the document version can view
-            if($document_version->reviewers()->where('user_id','=',$user->id)->exists()==true || $document_version->approvers()->where('user_id','=',$user->id)->exists()==true)
-                return $next($request);
-
-            
-            abort_if($user->can('view',$document)==false,403);
+            if(!$user->can('review',$document_version) && !$user->can('view',$document) && !$user->can('approve',$document_version))
+                abort(403,'Document is not available for viewing.');
+        }
+        elseif($document->access==Access::_CONFIDENTIAL) {
+            abort(403,'Document is not available for viewing.');
         }
         
 
@@ -42,8 +42,6 @@ class DocumentViewingMiddleware
         if($document->archived==true || $document_version->released==false || $document_version->approved==false || $document_version->reviewed==false)
             abort(403,'Document is not available for viewing.');
 
-    
-         
         return $next($request);
     }
 }
