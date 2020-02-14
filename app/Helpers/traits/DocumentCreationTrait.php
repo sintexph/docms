@@ -14,7 +14,6 @@ use App\Category;
 use App\Helpers\DocumentHelper;
 use App\DocumentDraft;
 use App\User;
-use App\DocumentAccessor;
 
 trait DocumentCreationTrait 
 {
@@ -45,7 +44,7 @@ trait DocumentCreationTrait
         $document->system_code=$system->code;
         $document->section_code=$section->code;
         $document->category_code=$category->code;
-        $document->access=$request['access_data']['access'];
+        $document->access=$request['access'];
         
         $document->keywords=explode(",",$request['keywords']);
 
@@ -61,39 +60,6 @@ trait DocumentCreationTrait
         $draft=DocumentDraft::find(Input::get('draft'));
             if($draft!=null)
                 $draft->delete();
-
-
-        # Check if the access is custom
-        if($document->access=="2")
-        {
-            # Save the new accessors
-            foreach($request['access_data']['accessors'] as $accessor_id)
-            {
-                $accessor=User::find($accessor_id);
-                if($accessor==null)
-                {
-                    DB::rollBack();
-                    abort(422,'User could not be found on the system!');
-                }
-                
-                DocumentAccessor::create([
-                    'document_id'=>$document->id,
-                    'user_id'=>$accessor->id
-                ]);
-            }
-
-        }
-        elseif($document->access=="4")
-        {
-            # Set the authenticated user as the accessor only
-            DocumentAccessor::create([
-                'document_id'=>$document->id,
-                'user_id'=>Auth::user()->id
-            ]);
-
-        }
-        
-
 
         return $document;
     }

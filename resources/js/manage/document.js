@@ -5,6 +5,9 @@ import ".././content-form.js";
 import contentListMixin from '.././mixin/content_list.js';
 
 
+Vue.mixin(require('../mixin/document_access').default);
+
+
 import {
     Document
 } from '.././src_classes/Document';

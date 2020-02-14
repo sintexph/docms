@@ -1,7 +1,7 @@
 <template>
     <form @submit.prevent="submit">
         <document-form ref="docForm" v-model="document">
-            <access-form v-model="document.access_data"></access-form>
+            <access-form v-model="document.access"></access-form>
         </document-form>
         <version-form :document="document" :show_version="false" v-model="document.current_version"></version-form>
         <button class="btn btn-sm btn-success" type="submit">Submit Document</button>
@@ -104,6 +104,7 @@
                     this.document.category = this.draft.document_category_code;
                     this.document.keywords = this.draft.document_keywords;
                     this.document.comment = this.draft.document_comment;
+                    this.document.access = this.draft.document_access;
                     // Tell document component that there is changes on the system field
                     this.$refs.docForm.load_sections();
 

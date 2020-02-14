@@ -5294,7 +5294,8 @@ __webpack_require__.r(__webpack_exports__);
         this.document.system = this.draft.document_system_code;
         this.document.category = this.draft.document_category_code;
         this.document.keywords = this.draft.document_keywords;
-        this.document.comment = this.draft.document_comment; // Tell document component that there is changes on the system field
+        this.document.comment = this.draft.document_comment;
+        this.document.access = this.draft.document_access; // Tell document component that there is changes on the system field
 
         this.$refs.docForm.load_sections();
         this.document.current_version.reviewers = this.draft.version_reviewer_ids;
@@ -5687,62 +5688,23 @@ __webpack_require__.r(__webpack_exports__);
       required: true
     },
     current_access: {
-      required: true,
-      "default": function _default() {
-        return '';
-      }
-    },
-    current_accessors: {
-      required: true,
-      type: [Array, Object],
-      "default": function _default() {
-        return [];
-      }
+      required: true
     }
   },
   data: function data() {
     return {
-      doc_access: {
-        access: '',
-        accessors: []
-      },
-      users_data: [],
-      access_data: [{
-        id: '1',
-        text: 'CONFIDENTIAL'
-      }, {
-        id: '2',
-        text: 'CUSTOM'
-      }, {
-        id: '3',
-        text: 'PUBLIC'
-      }, {
-        id: '4',
-        text: 'ONLY ME'
-      }],
+      access: null,
       submitted: false
     };
   },
   methods: {
-    load_list: function load_list(val) {
-      var parent = this;
-      axios.post('/util/users').then(function (response) {
-        response.data.forEach(function (data) {
-          parent.users_data.push({
-            text: data.name,
-            id: data.id
-          });
-        });
-      });
-    },
     submit_access: function submit_access() {
       var parent = this;
 
       if (parent.submitted === false) {
         parent.submitted = true;
         axios.patch('/manage/documents/update_access/' + parent.document_id, {
-          access: parent.doc_access.access,
-          accessors: parent.doc_access.accessors
+          access: parent.access
         }).then(function (response) {
           parent.alert_success(response);
           setTimeout(function () {
@@ -5757,16 +5719,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     var vm = this;
-    vm.load_list();
-    vm.doc_access.access = vm.current_access;
-    vm.doc_access.accessors = vm.current_accessors;
-    /*Push data to accessors*/
-
-    if (vm.current_accessors.length !== 0) {
-      vm.current_accessors.forEach(function (accessor) {
-        vm.doc_access.accessors.push(accessor.user.id);
-      });
-    }
+    if (vm.current_access) vm.access = vm.current_access;else vm.access = this.DOC_ACCESS.PUBLIC;
   }
 });
 
@@ -6056,71 +6009,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     value: {
-      type: [Object, Array],
       "default": function _default() {
-        return {
-          access: '1',
-          accessors: []
-        };
+        return null;
       }
     }
   },
   data: function data() {
     return {
-      users_options: [],
-      access_options: [{
-        id: '1',
-        text: 'CONFIDENTIAL'
-      }, {
-        id: '2',
-        text: 'CUSTOM'
-      }, {
-        id: '3',
-        text: 'PUBLIC'
-      }, {
-        id: '4',
-        text: 'ONLY ME'
-      }],
-      access_data: {
-        access: '1',
-        accessors: []
-      }
+      access: null,
+      access_options: []
     };
-  },
-  computed: {
-    show_accessors: function show_accessors() {
-      if (this.access_data.access === "2") return true;else return false;
-    }
-  },
-  methods: {
-    load_list: function load_list(val) {
-      var parent = this;
-      axios.post('/util/users').then(function (response) {
-        response.data.forEach(function (data) {
-          parent.users_options.push({
-            text: data.name,
-            id: data.id
-          });
-        });
-      });
-    }
   },
   watch: {
     value: {
       deep: true,
       handler: function handler(val) {
-        this.access_data = val;
+        this.access = val;
       }
     },
-    access_data: {
+    access: {
       deep: true,
       handler: function handler(val) {
         this.$emit('input', val);
@@ -6128,8 +6038,16 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    this.load_list();
-    if (this.value !== null) this.access_data = this.value;
+    var vm = this;
+    if (vm.value !== null) vm.access = vm.value;else vm.access = vm.DOC_ACCESS.PUBLIC;
+    vm.access_options.push({
+      id: vm.DOC_ACCESS.PUBLIC,
+      text: 'PUBLIC'
+    });
+    vm.access_options.push({
+      id: vm.DOC_ACCESS.CONFIDENTIAL,
+      text: 'CONFIDENTIAL'
+    });
   }
 });
 
@@ -19582,11 +19500,11 @@ var render = function() {
         [
           _c("access-form", {
             model: {
-              value: _vm.document.access_data,
+              value: _vm.document.access,
               callback: function($$v) {
-                _vm.$set(_vm.document, "access_data", $$v)
+                _vm.$set(_vm.document, "access", $$v)
               },
-              expression: "document.access_data"
+              expression: "document.access"
             }
           })
         ],
@@ -20257,11 +20175,11 @@ var render = function() {
           [
             _c("access-form", {
               model: {
-                value: _vm.doc_access,
+                value: _vm.access,
                 callback: function($$v) {
-                  _vm.doc_access = $$v
+                  _vm.access = $$v
                 },
-                expression: "doc_access"
+                expression: "access"
               }
             })
           ],
@@ -20580,43 +20498,16 @@ var render = function() {
             required: true
           },
           model: {
-            value: _vm.access_data.access,
+            value: _vm.access,
             callback: function($$v) {
-              _vm.$set(_vm.access_data, "access", $$v)
+              _vm.access = $$v
             },
-            expression: "access_data.access"
+            expression: "access"
           }
         })
       ],
       1
-    ),
-    _vm._v(" "),
-    _vm.show_accessors
-      ? _c(
-          "div",
-          { staticClass: "form-group" },
-          [
-            _vm._m(1),
-            _vm._v(" "),
-            _c("select2", {
-              attrs: {
-                style_name: "width:100%;",
-                multiple: true,
-                required: true,
-                options: _vm.users_options
-              },
-              model: {
-                value: _vm.access_data.accessors,
-                callback: function($$v) {
-                  _vm.$set(_vm.access_data, "accessors", $$v)
-                },
-                expression: "access_data.accessors"
-              }
-            })
-          ],
-          1
-        )
-      : _vm._e()
+    )
   ])
 }
 var staticRenderFns = [
@@ -20627,15 +20518,6 @@ var staticRenderFns = [
     return _c("label", { staticClass: "control-label" }, [
       _c("i", { staticClass: "fa fa-lock", attrs: { "aria-hidden": "true" } }),
       _vm._v(" Access")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", { staticClass: "control-label" }, [
-      _c("i", { staticClass: "fa fa-users", attrs: { "aria-hidden": "true" } }),
-      _vm._v(" Accessors")
     ])
   }
 ]
@@ -41519,6 +41401,7 @@ Vue.mixin(toastHelper);
 Vue.mixin(httpAlert);
 
 
+Vue.mixin(__webpack_require__(/*! ../mixin/document_access */ "./resources/js/mixin/document_access.js")["default"]);
 
 window.Document = _src_classes_Document__WEBPACK_IMPORTED_MODULE_3__["Document"];
 
@@ -41669,6 +41552,28 @@ __webpack_require__.r(__webpack_exports__);
     cast_to_cell: function cast_to_cell(data) {
       return new TableCell(data.value, data.fit);
     }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/mixin/document_access.js":
+/*!***********************************************!*\
+  !*** ./resources/js/mixin/document_access.js ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      DOC_ACCESS: {
+        PUBLIC: 1,
+        CONFIDENTIAL: 2
+      }
+    };
   }
 });
 
@@ -42637,7 +42542,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Document =
 /*#__PURE__*/
 function () {
-  function Document(number, title, section, system, category, keywords, comment, access_data, created_by, serial) {
+  function Document(number, title, section, system, category, keywords, comment, access, created_by, serial) {
     _classCallCheck(this, Document);
 
     if (number !== undefined) this._number = number;else this._number = '';
@@ -42647,10 +42552,7 @@ function () {
     if (category !== undefined) this._category = category;else this._category = '';
     if (keywords !== undefined) this._keywords = keywords;else this._keywords = '';
     if (comment !== undefined) this._comment = comment;else this._comment = '';
-    if (access_data !== undefined) this._access_data = access_data;else this._access_data = {
-      access: '3',
-      accessors: []
-    };
+    if (access !== undefined) this._access = access;else this._access = 1;
     if (created_by !== undefined) this._created_by = created_by;else this._created_by = '';
     if (serial !== undefined) this._serial = serial;else this._serial = '';
     this._current_version = new DocumentVersion();
@@ -42666,7 +42568,7 @@ function () {
         category: this.category,
         keywords: this.keywords,
         comment: this.comment,
-        access_data: this.access_data,
+        access: this.access,
         created_by: this.created_by,
         serial: this.serial
       };
@@ -42688,12 +42590,12 @@ function () {
       this._serial = serial;
     }
   }, {
-    key: "access_data",
+    key: "access",
     get: function get() {
-      return this._access_data;
+      return this._access;
     },
-    set: function set(access_data) {
-      this._access_data = access_data;
+    set: function set(access) {
+      this._access = access;
     }
   }, {
     key: "comment",

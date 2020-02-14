@@ -64,13 +64,6 @@ class Document extends Model
         return $this->hasMany('App\DocumentActionHistory','document_id');
     }
     
-    public function accessors()
-    {
-        return $this->hasMany('App\DocumentAccessor','document_id');
-    }
-
-    
-    
     public function getUrlTitleAttribute()
     {
         return \strtolower(\str_replace(" ","-",$this->title));

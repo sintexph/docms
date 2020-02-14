@@ -7,7 +7,7 @@
          category,
          keywords,
          comment,
-         access_data,
+         access,
          created_by,
          serial) {
 
@@ -54,13 +54,10 @@
          else
              this._comment = '';
 
-         if (access_data !== undefined)
-             this._access_data = access_data;
+         if (access !== undefined)
+             this._access = access;
          else
-             this._access_data = {
-                 access: '3',
-                 accessors: [],
-             };
+             this._access = 1;
 
 
          if (created_by !== undefined)
@@ -95,7 +92,7 @@
              category: this.category,
              keywords: this.keywords,
              comment: this.comment,
-             access_data: this.access_data,
+             access: this.access,
              created_by: this.created_by,
              serial: this.serial,
          }
@@ -108,12 +105,12 @@
          this._serial = serial;
      }
 
-     get access_data() {
-         return this._access_data;
+     get access() {
+         return this._access;
      }
 
-     set access_data(access_data) {
-         this._access_data = access_data;
+     set access(access) {
+         this._access = access;
      }
 
 

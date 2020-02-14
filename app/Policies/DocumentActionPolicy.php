@@ -51,13 +51,16 @@ class DocumentActionPolicy
     
     public function view(User $user,Document $document)
     {
-        if($user->perm_administrator==true || $user->id==$document->created_by)
+        if($document->access==DocumentAccess::_PUBLIC)
             return true;
-        elseif($document->access==DocumentAccess::_CONFIDENTIAL || $document->access==DocumentAccess::_PUBLIC)
-            return true;
-        elseif($document->access==DocumentAccess::_ONLY_ME)
-            return $document->created_by==$user->id;
-        elseif($document->access==DocumentAccess::_CUSTOM)
-            return $document->accessors()->where('user_id','=',$user->id)->exists();
+        elseif($document->access==DocumentAccess::_CONFIDENTIAL)
+        {
+            if($user->perm_administrator==true || $user->id==$document->created_by || $user->view_confidential==true)
+                return true;
+            else
+                return false;
+        }
+        else
+            return false;
     }
 }

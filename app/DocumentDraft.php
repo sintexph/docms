@@ -14,6 +14,7 @@ class DocumentDraft extends Model
         'document_category_code',
         'document_comment', 
         'document_keywords', 
+        'document_access',
 
         'version_content', 
         'version_description', 

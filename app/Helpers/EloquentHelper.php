@@ -51,15 +51,8 @@ class EloquentHelper
     public static function document(User $user)
     {
         if($user->perm_administrator==false)
-
-            return Document::where(function($query)use($user){
-                $query->orWhere('created_by','=',$user->id)
-                ->orWhereHas('accessors',function($accessor)use($user){
-                    $accessor->where('user_id', '=',$user->id);
-                });
-            });
-
+            return Document::where('created_by','=',$user->id);
         else
-        return Document::on();
+            return Document::on();
     }
 }

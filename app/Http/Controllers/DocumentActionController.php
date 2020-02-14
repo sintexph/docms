@@ -11,7 +11,6 @@ use App\User;
 use App\Document;
 
 use App\DocumentDraft;
-use App\DocumentAccessor;
 use App\Reference;
 use App\Helpers\DocumentHelper;
 use App\Helpers\DocumentActionHistoryHelper;
@@ -42,7 +41,6 @@ class DocumentActionController extends Controller
     {
         $this->validate($request,[
             'access'=>'required',
-            'accessors.*'=>'nullable',
         ]);
 
         $document=Document::find($id);
@@ -55,69 +53,13 @@ class DocumentActionController extends Controller
 
             $document->access=$request['access'];
 
-            
             if($document->isDirty())
             {
                 # Save action history
                 DocumentActionHistoryHelper::update_access($document,$user);
             }
             $document->save();
-
-            # Check if the access is custom
-            if($document->access=="2")
-            {
-                
-                # Save the new accessors
-                foreach($request['accessors'] as $accessor_id)
-                {
-                    $accessor=User::find($accessor_id);
-                    if($accessor==null)
-                    {
-                        DB::rollBack();
-                        abort(422,'User could not be found on the system!');
-                    }
-                    
-                    $document_accessor=DocumentAccessor::firstOrNew([
-                        'document_id'=>$document->id,
-                        'user_id'=>$accessor->id
-                    ]);
-
-                    # Check if the user is not exists on the access list
-                    if($document_accessor->exists==false)
-                    {
-                        
-                        $document_accessor->save();
-                        DocumentActionHistoryHelper::add_accessor($document_accessor,$user);
-                    }
-
-                }
-                
-                $removed_accessors=$document->accessors()->whereNotIn('user_id',$request['accessors'])->get();
-                
-                foreach ($removed_accessors as $removed_accessor) {
-                    # Save action history
-                    DocumentActionHistoryHelper::remove_accessor($removed_accessor,$user);
-                    $removed_accessor->delete();
-                }
-
-            }
-            elseif($document->access=="4")
-            {
-                # Remove all the accessors
-                $document->accessors()->delete();
-                # Set the authenticated user as the accessor only
-                DocumentAccessor::create([
-                    'document_id'=>$document->id,
-                    'user_id'=>Auth::user()->id
-                ]);
-
-            }
-            else
-            {
-                # Remove the accessors
-                $document->accessors()->delete();
-            }
- 
+             
 
             DB::commit();
 
@@ -419,9 +361,6 @@ class DocumentActionController extends Controller
         $document_data=(Object)$request['document'];
         $document_version_data=(Object)$request['version'];
 
-        
-        
-
         if(!empty($document_data) && !empty($document_version_data))
         {
             $draft=DocumentDraft::create([
@@ -432,6 +371,7 @@ class DocumentActionController extends Controller
                 'document_category_code'=>$document_data->category,
                 'document_comment'=>$document_data->comment, 
                 'document_keywords'=>$document_data->keywords, 
+                'document_access'=>$document_data->access, 
 
                 'version_content'=>Cast::generalize_keys($document_version_data->content), 
                 'version_description'=>Cast::generalize_keys($document_version_data->description), 
@@ -478,6 +418,7 @@ class DocumentActionController extends Controller
             $draft->document_category_code=$document_data->category; 
             $draft->document_comment=$document_data->comment; 
             $draft->document_keywords=$document_data->keywords; 
+            $draft->document_access=$document_data->access; 
 
             $draft->version_content=Cast::generalize_keys($document_version_data->content);
             $draft->version_description=Cast::generalize_keys($document_version_data->description);

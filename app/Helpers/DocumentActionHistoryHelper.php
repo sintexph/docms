@@ -4,7 +4,6 @@ namespace App\Helpers;
 use App\Document;
 use App\User;
 use App\DocumentActionHistory;
-use App\DocumentAccessor;
 use App\DocumentVersion;
 use App\Reference;
 use App\DocumentVersionAttachment;
@@ -112,20 +111,7 @@ class DocumentActionHistoryHelper
     {
         self::create_history($document,$user,$user->name.' has updated the access to '.$document->access_type);
     }
-    public static function add_accessor(DocumentAccessor $accessor,User $user)
-    {
-        $user_accessor=$accessor->user;
-        $document=$accessor->document;
-        
-        self::create_history($document,$user,$user->name.' has added '.$user_accessor->name.' as  accessor of the document.');
-    }
-    public static function remove_accessor(DocumentAccessor $accessor,User $user)
-    {
-        $user_accessor=$accessor->user;
-        $document=$accessor->document;
-        
-        self::create_history($document,$user,$user->name.' has removed '.$user_accessor->name.' as  accessor of the document.');
-    }
+ 
     
     public static function lock_document(Document $document,User $user)
     {
