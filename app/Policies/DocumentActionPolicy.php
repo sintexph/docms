@@ -50,7 +50,7 @@ class DocumentActionPolicy
     }
     
     public function view(User $user,Document $document)
-    { 
+    {
         if($document->access==DocumentAccess::_CONFIDENTIAL)
         {
             if($user->perm_administrator==true || $user->id==$document->created_by || $user->view_confidential==true)

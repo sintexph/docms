@@ -26,8 +26,6 @@ class DocumentReviewingController extends Controller
         $find=$request['find'];
         $state=$request['state'];
 
-        
-        
         # Versions to be reviewed
         $for_reviews=DocumentReviewer::on();
         $for_reviews->join('document_versions','document_reviewers.version_id','=','document_versions.id');

@@ -34,12 +34,15 @@ class DocumentViewingMiddleware
                 abort(403,'Document is not available for viewing.');
         }
         elseif($document->access==Access::_CONFIDENTIAL) {
-            abort(403,'Document is not available for viewing.');
+            abort(403,'Document is confidential and not available for viewing.');
         }
-        
-
-        # Cannot view if not approved or document archived
-        if($document->archived==true || $document_version->released==false || $document_version->approved==false || $document_version->reviewed==false)
+        elseif($document->access==Access::_PUBLIC)
+        {
+            # Cannot view if not approved or document archived
+            if($document->archived==true || $document_version->released==false || $document_version->approved==false || $document_version->reviewed==false)
+                abort(403,'Document is not available for viewing.');
+        }
+        else
             abort(403,'Document is not available for viewing.');
 
         return $next($request);
