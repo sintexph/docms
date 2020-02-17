@@ -32,7 +32,7 @@
                 type: [Number, String],
                 required: true,
             },
-              document_id: {
+            document_id: {
                 type: [Number, String],
                 required: true,
             },
@@ -42,7 +42,7 @@
             return {
                 creator_options: [],
                 document: new Document,
-                submitted:false,
+                submitted: false,
             }
         },
         methods: {
@@ -55,7 +55,11 @@
                         created_by: parent.document.created_by
                     }).then(function (response) {
                         parent.alert_success(response);
-                        location.reload();
+
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+
                     }).catch(function (error) {
                         parent.submitted = false;
                         parent.alert_failed(error);
@@ -68,7 +72,7 @@
         mounted() {
 
             this.document.created_by = this.created_by;
-            this.document.id=this.document_id;
+            this.document.id = this.document_id;
 
             // Load the creator list
             axios.post('/util/users-select2').then(response => {
