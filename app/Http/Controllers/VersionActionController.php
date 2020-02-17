@@ -86,9 +86,9 @@ class VersionActionController extends Controller
         $this->validate($request,$validation);
 
         $version_data=(object)$request['version'];
-      
-
+        
         try {
+
             $user=auth()->user();
             $document=Document::find($id);
             abort_if($document==null,404,'Document cannot be found!');

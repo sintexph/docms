@@ -48,7 +48,16 @@ class DocumentActionPolicy
         else
             return $user->perm_administrator;
     }
+
+    public function change_owner(User $user,Document $document)
+    {
+        if($document->locked==true)
+            return false;
+        else
+            return $user->perm_administrator;
+    }
     
+
     public function view(User $user,Document $document)
     {
         if($document->access==DocumentAccess::_CONFIDENTIAL)

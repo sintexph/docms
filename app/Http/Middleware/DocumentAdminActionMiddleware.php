@@ -30,7 +30,7 @@ class DocumentAdminActionMiddleware
             abort(403,"You don't have a permission to do any further action to this document.");
 
         # Could not do anything except lock/unlock if the document is locked.
-        if($action=='status' || $action=='archived' || $action=='trash')
+        if($action=='status' || $action=='archived' || $action=='trash' || $action=='change_owner')
         {
             if($document->locked)
                 abort(403,'The document is locked and could not do any further action.');

@@ -83,6 +83,7 @@ class DocumentActionHistoryHelper
         
         self::create_history($document,$user,$user->name.' has remove the '.$reference_document->reference.' as reference.');
     }
+    
     public static function edit_document(Document $document,User $user)
     {
         if($document->isDirty())
@@ -98,7 +99,7 @@ class DocumentActionHistoryHelper
                     $old_user=User::find($original_fields[$field]);
                     $new_user=User::find($value);
                     
-                    self::create_history($document,$user,$user->name.' has modified the '.$field_name.' value from '.$old_user->name.' to '.$new_user->name.'.');
+                    self::create_history($document,$user,$user->name.' has modified the creator from '.$old_user->name.' to '.$new_user->name.'.');
                 }
                 else
                     self::create_history($document,$user,$user->name.' has modified the '.$field_name.' value from '.$original_fields[$field].' to '.$value.'.');

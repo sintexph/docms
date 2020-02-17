@@ -1,25 +1,11 @@
 <template>
     <form @submit.prevent="submit">
         <document-form ref="docForm" v-model="document">
-            <template v-if="can_change_creator===true">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label><i class="fa fa-user-circle" aria-hidden="true"></i> Document Owner</label>
-                            <select2 :options="creator_options" v-model="document.created_by" style="width:100%;">
-                            </select2>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label><i class="fa fa-hashtag" aria-hidden="true"></i> Serial</label>
-                            <input @change="check_document_exists" type="number" class="form-control"
-                                v-model="document.serial">
-                            <validation :errors="errors" field="serial"></validation>
-                        </div>
-                    </div>
-                </div>
-            </template>
+            <div class="form-group">
+                <label><i class="fa fa-hashtag" aria-hidden="true"></i> Serial</label>
+                <input @change="check_document_exists" type="number" class="form-control" v-model="document.serial">
+                <validation :errors="errors" field="serial"></validation>
+            </div>
         </document-form>
         <button class="btn btn-sm btn-warning" type="submit">Update Document</button>
     </form>
@@ -27,17 +13,6 @@
 <script>
     export default {
         props: {
-            can_change_creator: {
-                type: Boolean,
-                require: true,
-                default () {
-                    return false;
-                }
-            },
-            created_by: {
-                type: [Number, String],
-                required: true,
-            },
             title: {
                 type: String
             },
@@ -70,7 +45,6 @@
             return {
                 submitted: false,
                 document: new Document,
-                creator_options: [],
                 errors: [],
             }
         },
@@ -86,10 +60,10 @@
                     serial: vm.document.serial,
                     document_id: vm.document_id,
 
-                }).then(response=>{
-                    vm.errors=[];
-                }).catch(error=>{
-                    vm.errors=error.response.data.errors;
+                }).then(response => {
+                    vm.errors = [];
+                }).catch(error => {
+                    vm.errors = error.response.data.errors;
                 });
             },
 
@@ -127,16 +101,10 @@
             vm.document.serial = vm.serial;
             vm.document.keywords = vm.keywords;
             vm.document.comment = vm.comment;
-            vm.document.created_by = vm.created_by;
             vm.document.serial = vm.serial;
             vm.$refs.docForm.load_sections();
 
 
-
-            // Load the creator list
-            axios.post('/util/users-select2').then(response => {
-                vm.creator_options = response.data.results;
-            });
 
 
 

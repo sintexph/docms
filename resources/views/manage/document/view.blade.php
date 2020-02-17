@@ -61,6 +61,8 @@
     @include('manage.document.view_src.views.new_version')
     @elseif($current_view=='edit' && $document->current_version->approved==false)
     @include('manage.document.view_src.views.edit_document')
+    @elseif($current_view=='change_owner')
+    @include('manage.document.view_src.views.change_owner')
     @elseif($current_view=='edit_access')
     @include('manage.document.view_src.views.edit_access')
     @elseif($current_view=='lock')

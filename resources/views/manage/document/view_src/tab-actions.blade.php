@@ -21,7 +21,13 @@
                 @endif
                 
         <li class="{{ $current_view=='edit_access'?'active':'' }}"><a href="?view=edit_access"><i class="fa fa-folder-open"
-                    aria-hidden="true"></i> Edit Access</a></li>
+                    aria-hidden="true"></i> Edit Access</a>
+        </li>
+            @if(auth()->user()->can('change_owner',$document))
+            <li class="{{ $current_view=='change_owner'?'active':'' }}"><a href="?view=change_owner"><i class="fa fa-user" aria-hidden="true"></i> Change Owner</a>
+            </li>
+            @endif
+
         @endif
 
         <li class="{{ $current_view=='histories'?'active':'' }}"><a href="?view=histories"><i class="fa fa-history"
@@ -50,6 +56,10 @@
                 Archive</a>
         </li>
         @endif
+
+
+
+        
     </ul>
 
 </div>

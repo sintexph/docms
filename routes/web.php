@@ -100,6 +100,7 @@ Route::prefix('manage')->name('manage')->group(function(){
                     ->name('.update_document')
                     ->middleware('document-action:,update_doc');
 
+
         Route::middleware('document-action')->group(function(){
 
             Route::patch('update_access/{id}','DocumentActionController@update_access')->name('.update_access');
@@ -130,6 +131,9 @@ Route::prefix('manage')->name('manage')->group(function(){
         Route::patch('change_status/{id}','DocumentAdminActionController@change_status')
         ->name('.change_status')->middleware('document-admin-action:status'); 
 
+        Route::patch('change-owner/{id}','DocumentActionController@change_owner')
+                    ->name('.change_owner')
+                    ->middleware('document-admin-action:change_owner'); 
 
         // Version actions
         Route::patch('new_version/{id}','VersionActionController@new_version')->name('.new_version')->middleware('document-action');

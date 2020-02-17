@@ -53,6 +53,7 @@ Vue.component('lock-document', require('.././components/manage/documents/lock_do
 Vue.component('reference-documents', require('.././components/manage/documents/references.vue').default);
 Vue.component('document-archive', require('.././components/manage/documents/archive.vue').default);
 Vue.component('comments', require('.././components/manage/documents/comments.vue').default);
+Vue.component('change-owner', require('.././components/manage/documents/change_owner.vue').default);
 
 Vue.component('document-version-action', require('.././components/manage/documents/document_version_actions.vue').default);
 

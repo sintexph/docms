@@ -1,6 +1,6 @@
 <document-edit 
 
-    :can_change_creator="{{ auth()->user()->can('initiate_action',$document)?'true':'false' }}"
+ 
     document_id="{{ $document->id }}"
     created_by="{{ $document->created_by }}"
     title="{{ $document->title }}"

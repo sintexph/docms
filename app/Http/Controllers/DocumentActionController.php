@@ -156,19 +156,13 @@ class DocumentActionController extends Controller
             'system'=>'required',
             'category'=>'required',
             'keywords'=>'nullable',
+            'serial'=>'required',
         ];
 
         $user=auth()->user();
         $document=Document::find($id);
         abort_if(empty($document),404,'Document could not be found!');
-        
-        # Set the validation for creator
-        if($user->can('initiate_action',$document))
-        {
-            $validation['created_by']='required';
-            $validation['serial']='required';
-        }
-
+ 
 
         $this->validate($request,$validation);
 
@@ -182,14 +176,8 @@ class DocumentActionController extends Controller
             $document->category_code=$request['category'];
             $document->keywords=explode(",",$request['keywords']);
             $document->comment=$request['comment'];
+            $document->serial=$request['serial'];
 
-            # Change the creator if the user is permitted to change
-            if($user->can('initiate_action',$document))
-            {
-                $document->created_by=$request['created_by'];
-                $document->serial=$request['serial'];
-            }
-            
             # Check changes
             if($document->isDirty())
             {
@@ -234,7 +222,56 @@ class DocumentActionController extends Controller
         }
 
     }
+    public function change_owner(Request $request,$id)
+    {
+        $validation=[
+            'created_by'=>'required',
+        ];
 
+        $user=auth()->user();
+        $document=Document::find($id);
+        abort_if(empty($document),404,'Document could not be found!');
+ 
+
+        $this->validate($request,$validation);
+
+        try {
+            
+            DB::beginTransaction();
+            
+ 
+
+            $document->created_by=$request['created_by'];
+
+
+            # Check changes
+            if($document->isDirty())
+            {
+                # Record modification history
+                DocumentActionHistoryHelper::edit_document($document,$user);
+                
+                $document->save();
+                DB::commit();
+
+                return response()->json(['message'=>'Owner of the document has been successfully changed!']);
+            }
+            else
+            {
+                DB::rollBack();
+                return response()->json(['message'=>'No changes has been made!']);
+            }
+            
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return response()->json(['message'=>$e->getMessage()],422);
+
+            
+        }
+
+    }
+ 
     /**
      * Add reference to the document
      */
