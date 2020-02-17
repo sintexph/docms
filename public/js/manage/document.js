@@ -6799,19 +6799,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     document_id: [String, Object],
+    document_system: String,
     current_version_content: [Array, Object]
   },
   data: function data() {
     return {
-      version: {
-        number: '',
-        content: new Content(),
-        description: new Content(),
-        reviewers: [],
-        approvers: [],
-        effective_date: '',
-        expiry_date: ''
-      },
+      version: new DocumentVersion(),
       submitted: false
     };
   },
@@ -6838,11 +6831,17 @@ __webpack_require__.r(__webpack_exports__);
           parent.alert_failed(error);
         });
       }
+    },
+    get_system: function get_system(code) {
+      axios.post('/util/get-system/' + code).then(function (response) {
+        EVENT_BUS.$emit("SYSTEM_LOADED", response.data);
+      });
     }
   },
   mounted: function mounted() {
     this.$nextTick(function () {
       this.version.content = this.cast_to_content(this.current_version_content);
+      if (this.document_system) this.get_system(this.document_system);
     });
   }
 });

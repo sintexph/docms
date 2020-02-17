@@ -101,52 +101,26 @@ class VersionActionController extends Controller
                 abort(422,"Could not create a new version since there's still a document version that needs to be reviewed,approved and released!");
 
             
+            
             # Start a transaction
             DB::beginTransaction();
 
-            # Cast the data first to remove the underscore from javascript objects
-            $version_data=Cast::generalize_keys($version_data);
-    
-            $version=DocumentHelper::save_version(
-                $document,
-                $user,
-                Cast::generalize_keys($version_data->content), // Cast again to verify
-                Cast::generalize_keys($version_data->description), // Cast again to verify
-                $version_data->effective_date,
-                $version_data->expiry_date
-            );
-          
+            $document_version=$this->save_new_version($document,$request);
 
-            $document->version=$version->version;
-            $document->save();
-
-
-            # Save a new list
-            foreach ($version_data->reviewers as $value) {
-                $user_rev=User::find($value);
-                if($user_rev==null)
-                    abort(404,'Reviewer not could not be found on the system');
-
-                DocumentHelper::save_reviewer($user_rev,$version,true);
-            }
-
-            if($version->reviewers->count()!=0) # If there are reviewers
-                DocumentVersionHelper::for_review($version,$user); # Set the document version for review
-
-            # Save a new list
-            foreach ($version_data->approvers as $value) {
-                $user_rev=User::find($value);
-                if($user_rev==null)
-                    abort(404,'Approver not could not be found on the system');
-
-                DocumentHelper::save_approver($user_rev,$version);
-            }
-
-
-
+            $this->version_save_reviewer($document_version,$request);
+            $this->version_save_approver($document_version,$request);
             
+            if($document_version->reviewers->count()!=0 && $document_version->approvers->count()!=0)
+            {
+                # If there are reviewers and approvers
+                DocumentVersionHelper::for_review($document_version,$user); # Set the document version for review
 
-
+                # Notify the reviewers
+                foreach ($document_version->reviewers as $reviewer) {
+                    MailHelper::send_email_reviewer($reviewer);
+                }
+            }
+            
             DB::commit();
             return response()->json(['message'=>'Document version successfully saved!']);
 
@@ -158,6 +132,7 @@ class VersionActionController extends Controller
 
 
     }
+
     public function update_version(Request $request,$id)
     {
         $validation=[

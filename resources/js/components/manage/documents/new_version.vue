@@ -8,19 +8,12 @@
     export default {
         props: {
             document_id: [String, Object],
+            document_system:String,
             current_version_content: [Array, Object],
         },
         data: function () {
             return {
-                version: {
-                    number: '',
-                    content: new Content,
-                    description: new Content,
-                    reviewers: [],
-                    approvers: [],
-                    effective_date: '',
-                    expiry_date: '',
-                },
+                version: new DocumentVersion,
                 submitted: false,
             }
         },
@@ -54,12 +47,23 @@
                     });
                 }
 
+            },
+            get_system(code) {
+                axios.post('/util/get-system/' + code).then(response => {
+                    EVENT_BUS.$emit("SYSTEM_LOADED", response.data);
+                });
             }
         },
         mounted() {
             this.$nextTick(function () {
                 this.version.content = this.cast_to_content(this.current_version_content);
+
+                if (this.document_system)
+                    this.get_system(this.document_system);
+
             });
+
+
         }
     }
 
