@@ -20,12 +20,23 @@ Error
     <div class="error-content">
         <h3>{{$exception->getMessage()}}</h3>
         <p>
-            Meanwhile, you may <a href="/">return to home</a> or if you find this as a problem, you can create a ticket <a href="http://it-helpdesk.sportscity.com.ph/user#/create">here</a>.
+            Meanwhile, you may 
+            @if(URL::previous()!=URL::current())
+            <a href="{{ URL::previous() }}">return to back</a> 
+            @else
+            <a href="/">return to home</a> 
+            @endif
+            or if you find this as a problem, you can create a ticket <a href="http://it-helpdesk.sportscity.com.ph/user#/create">here</a>.
         </p>
     </div>
 </div>
 
+
+ 
+
 @endslot
+
+
 
 
 @slot('start_script')

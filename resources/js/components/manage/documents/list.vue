@@ -1,86 +1,90 @@
 <template>
     <div>
-        <div class="box box-solid">
-            <div class="box-body">
-                <div class="form-inline">
-                    <div class="form-group">
-                        <label class="control-label">Search Document </label>
-                        <div class="input-group input-group-sm">
-                            <input type="text" placeholder="Search" class="form-control" @keydown.enter="filter_list"
-                                v-model="filters.find">
-                            <span class="input-group-btn">
-                                <button type="button" class="btn" @click.prevent="filter_list">
-                                    <i aria-hidden="true" class="fa fa-search"></i>
-                                    <span>Search</span>
-                                </button>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">State</label>
-                        <select class="form-control input-sm" v-model="filters.state" @change="filter_list">
-                            <option value="">-- Filter State --</option>
-                            <option value="archived">Archived</option>
-                            <option value="obsolete">Obsolete</option>
-                            <option value="active">Active</option>
-                            <option value="1">Pending</option>
-                            <option value="5">For Review</option>
-                            <option value="4">For Approval</option>
-                            <option value="3">Approved</option>
-                            <option value="2">Released</option>
-                        </select>
-                    </div>
-                </div>
-                <a href="#" data-toggle="collapse" data-target="#collapse-filter" aria-expanded="false"
-                    aria-controls="collapse-filter">
-                    <i class="fa fa-filter" aria-hidden="true"></i> More Filters
-                </a>
-            </div>
-        </div>
-        <div class="collapse" id="collapse-filter">
+        <form action="/manage/documents" method="get">
             <div class="box box-solid">
                 <div class="box-body">
                     <div class="form-inline">
                         <div class="form-group">
-                            <label class="control-label">System</label>
-                            <select class="form-control input-sm" v-model="filters.system" @change="filter_list">
-                                <option value="">-- Filter System --</option>
-                                <option v-for="(value,key) in systems" :key="key" :value="value.code">
-                                    {{ value.name }}
-                                </option>
-                            </select>
+                            <label class="control-label">Search Document </label>
+                            <div class="input-group input-group-sm">
+                                <input type="text" name="find" placeholder="Search" class="form-control"
+                                    v-model="filters.find">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-default">
+                                        <i aria-hidden="true" class="fa fa-search"></i>
+                                        <span>Search</span>
+                                    </button>
+                                </span>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label">Section</label>
-                            <select class="form-control input-sm" v-model="filters.section" @change="filter_list">
-                                <option value="">-- Filter Section --</option>
-                                <option v-for="(value,key) in sections" :key="key" :value="value.code">
-                                    {{ value.name }}
-                                </option>
-                            </select>
-
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Category</label>
-                            <select class="form-control input-sm" v-model="filters.category" @change="filter_list">
-                                <option value="">-- Filter Category --</option>
-                                <option v-for="(value,key) in categories" :key="key" :value="value.code">
-                                    {{ value.name }}
-                                </option>
+                            <label class="control-label">State</label>
+                            <select class="form-control input-sm" name="state" v-model="filters.state">
+                                <option value="">-- Filter State --</option>
+                                <option value="archived">Archived</option>
+                                <option value="obsolete">Obsolete</option>
+                                <option value="active">Active</option>
+                                <option value="1">Pending</option>
+                                <option value="5">For Review</option>
+                                <option value="4">For Approval</option>
+                                <option value="3">Approved</option>
+                                <option value="2">Released</option>
                             </select>
                         </div>
                     </div>
+                    <a href="#"
+                        @click.prevent="show_more_filters===true?show_more_filters=false:show_more_filters=true">
+                        <i class="fa fa-filter" aria-hidden="true"></i> More Filters
+                    </a>
                 </div>
             </div>
-        </div>
+            <transition name="fade">
+                <div v-if="show_more_filters===true" class="box box-solid">
+                    <div class="box-body">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label class="control-label">System</label>
+                                <select class="form-control input-sm" v-model="filters.system" name="system">
+                                    <option value="">-- Filter System --</option>
+                                    <option v-for="(value,key) in systems" :key="key" :value="value.code">
+                                        {{ value.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Section</label>
+                                <select class="form-control input-sm" v-model="filters.section" name="section">
+                                    <option value="">-- Filter Section --</option>
+                                    <option v-for="(value,key) in sections" :key="key" :value="value.code">
+                                        {{ value.name }}
+                                    </option>
+                                </select>
+
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Category</label>
+                                <select class="form-control input-sm" v-model="filters.category" name="category">
+                                    <option value="">-- Filter Category --</option>
+                                    <option v-for="(value,key) in categories" :key="key" :value="value.code">
+                                        {{ value.name }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </form>
+
         <div class="box box-solid">
             <div class="box-header with-border">
                 <h3 class="box-title">Document List</h3>
                 <div class="pull-right">
                     <div class="btn-group btn-group-xs">
-                        
-                        <a href="/manage/documents/download" class="btn btn-default"><i class="fa fa-download" aria-hidden="true"></i> Download List</a>
-              
+
+                        <a href="/manage/documents/download" class="btn btn-default"><i class="fa fa-download"
+                                aria-hidden="true"></i> Download List</a>
+
                     </div>
                 </div>
             </div>
@@ -112,12 +116,15 @@
                 default: function () {
                     return [];
                 }
-            }
+            },
+            filter_find: String,
+            filter_state: String,
+            filter_section: String,
+            filter_system: String,
+            filter_category: String,
         },
         data: function () {
             return {
-
-
                 columns: [{
                         label: '#',
                         name: 'id',
@@ -160,7 +167,11 @@
                         data: 'current_version.state',
                         className: 'fit',
                         render: function (data, meta, row) {
-                            return row.current_version.state;
+                            if (row.current_version) {
+                                return row.current_version.state;
+                            } else
+                                return '---';
+
                         }
                     },
 
@@ -260,6 +271,7 @@
                     section: '',
                     category: '',
                 },
+                show_more_filters: false
             }
         },
         methods: {
@@ -269,6 +281,17 @@
         },
         mounted() {
             let par = this;
+
+            par.filters.find = par.filter_find;
+            par.filters.state = par.filter_state;
+            par.filters.system = par.filter_system;
+            par.filters.section = par.filter_section;
+            par.filters.category = par.filter_category;
+
+            if (par.filters.system || par.filters.section || par.filters.category)
+                par.show_more_filters = true;
+
+
             par.systems.forEach(function (system) {
                 par.system_data.push({
                     id: system.code,
@@ -282,3 +305,18 @@
     }
 
 </script>
+<style>
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: opacity .5s;
+    }
+
+    .fade-enter,
+    .fade-leave-to
+
+    /* .fade-leave-active below version 2.1.8 */
+        {
+        opacity: 0;
+    }
+
+</style>

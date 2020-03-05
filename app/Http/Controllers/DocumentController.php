@@ -26,6 +26,7 @@ class DocumentController extends Controller
      */
     public function view($id)
     {
+        die();
         $document=Document::find($id);
 
         \abort_if($document==null,404);

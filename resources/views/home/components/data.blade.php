@@ -8,7 +8,7 @@
             @if($key==0)
                 <a data-disable-interaction="1" data-step='6' data-position="bottom-middle-aligned" data-intro='E click ang kining nga numero para makita nimo ang sulod sa documento' href="{{ route('home.view_document',$document->active_version->id) }}">
             @else
-                <a href="{{ route('home.view_document',$document->active_version->id) }}"> 12
+                <a href="{{ route('home.view_document',$document->active_version->id) }}">
             @endif
             
             @if($document->obsolete==true)

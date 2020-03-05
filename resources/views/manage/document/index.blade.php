@@ -31,6 +31,12 @@
         :systems="{{ json_encode($systems) }}"
         :categories="{{ json_encode($categories) }}"
         :sections="{{ json_encode($sections) }}"
+
+        filter_find="{{ $find }}"
+        filter_state="{{ $state }}"
+        filter_section="{{ $section }}"
+        filter_system="{{ $system }}"
+        filter_category="{{ $category }}"
     >
     </manage-documents>
 </div>

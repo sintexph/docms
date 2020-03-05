@@ -22,7 +22,16 @@ class ManageDocumentController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(){
+    public function index(Request $request){
+
+        $find=$request->find?:'';
+        $state=$request->state?:'';
+        $section=$request->section?:'';
+        $system=$request->system?:'';
+        $category=$request->category?:'';
+
+
+
         $systems=System::orderBy('name','asc')->get();
         $sections=Section::orderBy('name','asc')->get();
         $categories=Category::orderBy('name','asc')->get();
@@ -31,6 +40,13 @@ class ManageDocumentController extends Controller
             'systems'=>$systems,
             'sections'=>$sections,
             'categories'=>$categories,
+            
+            'find'=>$find,
+            'state'=>$state,
+            'section'=>$section,
+            'system'=>$system,
+            'category'=>$category,
+
         ]);
     }
     
@@ -210,7 +226,8 @@ class ManageDocumentController extends Controller
         }])
         ->first();
 
-        
+        abort_if($selected_version==null,404,'Document has no saved version!');
+
         $old_versions=$document->versions()->where('id','<>',$selected_version->id)->get();
         $references=$document->references;
         $attachments=$selected_version->attachments()->with('upload')->get();
