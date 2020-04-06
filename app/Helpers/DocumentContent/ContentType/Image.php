@@ -32,7 +32,10 @@ class Image extends Datum
         if ($this->meta['height'] != '' && $this->meta['height'] != null) {
             $style .= 'height:' . $this->meta['height'] . 'px;';
         }
-        $style.='margin-top:10px';
+
+        if($this->meta['position']!="right")
+            $style.='margin-top:10px';
+            
         return $style;
     }
     

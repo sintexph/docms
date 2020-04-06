@@ -57,6 +57,7 @@ Route::prefix('util')->name('util')->group(function(){
     Route::post('system_list', 'UtilityController@system_list')->name('.system_list');
     Route::post('system_list_ws', 'UtilityController@system_list_ws')->name('.system_list_ws');
 
+    Route::post('content-titles', 'UtilityController@contentTitles')->name('.contentTitles');
 
     Route::post('section_list', 'UtilityController@section_list')->name('.section_list');
     Route::post('find_documents', 'UtilityController@find_documents')->name('.find_documents');
@@ -197,6 +198,21 @@ Route::middleware('approver')->group(function(){
 });
 
 Route::middleware('administrator')->group(function(){
+
+
+    Route::prefix('content-titles')->name('content_titles')->group(function(){
+        
+        Route::get('','ManageContentTitleController@index');
+        Route::post('list','ManageContentTitleController@list')->name('.list');
+        Route::post('fetch/{id}','ManageContentTitleController@fetch')->name('.fetch');
+        Route::put('save','ManageContentTitleController@save')->name('.save');
+        Route::patch('update/{id}','ManageContentTitleController@update')->name('.update');
+        
+        Route::delete('delete/{id}','ManageContentTitleController@delete')->name('.delete');
+        Route::patch('archive/{id}','ManageContentTitleController@archive')->name('.archive');
+        Route::patch('restore/{id}','ManageContentTitleController@restore')->name('.restore');
+
+    });
 
     Route::prefix('systems')->name('systems')->group(function(){
         

@@ -1,6 +1,7 @@
 {
     "/js/account.js": "/js/account.js",
     "/js/category.js": "/js/category.js",
+    "/js/content-title.js": "/js/content-title.js",
     "/js/draft.js": "/js/draft.js",
     "/js/global.js": "/js/global.js",
     "/js/home.js": "/js/home.js",

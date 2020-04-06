@@ -19,10 +19,16 @@
 
                         <input type="checkbox" @change="head_change(content.content_items[key].meta.with_header,key)"
                             v-model="content.content_items[key].meta.with_header" title="With header">
+
                         <span v-if="content.content_items[key].meta.with_header===false" style="margin-left:5px;"
                             class="text-gray"><i>No title applied...</i></span>
-                        <input type="text" v-else class="input-title" v-model="content.content_items[key].name" placeholder="Title should be here ....">
 
+                        <select v-else class="input-title" v-model="content.content_items[key].name"
+                            placeholder="Title should be here ....">
+                            <option value="">-- SELECT TITLE --</option>
+                            <option v-for="(value,key) in content_titles" :key="key" :value="value.code">
+                                {{ value.name }}</option>
+                        </select>
                         <div class="pull-right">
                             <div class="btn-group">
                                 <button type="button" title="Settings" class="btn btn-xs btn-default dropdown-toggle"
@@ -98,10 +104,20 @@
         data: function () {
             return {
                 content: new Content,
+                content_titles: [],
                 change_content_title: false,
             }
         },
         methods: {
+
+            loadContentTitles() {
+                axios.post('/util/content-titles').then(response => {
+                    this.content_titles = response.data;
+                }).catch(error => {
+                    this.alert_failed(error);
+                });
+            },
+
             head_change: function (value, index) {
                 if (value === false)
                     this.content.content_items[index].name = '';
@@ -134,14 +150,17 @@
         },
         mounted() {
 
+            this.$nextTick(() => {
 
-            $(document).on('click', '.main-item *', function () {
+                this.loadContentTitles();
 
-                $('.box').not($(this).parent()).removeClass('main-item-focus');
-                $(this).parent().addClass('main-item-focus');
+                $(document).on('click', '.main-item *', function () {
 
-            });
+                    $('.box').not($(this).parent()).removeClass('main-item-focus');
+                    $(this).parent().addClass('main-item-focus');
 
+                });
+            })
 
         }
     }

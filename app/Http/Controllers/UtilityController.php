@@ -35,8 +35,12 @@ class UtilityController extends Controller
         return "";
     }
 
+    public function contentTitles()
+    {
+        $systems=\App\ContentTitle::orderBy('name','asc')->get();
+        return json_encode($systems);
+    }
 
- 
     public function getSystem($code)
     {
         $system=\App\System::where('code',$code)->first();

@@ -52,7 +52,9 @@ export class Image extends Datum {
         if (this._meta.height !== '' && this._meta.height !== null) {
             style += 'height:' + this._meta.height + 'px;';
         }
-        style += 'margin-top:10px';
+
+        if (this._meta.position !== 'right')
+            style += 'margin-top:10px';
 
         return style;
     }

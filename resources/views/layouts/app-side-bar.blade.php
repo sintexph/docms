@@ -170,6 +170,9 @@ DMS - @yield('title','Document Management System')
             <li class="@yield('nav-5-3')">
                 <a href="{{ route('categories') }}"><i class="fa fa-circle-o"></i> Categories</a>
             </li>
+            <li class="@yield('nav-5-4')">
+                <a href="{{ route('content_titles') }}"><i class="fa fa-circle-o"></i> Content Titles</a>
+            </li>
         </ul>
     </li>
 
