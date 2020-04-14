@@ -123,7 +123,23 @@ export default {
             return temp;
         },
         cast_to_cell: function (data) {
-            return new TableCell(data.value, data.fit);
+            var tblCell=new TableCell;
+
+            tblCell.value=data.value;
+            tblCell.fit= data.fit;
+
+            if (data.colspan !== undefined)
+                tblCell.colspan = data.colspan;
+
+            if (data.rowspan !== undefined)
+                tblCell.rowspan = data.rowspan;
+
+            if(data.center!==undefined)
+                tblCell.center = data.center;
+
+
+            return tblCell;
+
         }
     }
 }

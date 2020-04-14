@@ -12,9 +12,6 @@ use App\Helpers\DocumentContent\Datum;
 use App\Helpers\DocumentContent\Content;
 use App\Helpers\DocumentContent\ContentItem;
 
-
-
-
 class Cast
 {
     public static function cast_to_content($data) {
@@ -148,10 +145,13 @@ class Cast
             return $temp;
     }
     public static function cast_to_cell($data) {
-
-            //$temp = new TableCell($data,false); // Enabled temporarily during maintenance
-            $temp = new TableCell($data['value'],$data['fit']); // Disabled temporarily during maintenance
-            return $temp;
+        
+        $temp = new TableCell($data['value'],$data['fit']);
+        $temp->rowspan=$data['rowspan'];
+        $temp->colspan=$data['colspan'];
+        $temp->center=$data['center'];
+        
+        return $temp;
     }
     public static function cast_to_paragraph($data) {
             $temp = new Paragraph;

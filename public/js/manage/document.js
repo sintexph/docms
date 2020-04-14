@@ -4107,6 +4107,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     value: {
@@ -4122,37 +4153,35 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    add_row: function add_row() {
-      var vm = this; // initiate empty row
-
-      var row = []; // Loop all data on first row of the table and push empty data to new row
-      // This is to initiate exact data to be inserted in the new row
-
-      vm.table.rows[0].forEach(function () {
-        row.push(new TableCell());
-      }); // Push new row to table row
-
-      vm.table.rows.push(row);
+    setRowCellFit: function setRowCellFit(rowIndex, cellIndex) {
+      if (this.table.rows[rowIndex][cellIndex].fit === true) this.table.rows[rowIndex][cellIndex].fit = false;else this.table.rows[rowIndex][cellIndex].fit = true;
     },
-    remove_row: function remove_row(index) {
-      var vm = this; // If the table row is 1 then do not remove
-
-      if (vm.table.rows.length <= 1) {
-        alert('Could not remove anymore the first row!');
-        return;
-      }
-
-      vm.table.rows.splice(index, 1);
+    setHeaderFit: function setHeaderFit(index) {
+      if (this.table.header[index].fit === true) this.table.header[index].fit = false;else this.table.header[index].fit = true;
     },
-    remove_header: function remove_header(index) {
-      var vm = this; // If the table header is 1 then do not remove
-
-      if (vm.table.header.length <= 1) {
-        alert('Could not remove anymore the first header!');
-        return;
-      }
-
-      vm.table.removeHeaderIndex(index);
+    setRowCellCenter: function setRowCellCenter(rowIndex, cellIndex) {
+      if (this.table.rows[rowIndex][cellIndex].center === true) this.table.rows[rowIndex][cellIndex].center = false;else this.table.rows[rowIndex][cellIndex].center = true;
+    },
+    setHeaderCenter: function setHeaderCenter(index) {
+      if (this.table.header[index].center === true) this.table.header[index].center = false;else this.table.header[index].center = true;
+    },
+    removeHeaderCell: function removeHeaderCell(cellIndex) {
+      this.table.removeHeaderCell(cellIndex);
+    },
+    removeRow: function removeRow(rowIndex) {
+      this.table.removeRow(rowIndex);
+    },
+    removeRowCell: function removeRowCell(rowIndex, cellIndex) {
+      this.table.removeRowCell(rowIndex, cellIndex);
+    },
+    addRowCell: function addRowCell(index) {
+      this.table.addRowCell(index);
+    },
+    addRow: function addRow() {
+      this.table.addRow();
+    },
+    addHeader: function addHeader() {
+      this.table.addHeaderCell();
     },
     reset: function reset() {
       this.table = new Table();
@@ -5349,7 +5378,7 @@ __webpack_require__.r(__webpack_exports__);
       var closeWindow = confirm("Do you want to close this window?");
 
       if (closeWindow === true) {
-        location.replace("/manage/documents");
+        if (this.draft !== null) location.replace("/drafts");else location.replace("/manage/documents");
       }
     },
     submit: function submit() {
@@ -7267,6 +7296,25 @@ __webpack_require__.r(__webpack_exports__);
     }
   }
 });
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/content-form/component_items/c_table.vue?vue&type=style&index=0&lang=scss&":
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/content-form/component_items/c_table.vue?vue&type=style&index=0&lang=scss& ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".cell-tools {\n  margin-top: 5px;\n  margin-bottom: 5px;\n}\n.cell-tools button.active {\n  color: #76c784;\n}", ""]);
+
+// exports
+
 
 /***/ }),
 
@@ -13509,6 +13557,36 @@ Sortable.mount(Remove, Revert);
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/content-form/component_items/c_table.vue?vue&type=style&index=0&lang=scss&":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/content-form/component_items/c_table.vue?vue&type=style&index=0&lang=scss& ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../../node_modules/css-loader!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/src??ref--7-2!../../../../../node_modules/sass-loader/dist/cjs.js??ref--7-3!../../../../../node_modules/vue-loader/lib??vue-loader-options!./c_table.vue?vue&type=style&index=0&lang=scss& */ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/content-form/component_items/c_table.vue?vue&type=style&index=0&lang=scss&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./node_modules/@sintexph/vue-lib/dist/components/auto-complete.vue?vue&type=style&index=0&lang=css&":
 /*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/@sintexph/vue-lib/dist/components/auto-complete.vue?vue&type=style&index=0&lang=css& ***!
@@ -17611,31 +17689,11 @@ var render = function() {
         "a",
         {
           staticClass: "btn btn-xs btn-default",
-          attrs: { href: "#", title: "Add Header" },
-          on: {
-            click: function($event) {
-              $event.preventDefault()
-              return _vm.table.addHeader()
-            }
-          }
-        },
-        [
-          _c("i", {
-            staticClass: "fa fa-header",
-            attrs: { "aria-hidden": "true" }
-          })
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "a",
-        {
-          staticClass: "btn btn-xs btn-default",
           attrs: { href: "#", title: "Add Row" },
           on: {
             click: function($event) {
               $event.preventDefault()
-              return _vm.add_row($event)
+              return _vm.addRow($event)
             }
           }
         },
@@ -17653,30 +17711,54 @@ var render = function() {
         _c(
           "tr",
           [
-            _c("th", { staticClass: "fit" }),
+            _c("td", { staticClass: "fit" }, [
+              _c(
+                "a",
+                {
+                  attrs: { title: "Add Header", href: "#" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.addHeader($event)
+                    }
+                  }
+                },
+                [
+                  _c("i", {
+                    staticClass: "fa fa-plus",
+                    attrs: { "aria-hidden": "true" }
+                  })
+                ]
+              )
+            ]),
             _vm._v(" "),
-            _vm._l(_vm.table.header, function(value, key) {
-              return _c("th", { key: key }, [
-                _c("div", { staticClass: "input-group" }, [
+            _vm._l(_vm.table.header, function(cell, cellIndex) {
+              return _c(
+                "th",
+                {
+                  key: cellIndex,
+                  attrs: { rowspan: cell.rowspan, colspan: cell.colspan }
+                },
+                [
                   _c("input", {
                     directives: [
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.table.header[key].value,
-                        expression: "table.header[key].value"
+                        value: _vm.table.header[cellIndex].value,
+                        expression: "table.header[cellIndex].value"
                       }
                     ],
                     staticClass: "form-control",
-                    attrs: { type: "text", name: "head-input-" + key },
-                    domProps: { value: _vm.table.header[key].value },
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.table.header[cellIndex].value },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
                           return
                         }
                         _vm.$set(
-                          _vm.table.header[key],
+                          _vm.table.header[cellIndex],
                           "value",
                           $event.target.value
                         )
@@ -17684,79 +17766,103 @@ var render = function() {
                     }
                   }),
                   _vm._v(" "),
-                  _c("span", { staticClass: "input-group-btn" }, [
-                    _vm.table.header.length > 1
-                      ? _c(
-                          "a",
-                          {
-                            staticClass: "btn btn-default text-red",
-                            attrs: { href: "#", title: "Remove header" },
-                            on: {
-                              click: function($event) {
-                                $event.preventDefault()
-                                return _vm.remove_header(key)
-                              }
-                            }
-                          },
-                          [
-                            _c("i", {
-                              staticClass: "fa fa-trash",
-                              attrs: { "aria-hidden": "true" }
-                            })
-                          ]
-                        )
-                      : _vm._e()
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.table.header[key].fit,
-                        expression: "table.header[key].fit"
-                      }
-                    ],
-                    attrs: { type: "checkbox" },
-                    domProps: {
-                      checked: Array.isArray(_vm.table.header[key].fit)
-                        ? _vm._i(_vm.table.header[key].fit, null) > -1
-                        : _vm.table.header[key].fit
-                    },
-                    on: {
-                      change: function($event) {
-                        var $$a = _vm.table.header[key].fit,
-                          $$el = $event.target,
-                          $$c = $$el.checked ? true : false
-                        if (Array.isArray($$a)) {
-                          var $$v = null,
-                            $$i = _vm._i($$a, $$v)
-                          if ($$el.checked) {
-                            $$i < 0 &&
-                              _vm.$set(
-                                _vm.table.header[key],
-                                "fit",
-                                $$a.concat([$$v])
-                              )
-                          } else {
-                            $$i > -1 &&
-                              _vm.$set(
-                                _vm.table.header[key],
-                                "fit",
-                                $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                              )
+                  _c("div", { staticClass: "cell-tools" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.table.header[cellIndex].colspan,
+                          expression: "table.header[cellIndex].colspan"
+                        }
+                      ],
+                      staticStyle: { width: "50px" },
+                      attrs: {
+                        title: "Extend column",
+                        placeholder: "col",
+                        type: "text"
+                      },
+                      domProps: { value: _vm.table.header[cellIndex].colspan },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
                           }
-                        } else {
-                          _vm.$set(_vm.table.header[key], "fit", $$c)
+                          _vm.$set(
+                            _vm.table.header[cellIndex],
+                            "colspan",
+                            $event.target.value
+                          )
                         }
                       }
-                    }
-                  }),
-                  _vm._v(" Fit")
-                ])
-              ])
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-xs btn-default",
+                        attrs: { type: "button", title: "Remove header" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.removeHeaderCell(cellIndex)
+                          }
+                        }
+                      },
+                      [
+                        _c("i", {
+                          staticClass: "fa fa-trash text-red",
+                          attrs: { "aria-hidden": "true" }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        class:
+                          "btn btn-xs btn-default " +
+                          (cell.center === true ? "active" : ""),
+                        attrs: { type: "button", title: "Align center" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.setHeaderCenter(cellIndex)
+                          }
+                        }
+                      },
+                      [
+                        _c("i", {
+                          staticClass: "fa fa-align-center",
+                          attrs: { "aria-hidden": "true" }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        class:
+                          "btn btn-xs btn-default " +
+                          (cell.fit === true ? "active" : ""),
+                        attrs: { type: "button", title: "Fit header cell" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.setHeaderFit(cellIndex)
+                          }
+                        }
+                      },
+                      [
+                        _c("i", {
+                          staticClass: "fa fa-arrows-h",
+                          attrs: { "aria-hidden": "true" }
+                        })
+                      ]
+                    )
+                  ])
+                ]
+              )
             })
           ],
           2
@@ -17765,113 +17871,221 @@ var render = function() {
       _vm._v(" "),
       _c(
         "tbody",
-        _vm._l(_vm.table.rows, function(rowvalue, rowkey) {
+        _vm._l(_vm.table.rows, function(row, rowIndex) {
           return _c(
             "tr",
-            { key: rowkey },
+            { key: rowIndex },
             [
               _c("td", { staticClass: "fit" }, [
-                _vm.table.rows.length > 1
-                  ? _c(
-                      "a",
-                      {
-                        staticClass: "btn btn-default btn-xs text-red",
-                        attrs: { href: "#", title: "Remove row" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.remove_row(rowkey)
-                          }
-                        }
-                      },
-                      [
-                        _c("i", {
-                          staticClass: "fa fa-trash",
-                          attrs: { "aria-hidden": "true" }
-                        })
-                      ]
-                    )
-                  : _vm._e()
-              ]),
-              _vm._v(" "),
-              _vm._l(rowvalue, function(value, tdkey) {
-                return _c("td", { key: tdkey }, [
-                  _c("textarea", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.table.rows[rowkey][tdkey].value,
-                        expression: "table.rows[rowkey][tdkey].value"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: { name: "tditem-tarea-" + tdkey },
-                    domProps: { value: _vm.table.rows[rowkey][tdkey].value },
+                _c(
+                  "a",
+                  {
+                    attrs: { href: "#", title: "Add Cell" },
                     on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(
-                          _vm.table.rows[rowkey][tdkey],
-                          "value",
-                          $event.target.value
-                        )
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.addRowCell(rowIndex)
                       }
                     }
-                  }),
-                  _vm._v(" "),
-                  _c("div", [
-                    _c("input", {
+                  },
+                  [
+                    _c("i", {
+                      staticClass: "fa fa-plus",
+                      attrs: { "aria-hidden": "true" }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass: "text-red",
+                    attrs: { href: "#", title: "Remove row" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.removeRow(rowIndex)
+                      }
+                    }
+                  },
+                  [
+                    _c("i", {
+                      staticClass: "fa fa-trash",
+                      attrs: { "aria-hidden": "true" }
+                    })
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _vm._l(row, function(cell, cellIndex) {
+                return _c(
+                  "td",
+                  {
+                    key: cellIndex,
+                    attrs: { rowspan: cell.rowspan, colspan: cell.colspan }
+                  },
+                  [
+                    _c("textarea", {
                       directives: [
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.table.rows[rowkey][tdkey].fit,
-                          expression: "table.rows[rowkey][tdkey].fit"
+                          value: _vm.table.rows[rowIndex][cellIndex].value,
+                          expression: "table.rows[rowIndex][cellIndex].value"
                         }
                       ],
-                      attrs: { type: "checkbox" },
+                      staticClass: "form-control",
+                      staticStyle: { height: "100%" },
                       domProps: {
-                        checked: Array.isArray(
-                          _vm.table.rows[rowkey][tdkey].fit
-                        )
-                          ? _vm._i(_vm.table.rows[rowkey][tdkey].fit, null) > -1
-                          : _vm.table.rows[rowkey][tdkey].fit
+                        value: _vm.table.rows[rowIndex][cellIndex].value
                       },
                       on: {
-                        change: function($event) {
-                          var $$a = _vm.table.rows[rowkey][tdkey].fit,
-                            $$el = $event.target,
-                            $$c = $$el.checked ? true : false
-                          if (Array.isArray($$a)) {
-                            var $$v = null,
-                              $$i = _vm._i($$a, $$v)
-                            if ($$el.checked) {
-                              $$i < 0 &&
-                                _vm.$set(
-                                  _vm.table.rows[rowkey][tdkey],
-                                  "fit",
-                                  $$a.concat([$$v])
-                                )
-                            } else {
-                              $$i > -1 &&
-                                _vm.$set(
-                                  _vm.table.rows[rowkey][tdkey],
-                                  "fit",
-                                  $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                                )
-                            }
-                          } else {
-                            _vm.$set(_vm.table.rows[rowkey][tdkey], "fit", $$c)
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
                           }
+                          _vm.$set(
+                            _vm.table.rows[rowIndex][cellIndex],
+                            "value",
+                            $event.target.value
+                          )
                         }
                       }
                     }),
-                    _vm._v(" Fit")
-                  ])
-                ])
+                    _vm._v(" "),
+                    _c("div", { staticClass: "cell-tools" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.table.rows[rowIndex][cellIndex].colspan,
+                            expression:
+                              "table.rows[rowIndex][cellIndex].colspan"
+                          }
+                        ],
+                        staticStyle: { width: "50px" },
+                        attrs: {
+                          title: "Extend column",
+                          placeholder: "col",
+                          type: "text"
+                        },
+                        domProps: {
+                          value: _vm.table.rows[rowIndex][cellIndex].colspan
+                        },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.table.rows[rowIndex][cellIndex],
+                              "colspan",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.table.rows[rowIndex][cellIndex].rowspan,
+                            expression:
+                              "table.rows[rowIndex][cellIndex].rowspan"
+                          }
+                        ],
+                        staticStyle: { width: "50px" },
+                        attrs: {
+                          title: "Extend row",
+                          placeholder: "row",
+                          type: "text"
+                        },
+                        domProps: {
+                          value: _vm.table.rows[rowIndex][cellIndex].rowspan
+                        },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.table.rows[rowIndex][cellIndex],
+                              "rowspan",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-xs btn-default",
+                          attrs: { type: "button", title: "Remove cell" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.removeRowCell(rowIndex, cellIndex)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fa fa-trash text-red",
+                            attrs: { "aria-hidden": "true" }
+                          })
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          class:
+                            "btn btn-xs btn-default " +
+                            (cell.center === true ? "active" : ""),
+                          attrs: { type: "button", title: "Align center" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.setRowCellCenter(rowIndex, cellIndex)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fa fa-align-center",
+                            attrs: { "aria-hidden": "true" }
+                          })
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          class:
+                            "btn btn-xs btn-default " +
+                            (cell.fit === true ? "active" : ""),
+                          attrs: { type: "button", title: "Fit row cell" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.setRowCellFit(rowIndex, cellIndex)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fa fa-arrows-h",
+                            attrs: { "aria-hidden": "true" }
+                          })
+                        ]
+                      )
+                    ])
+                  ]
+                )
               })
             ],
             2
@@ -39131,7 +39345,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _c_table_vue_vue_type_template_id_09e21f96___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./c_table.vue?vue&type=template&id=09e21f96& */ "./resources/js/components/content-form/component_items/c_table.vue?vue&type=template&id=09e21f96&");
 /* harmony import */ var _c_table_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./c_table.vue?vue&type=script&lang=js& */ "./resources/js/components/content-form/component_items/c_table.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _c_table_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./c_table.vue?vue&type=style&index=0&lang=scss& */ "./resources/js/components/content-form/component_items/c_table.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
 
 
 
@@ -39139,7 +39355,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _c_table_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _c_table_vue_vue_type_template_id_09e21f96___WEBPACK_IMPORTED_MODULE_0__["render"],
   _c_table_vue_vue_type_template_id_09e21f96___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -39168,6 +39384,22 @@ component.options.__file = "resources/js/components/content-form/component_items
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_c_table_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./c_table.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/content-form/component_items/c_table.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_c_table_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/content-form/component_items/c_table.vue?vue&type=style&index=0&lang=scss&":
+/*!************************************************************************************************************!*\
+  !*** ./resources/js/components/content-form/component_items/c_table.vue?vue&type=style&index=0&lang=scss& ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_c_table_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader!../../../../../node_modules/css-loader!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/src??ref--7-2!../../../../../node_modules/sass-loader/dist/cjs.js??ref--7-3!../../../../../node_modules/vue-loader/lib??vue-loader-options!./c_table.vue?vue&type=style&index=0&lang=scss& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/content-form/component_items/c_table.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_c_table_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_c_table_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_c_table_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_c_table_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_c_table_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -41948,7 +42180,13 @@ __webpack_require__.r(__webpack_exports__);
       return temp;
     },
     cast_to_cell: function cast_to_cell(data) {
-      return new TableCell(data.value, data.fit);
+      var tblCell = new TableCell();
+      tblCell.value = data.value;
+      tblCell.fit = data.fit;
+      if (data.colspan !== undefined) tblCell.colspan = data.colspan;
+      if (data.rowspan !== undefined) tblCell.rowspan = data.rowspan;
+      if (data.center !== undefined) tblCell.center = data.center;
+      return tblCell;
     }
   }
 });
@@ -42634,67 +42872,6 @@ function (_Datum) {
   }
 
   _createClass(Table, [{
-    key: "addHeader",
-    value: function addHeader(header) {
-      var par = this;
-
-      if (header === undefined) {
-        this._header.push(new TableCell());
-      } else {
-        this._header.push(header);
-      } // Insert new cell in row
-
-
-      this._rows.forEach(function (row, key) {
-        par._rows[key].push(new TableCell());
-      });
-    }
-  }, {
-    key: "removeHeader",
-    value: function removeHeader(element) {
-      var index = this._header.indexOf(element);
-
-      this.removeHeaderIndex(index);
-    }
-  }, {
-    key: "removeHeaderIndex",
-    value: function removeHeaderIndex(index) {
-      var par = this;
-
-      this._header.splice(index, 1);
-
-      this._rows.forEach(function (row, key) {
-        par._rows[key].splice(index, 1);
-      });
-    }
-  }, {
-    key: "addRow",
-    value: function addRow(row) {
-      if (row !== undefined) {
-        this._rows.push(row);
-      } else {
-        var rw = [];
-
-        this._header.forEach(function () {
-          rw.push(new TableCell());
-        });
-
-        this._rows.push(rw);
-      }
-    }
-  }, {
-    key: "removeRow",
-    value: function removeRow(element) {
-      var index = this._rows.indexOf(element);
-
-      this.removeRowIndex(index);
-    }
-  }, {
-    key: "removeRowIndex",
-    value: function removeRowIndex(index) {
-      this._rows.splice(index, 1);
-    }
-  }, {
     key: "init",
     value: function init() {
       this._header = [new TableCell(), new TableCell(), new TableCell()];
@@ -42707,7 +42884,10 @@ function (_Datum) {
       display += '<tr>';
 
       this._header.forEach(function (head) {
-        if (head.fit === true) display += '<th style="white-space: nowrap; width: 1%;">' + head.value + '</th>';else display += '<th>' + head.value + '</th>';
+        var style = '';
+        if (head.fit === true) style += "white-space: nowrap; width: 1%; ";
+        if (head.center === true) style += "text-align:center; ";
+        display += '<th rowspan="' + head.rowspan + '" colspan="' + head.colspan + '" style=' + style + '>' + head.value + '</th>';
       });
 
       display += '</tr>';
@@ -42722,7 +42902,10 @@ function (_Datum) {
       this._rows.forEach(function (cells) {
         display += '<tr>';
         cells.forEach(function (cell) {
-          if (cell.fit === true) display += '<td style="white-space: nowrap; width: 1%;">' + cell.value + '</td>';else display += '<td>' + cell.value + '</td>';
+          var style = '';
+          if (cell.fit === true) style += "white-space: nowrap; width: 1%; ";
+          if (cell.center === true) style += "text-align:center; ";
+          display += '<td rowspan="' + cell.rowspan + '" colspan="' + cell.colspan + '" style="' + style + '">' + cell.value + '</td>';
         });
         display += '</tr>';
       });
@@ -42739,6 +42922,55 @@ function (_Datum) {
     key: "toShortString",
     value: function toShortString() {
       return '<table class="table table-bordered">' + this.thead() + '</table>';
+    }
+  }, {
+    key: "addRow",
+    value: function addRow() {
+      this._rows.push([new TableCell()]);
+    }
+  }, {
+    key: "addRowCell",
+    value: function addRowCell(rowIndex) {
+      this._rows[rowIndex].push(new TableCell());
+    }
+  }, {
+    key: "removeRow",
+    value: function removeRow(rowIndex) {
+      if (this._rows.length == 1) {
+        alert("Table must have at least 1 row!");
+        return;
+      }
+
+      this._rows.splice(rowIndex, 1);
+    }
+  }, {
+    key: "removeRowCell",
+    value: function removeRowCell(rowIndex, cellIndex) {
+      if (this._rows[rowIndex].length == 1) {
+        alert("Table must have at least 1 cell!");
+        return;
+      }
+
+      this._rows[rowIndex].splice(cellIndex, 1);
+    }
+  }, {
+    key: "addHeaderCell",
+    value: function addHeaderCell(tableCell) {
+      if (tableCell === undefined) {
+        this._header.push(new TableCell());
+      } else {
+        this._header.push(tableCell);
+      }
+    }
+  }, {
+    key: "removeHeaderCell",
+    value: function removeHeaderCell(cellIndex) {
+      if (this._header.length == 1) {
+        alert("Table must have at least 1 header!");
+        return;
+      }
+
+      this._header.splice(cellIndex, 1);
     }
   }, {
     key: "header",
@@ -42787,9 +43019,36 @@ function () {
 
     if (value !== undefined) this._value = value;else this._value = '';
     if (fit !== undefined) this._fit = fit;else this._fit = false;
+    this._rowspan = "";
+    this._colspan = "";
+    this._center = false;
   }
 
   _createClass(TableCell, [{
+    key: "colspan",
+    set: function set(value) {
+      this._colspan = value;
+    },
+    get: function get() {
+      return this._colspan;
+    }
+  }, {
+    key: "rowspan",
+    set: function set(value) {
+      this._rowspan = value;
+    },
+    get: function get() {
+      return this._rowspan;
+    }
+  }, {
+    key: "center",
+    set: function set(value) {
+      this._center = value;
+    },
+    get: function get() {
+      return this._center;
+    }
+  }, {
     key: "value",
     get: function get() {
       return this._value;

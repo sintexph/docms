@@ -37,10 +37,10 @@
         },
         data: function () {
             return {
-                filters:{
-                    find:'',
+                filters: {
+                    find: '',
                 },
-                submitted:false,
+                submitted: false,
                 columns: [{
                         label: '#',
                         name: 'id',
@@ -67,17 +67,20 @@
                         data: 'id',
                         className: 'fit',
                         render: function (data) {
-                            var btn_modify = `<a href="/manage/documents/create?draft=` + data +
-                                `" target="_blank"><i class="fa fa-pencil" aria-hidden="true"></i> Modify</a>`;
-                            var btn_delete = `<a href="#" data-id="` + data +
-                                `" class="btn-delete"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>`;
-                            return btn_modify + '<br>' + btn_delete;
+                            var btn_modify =
+                                `<a class="btn btn-xs btn-default" title="Modify draft" href="/manage/documents/create?draft=` +
+                                data +
+                                `" target="_blank"><i class="fa fa-pencil text-yellow" aria-hidden="true"></i></a>`;
+                            var btn_delete =
+                                `<a href="#" class="btn btn-xs btn-default btn-delete" data-id="` + data +
+                                `"><i class="fa fa-trash text-red" aria-hidden="true"></i></a>`;
+                            return btn_modify + '&nbsp;' + btn_delete;
                         }
                     }
 
 
                 ],
-                
+
             }
         },
         methods: {
@@ -106,11 +109,11 @@
         },
         mounted() {
             let par = this;
-       
-       
+
+
 
             par.$nextTick(function () {
-                 $(document).on('click', '.btn-delete', function (e) {
+                $(document).on('click', '.btn-delete', function (e) {
                     e.preventDefault();
                     var id = $(this).data("id");
                     par.delete(id);

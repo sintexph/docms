@@ -1,41 +1,72 @@
 <template>
     <div class="table-responsive">
         <div style="padding-bottom:5px;">
-            <a href="#" class="btn btn-xs btn-default" @click.prevent="table.addHeader()" title="Add Header"><i
-                    class="fa fa-header" aria-hidden="true"></i></a>
-            <a href="#" class="btn btn-xs btn-default" @click.prevent="add_row" title="Add Row"><i
+
+            <a href="#" class="btn btn-xs btn-default" @click.prevent="addRow" title="Add Row"><i
                     class="fa fa-list-alt" aria-hidden="true"></i></a>
         </div>
+
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th class="fit">
-                    </th>
-                    <th v-for="(value,key) in table.header" :key="key">
-                        <div class="input-group">
-                            <input type="text" class="form-control" :name="'head-input-'+key"
-                                v-model="table.header[key].value">
-                            <span class="input-group-btn">
-                                <a href="#" v-if="table.header.length>1" @click.prevent="remove_header(key)"
-                                    class="btn btn-default text-red" title="Remove header"><i class="fa fa-trash"
-                                        aria-hidden="true"></i></a>
-                            </span>
+                    <td class="fit">
+                        <a title="Add Header" @click.prevent="addHeader" href="#"><i class="fa fa-plus"
+                                aria-hidden="true"></i></a>
+                    </td>
+                    <th :rowspan="cell.rowspan" :colspan="cell.colspan" v-for="(cell,cellIndex) in table.header"
+                        :key="cellIndex">
+
+                        <input class="form-control" type="text" v-model="table.header[cellIndex].value">
+
+                        <div class="cell-tools">
+                            <input title="Extend column" placeholder="col" style="width:50px;"
+                                v-model="table.header[cellIndex].colspan" type="text">
+                            <button class="btn btn-xs btn-default" @click.prevent="removeHeaderCell(cellIndex)" type="button" title="Remove header"><i
+                                    class="fa fa-trash text-red" aria-hidden="true"></i></button>
+                            <button :class="'btn btn-xs btn-default '+(cell.center===true?'active':'')" @click.prevent="setHeaderCenter(cellIndex)"
+                                type="button" title="Align center">
+                                <i class="fa fa-align-center" aria-hidden="true"></i>
+                            </button>
+
+                            <button :class="'btn btn-xs btn-default '+(cell.fit===true?'active':'')" @click.prevent="setHeaderFit(cellIndex)"
+                                type="button" title="Fit header cell">
+                                <i class="fa fa-arrows-h" aria-hidden="true"></i>
+                            </button>
                         </div>
-                        <div><input type="checkbox" v-model="table.header[key].fit"> Fit</div>
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(rowvalue,rowkey) in table.rows" :key="rowkey">
+                <tr v-for="(row,rowIndex) in table.rows" :key="rowIndex">
                     <td class="fit">
-                        <a v-if="table.rows.length>1" href="#" @click.prevent="remove_row(rowkey)"
-                            class="btn btn-default btn-xs text-red" title="Remove row"><i class="fa fa-trash"
+                        <a href="#" title="Add Cell" @click.prevent="addRowCell(rowIndex)"><i class="fa fa-plus"
                                 aria-hidden="true"></i></a>
+                        <a href="#" class="text-red" title="Remove row" @click.prevent="removeRow(rowIndex)"><i
+                                class="fa fa-trash" aria-hidden="true"></i></a>
                     </td>
-                    <td v-for="(value,tdkey) in rowvalue" :key="tdkey">
-                        <textarea class="form-control" :name="'tditem-tarea-'+tdkey"
-                            v-model="table.rows[rowkey][tdkey].value"></textarea>
-                            <div><input type="checkbox" v-model="table.rows[rowkey][tdkey].fit"> Fit</div>
+                    <td :rowspan="cell.rowspan" :colspan="cell.colspan" v-for="(cell,cellIndex) in row"
+                        :key="cellIndex">
+                        <textarea style="height:100%;" class="form-control"
+                            v-model="table.rows[rowIndex][cellIndex].value"></textarea>
+
+                        <div class="cell-tools">
+                            <input title="Extend column" placeholder="col" style="width:50px;"
+                                v-model="table.rows[rowIndex][cellIndex].colspan" type="text">
+                            <input title="Extend row" placeholder="row" style="width:50px;"
+                                v-model="table.rows[rowIndex][cellIndex].rowspan" type="text">
+                            <button class="btn btn-xs btn-default" @click.prevent="removeRowCell(rowIndex,cellIndex)" type="button"
+                                title="Remove cell"><i class="fa fa-trash text-red" aria-hidden="true"></i></button>
+
+                            <button :class="'btn btn-xs btn-default '+(cell.center===true?'active':'')"
+                                @click.prevent="setRowCellCenter(rowIndex,cellIndex)" type="button"
+                                title="Align center">
+                                <i class="fa fa-align-center" aria-hidden="true"></i>
+                            </button>
+                            <button :class="'btn btn-xs btn-default '+(cell.fit===true?'active':'')"
+                                @click.prevent="setRowCellFit(rowIndex,cellIndex)" type="button" title="Fit row cell">
+                                <i class="fa fa-arrows-h" aria-hidden="true"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -62,41 +93,57 @@
         methods: {
 
 
-            add_row: function () {
-                let vm = this;
-                // initiate empty row
-                var row = [];
-                // Loop all data on first row of the table and push empty data to new row
-                // This is to initiate exact data to be inserted in the new row
-                vm.table.rows[0].forEach(function () {
-                    row.push(new TableCell);
-                });
-                // Push new row to table row
-                vm.table.rows.push(row);
+
+            setRowCellFit(rowIndex, cellIndex) {
+
+                if (this.table.rows[rowIndex][cellIndex].fit === true)
+                    this.table.rows[rowIndex][cellIndex].fit = false;
+                else
+                    this.table.rows[rowIndex][cellIndex].fit = true;
+
+            },
+            setHeaderFit(index) {
+                if (this.table.header[index].fit === true)
+                    this.table.header[index].fit = false;
+                else
+                    this.table.header[index].fit = true;
+            },
+            setRowCellCenter(rowIndex, cellIndex) {
+
+                if (this.table.rows[rowIndex][cellIndex].center === true)
+                    this.table.rows[rowIndex][cellIndex].center = false;
+                else
+                    this.table.rows[rowIndex][cellIndex].center = true;
+
+            },
+            setHeaderCenter(index) {
+                if (this.table.header[index].center === true)
+                    this.table.header[index].center = false;
+                else
+                    this.table.header[index].center = true;
             },
 
-            remove_row: function (index) {
-                let vm = this;
-
-                // If the table row is 1 then do not remove
-                if (vm.table.rows.length <= 1) {
-                    alert('Could not remove anymore the first row!');
-                    return;
-                }
-                vm.table.rows.splice(index, 1);
+            removeHeaderCell(cellIndex) {
+                this.table.removeHeaderCell(cellIndex);
             },
 
-
-            remove_header: function (index) {
-                let vm = this;
-
-                // If the table header is 1 then do not remove
-                if (vm.table.header.length <= 1) {
-                    alert('Could not remove anymore the first header!');
-                    return;
-                }
-                vm.table.removeHeaderIndex(index);
+            removeRow(rowIndex) {
+                this.table.removeRow(rowIndex);
             },
+
+            removeRowCell(rowIndex, cellIndex) {
+                this.table.removeRowCell(rowIndex, cellIndex);
+            },
+            addRowCell(index) {
+                this.table.addRowCell(index);
+            },
+            addRow() {
+                this.table.addRow();
+            },
+            addHeader() {
+                this.table.addHeaderCell();
+            },
+
             reset: function () {
                 this.table = new Table;
                 this.table.init();
@@ -132,3 +179,18 @@
     }
 
 </script>
+<style lang="scss">
+
+    .cell-tools {
+        margin-top: 5px;
+        margin-bottom: 5px;
+
+      
+
+    }
+
+    .cell-tools button.active {
+        color: rgb(118, 199, 132);
+
+    }
+</style>

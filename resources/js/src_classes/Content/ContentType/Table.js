@@ -41,55 +41,6 @@ export class Table extends Datum {
     }
 
 
-    addHeader(header) {
-
-        var par = this;
-        if (header === undefined) {
-            this._header.push(new TableCell);
-
-        } else {
-            this._header.push(header);
-        }
-
-        // Insert new cell in row
-        this._rows.forEach(function (row, key) {
-            par._rows[key].push(new TableCell);
-        });
-
-    }
-    removeHeader(element) {
-        const index = this._header.indexOf(element);
-        this.removeHeaderIndex(index);
-    }
-
-    removeHeaderIndex(index) {
-        var par = this;
-        this._header.splice(index, 1);
-
-        this._rows.forEach(function (row, key) {
-            par._rows[key].splice(index, 1);
-        });
-    }
-
-    addRow(row) {
-        if (row !== undefined) {
-            this._rows.push(row);
-        } else {
-            var rw = [];
-            this._header.forEach(function () {
-                rw.push(new TableCell);
-            });
-            this._rows.push(rw);
-        }
-    }
-    removeRow(element) {
-        const index = this._rows.indexOf(element);
-        this.removeRowIndex(index);
-    }
-
-    removeRowIndex(index) {
-        this._rows.splice(index, 1);
-    }
 
     init() {
         this._header = [new TableCell, new TableCell, new TableCell];
@@ -105,12 +56,19 @@ export class Table extends Datum {
     thead() {
 
         var display = '<thead>';
+
         display += '<tr>';
         this._header.forEach(function (head) {
+
+            var style = '';
+
             if (head.fit === true)
-                display += '<th style="white-space: nowrap; width: 1%;">' + head.value + '</th>';
-            else
-                display += '<th>' + head.value + '</th>';
+                style += `white-space: nowrap; width: 1%; `;
+
+            if (head.center === true)
+                style += `text-align:center; `;
+
+            display += '<th rowspan="' + head.rowspan + '" colspan="' + head.colspan + '" style=' + style + '>' + head.value + '</th>';
         });
         display += '</tr>';
         display += '</thead>';
@@ -119,12 +77,21 @@ export class Table extends Datum {
     tbody() {
         var display = '<tbody>';
         this._rows.forEach(function (cells) {
+
+
+
             display += '<tr>';
             cells.forEach(function (cell) {
+
+                var style = '';
+
                 if (cell.fit === true)
-                    display += '<td style="white-space: nowrap; width: 1%;">' + cell.value + '</td>';
-                else
-                    display += '<td>' + cell.value + '</td>';
+                    style += `white-space: nowrap; width: 1%; `;
+
+                if (cell.center === true)
+                    style += `text-align:center; `;
+
+                display += '<td rowspan="' + cell.rowspan + '" colspan="' + cell.colspan + '" style="' + style + '">' + cell.value + '</td>';
             });
             display += '</tr>';
         });
@@ -137,5 +104,62 @@ export class Table extends Datum {
     toShortString() {
         return '<table class="table table-bordered">' + this.thead() + '</table>';
     }
+
+
+
+
+
+
+
+
+
+    addRow() {
+        this._rows.push([new TableCell]);
+    }
+
+    addRowCell(rowIndex) {
+        this._rows[rowIndex].push(new TableCell);
+    }
+
+
+
+    removeRow(rowIndex) {
+        if (this._rows.length == 1) {
+            alert("Table must have at least 1 row!");
+            return;
+        }
+        this._rows.splice(rowIndex, 1);
+    }
+
+
+    removeRowCell(rowIndex, cellIndex) {
+
+        if (this._rows[rowIndex].length == 1) {
+            alert("Table must have at least 1 cell!");
+            return;
+        }
+
+
+        this._rows[rowIndex].splice(cellIndex, 1);
+    }
+
+    addHeaderCell(tableCell) {
+        if (tableCell === undefined) {
+            this._header.push(new TableCell);
+
+        } else {
+            this._header.push(tableCell);
+        }
+    }
+    removeHeaderCell(cellIndex) {
+
+        if (this._header.length == 1) {
+            alert("Table must have at least 1 header!");
+            return;
+        }
+
+        this._header.splice(cellIndex, 1);
+    }
+
 
 }

@@ -34,10 +34,18 @@ class Table extends Datum
 
         # Generate the header of the table
         foreach ($this->header as $key => $head) {
+
+            $style='';
             if($head->fit==true)
-                $display .= '<th style="white-space: nowrap; width: 1%;">' . $head->value . '</th>';
-            else
-                $display .= '<th>' . $head->value . '</th>';
+                $style .= 'white-space: nowrap; width: 1%; ';
+
+            dump($head);
+            if($head->center==true)
+                $style .= 'text-align:center; ';
+ 
+            //$display .= '<th>' . $head->value . '</th>';
+
+            $display .= '<th rowspan="' . $head->rowspan . '" colspan="' . $head->colspan . '" style=' . $style . '>' . $head->value . '</th>';
         }
         $display .= '</tr>';
         $display .= '</thead>';
@@ -46,18 +54,29 @@ class Table extends Datum
         $display .= '<tbody>';
 
         foreach ($this->rows as $row) {
+
             $display .= '<tr>';
+
             foreach ($row as $cell) {
-                if($cell->fit==true)
-                    $display .= '<td style="white-space: nowrap; width: 1%;">' . $cell->value . '</td>';
-                else
-                    $display .= '<td>' . $cell->value . '</td>';
+
+                $style = '';
+
+                if ($cell->fit === true)
+                    $style .= `white-space: nowrap; width: 1%; `;
+
+                if ($cell->center === true)
+                    $style .= `text-align:center; `;
+
+                $display .= '<td rowspan="' . $cell->rowspan . '" colspan="' . $cell->colspan . '" style="' . $style . '">' . $cell->value . '</td>';
+
             }
+
             $display .= '</tr>';
         }
 
         $display .= '</tbody>';
         $display .= '</table>';
+
         return $display;
     }
 }

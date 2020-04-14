@@ -34,14 +34,15 @@
             }
         },
         methods: {
-            closeWindow()
-        {
-            var closeWindow=confirm("Do you want to close this window?");
-            if(closeWindow===true)
-            {
-                location.replace("/manage/documents");
-            }
-        },
+            closeWindow() {
+                var closeWindow = confirm("Do you want to close this window?");
+                if (closeWindow === true) {
+                    if (this.draft !== null)
+                        location.replace("/drafts");
+                    else
+                        location.replace("/manage/documents");
+                }
+            },
             submit: function () {
                 let parent = this;
                 if (parent.submitted === false) {
