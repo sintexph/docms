@@ -1,1 +1,67 @@
-table.ordered-list tr td.ol-content,table.ordered-list tr td.ol-label{vertical-align:top;text-align:left}table.ordered-list{border-collapse:collapse}table.ordered-list tr td.ol-content{padding:0}.item-btn-action{padding-top:5px;padding-bottom:5px}
+table.ordered-list tr td.ol-label,
+table.ordered-list tr td.ol-content {
+  vertical-align: top;
+  text-align: left;
+}
+
+table.ordered-list {
+  border-collapse: collapse;
+}
+
+table.ordered-list tr td.ol-content {
+  padding: 0px;
+}
+
+.item-btn-action {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.btn-float {
+  position: fixed;
+  right: 40px;
+  top: 40px;
+}
+
+.btn-float button {
+  cursor: pointer;
+  margin: 5px;
+  display: block;
+  width: 60px;
+  height: 60px;
+  background-color: #1973bd;
+  color: #FFF;
+  border-radius: 50px;
+  text-align: center;
+  border-color: transparent;
+  box-shadow: 2px 2px 3px #999;
+}
+
+.btn-float i {
+  font-size: 18px;
+}
+
+.btn-float .float-close {
+  background-color: #e61919;
+}
+
+.btn-float .float-close:hover {
+  background-color: #ff1e1e;
+}
+
+.btn-float .float-draft {
+  background-color: #bd8919;
+}
+
+.btn-float .float-draft:hover {
+  background-color: #f0ad1d;
+}
+
+.btn-float .float-submit {
+  background-color: #19bd2f;
+}
+
+.btn-float .float-submit:hover {
+  background-color: #19df34;
+}
+

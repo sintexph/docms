@@ -8,11 +8,6 @@
 
 <div id="app-document">
     @if($selected_version->reviewed==false && $selected_version->approved==false)
-    <div class="pull-right">
-    <a href="{{ route('manage.documents.view',$document->id) }}" class="btn btn-xs btn-danger"><i class="fa fa-window-close" aria-hidden="true"></i>&nbsp;&nbsp;Exit Workspace</a>
-</div>
- 
-
     <edit-version 
         document_id="{{ $document->id }}"
         document_type="{{ $selected_version->document_type }}"
@@ -37,6 +32,14 @@
     href="http://cdn.sportscity.com.ph/AdminLTE-2.4.5/bower_components/select2/dist/css/select2.min.css">
 <link rel="stylesheet" href="http://cdn.sportscity.com.ph/bs-tag-input/src/bootstrap-tagsinput.css">
 <script src='http://cdn.sportscity.com.ph/tinymce/tinymce.min.js'></script>
+
+
+<style>
+    .fixed .content-wrapper,
+    .fixed .right-side {
+        padding-top: 0px !important;
+    }
+</style>
 
 @endslot
 

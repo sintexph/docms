@@ -12,7 +12,7 @@
                             aria-hidden="true"></i>
                         <span>View Online</span></a></li>
                 <li>
-                    <a href="?latab=ev" v-if="selected_version.for_review==false">
+                    <a :href="'/manage/documents/edit-version/'+document.id" v-if="selected_version.for_review==false">
                         <i class="fa fa-pencil" aria-hidden="true"></i>
                         <span>Modify Version</span>
                     </a>

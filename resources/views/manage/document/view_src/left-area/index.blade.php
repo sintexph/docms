@@ -29,10 +29,7 @@
         @include('manage.document.view_src.left-area.tabs.references')
         @break
 
-    @case('ev')
-        @include('manage.document.view_src.left-area.tabs.edit_version')
-        @break
-        
+ 
     @default
         @include('manage.document.view_src.left-area.tabs.current_version')
 @endswitch

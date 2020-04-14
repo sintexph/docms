@@ -4,13 +4,20 @@
             <version-form :show_version="false" :data_required="false" v-model="version">
                 <template slot="header">Edit version information</template>
             </version-form>
-            <a :href="'/manage/documents/view/'+document_id" class="btn btn-sm btn-danger" title="Cancel">Cancel</a>
-            <button class="btn btn-sm btn-warning" @click="save_only=true" type="submit"
-                title="Save the changes of the document, it will not send notification to the approver and reviewer of the document.">Save
-                Only</button>
-            <button class="btn btn-sm btn-success" @click="save_only=false" type="submit"
-                title="Submit the document which means it is ready to be reviewed and approved.">Submit
-                Document</button>
+            <div class="btn-float">
+                <button class="float-submit" @click="save_only=false" type="submit"
+                    title="Submit the document which means it is ready to be reviewed and approved.">
+                    <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                </button>
+
+                <button class="float-draft" @click="save_only=true" type="submit"
+                    title="Save the changes of the document, it will not send notification to the approver and reviewer of the document.">
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                </button>
+                <button @click.prevent="cancelEdit" class="float-close" title="Cancel">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
         </form>
     </div>
 </template>
@@ -40,6 +47,9 @@
             }
         },
         methods: {
+            cancelEdit() {
+                location.replace('/manage/documents/view/' + this.document_id);
+            },
             submit: function () {
                 let parent = this;
                 if (parent.submitted === false) {

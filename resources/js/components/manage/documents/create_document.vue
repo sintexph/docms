@@ -4,8 +4,18 @@
             <access-form v-model="document.access"></access-form>
         </document-form>
         <version-form :document="document" :show_version="false" v-model="document.current_version"></version-form>
-        <button class="btn btn-sm btn-success" type="submit">Submit Document</button>
-        <button class="btn btn-sm btn-warning" type="button" @click.prevent="save_draft">Save Draft</button>
+        <div class="btn-float">
+            <button class="float-submit" title="Submit document">
+                <i class="fa fa-paper-plane" aria-hidden="true"></i>
+            </button>
+            <button class="float-draft" title="Save document as draft" @click.prevent="save_draft">
+                <i class="fa fa-pencil-square" aria-hidden="true"></i>
+            </button>
+
+            <button @click.prevent="closeWindow" class="float-close" title="Close window creation">
+                <i class="fa fa-window-close" aria-hidden="true"></i>
+            </button>
+        </div>
     </form>
 </template>
 <script>
@@ -25,6 +35,14 @@
             }
         },
         methods: {
+            closeWindow()
+        {
+            var closeWindow=confirm("Do you want to close this window?");
+            if(closeWindow===true)
+            {
+                location.replace("/manage/documents");
+            }
+        },
             submit: function () {
                 let parent = this;
                 if (parent.submitted === false) {
