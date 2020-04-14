@@ -5,14 +5,13 @@
         </document-form>
         <version-form :document="document" :show_version="false" v-model="document.current_version"></version-form>
         <div class="btn-float">
-            <button class="float-submit" title="Submit document">
+            <button class="btn btn-success" title="Submit document">
                 <i class="fa fa-paper-plane" aria-hidden="true"></i>
             </button>
-            <button class="float-draft" title="Save document as draft" @click.prevent="save_draft">
+            <button class="btn btn-warning" title="Save document as draft" @click.prevent="save_draft">
                 <i class="fa fa-pencil-square" aria-hidden="true"></i>
             </button>
-
-            <button @click.prevent="closeWindow" class="float-close" title="Close window creation">
+            <button @click.prevent="closeWindow" class="btn btn-danger" title="Close window creation">
                 <i class="fa fa-window-close" aria-hidden="true"></i>
             </button>
         </div>

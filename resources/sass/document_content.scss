@@ -24,48 +24,25 @@ table.ordered-list tr td.ol-content {
     right: 40px;
     top: 40px;
 
-     button {
-         cursor:pointer;
+    button {
+
         margin: 5px;
         display: block;
 
         width: 60px;
         height: 60px;
-        background-color: #1973bd;
-        color: #FFF;
+  
         border-radius: 50px;
         text-align: center;
         border-color: transparent;
         box-shadow: 2px 2px 3px #999;
+        cursor: pointer;
     }
- 
+
 
     i {
         font-size: 18px;
+
+    }
  
-    }
-
-    .float-close {
-        background-color: #e61919;
-    }
-
-    .float-close:hover {
-        background-color: #ff1e1e;
-    }
-
-    .float-draft {
-        background-color: #bd8919;
-    }
-
-    .float-draft:hover {
-        background-color: #f0ad1d;
-    }
-
-    .float-submit {
-        background-color: #19bd2f;
-    }
-
-    .float-submit:hover {
-        background-color: #19df34;
-    }
 }

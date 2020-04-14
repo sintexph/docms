@@ -5329,7 +5329,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     draft: {
@@ -19812,7 +19811,7 @@ var render = function() {
         _c(
           "button",
           {
-            staticClass: "float-draft",
+            staticClass: "btn btn-warning",
             attrs: { title: "Save document as draft" },
             on: {
               click: function($event) {
@@ -19832,7 +19831,7 @@ var render = function() {
         _c(
           "button",
           {
-            staticClass: "float-close",
+            staticClass: "btn btn-danger",
             attrs: { title: "Close window creation" },
             on: {
               click: function($event) {
@@ -19860,7 +19859,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "button",
-      { staticClass: "float-submit", attrs: { title: "Submit document" } },
+      { staticClass: "btn btn-success", attrs: { title: "Submit document" } },
       [
         _c("i", {
           staticClass: "fa fa-paper-plane",
@@ -20703,7 +20702,7 @@ var render = function() {
           _c(
             "button",
             {
-              staticClass: "float-submit",
+              staticClass: "btn btn-success",
               attrs: {
                 type: "submit",
                 title:
@@ -20726,7 +20725,7 @@ var render = function() {
           _c(
             "button",
             {
-              staticClass: "float-draft",
+              staticClass: "btn btn-warning",
               attrs: {
                 type: "submit",
                 title:
@@ -20749,7 +20748,7 @@ var render = function() {
           _c(
             "button",
             {
-              staticClass: "float-close",
+              staticClass: "btn btn-danger",
               attrs: { title: "Cancel" },
               on: {
                 click: function($event) {
