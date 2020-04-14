@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\ContentTitle;
-use App\Document;
-use App\Section;
 use DB;
 
 class ManageContentTitleController extends Controller
@@ -60,7 +58,7 @@ class ManageContentTitleController extends Controller
 
         ContentTitle::create([
             'name'=>$request['name'],
-            'code'=>strtoupper($request['code']),
+            'code'=>$request['code'],
             'created_by'=>auth()->user()->name
         ]);
 
@@ -87,27 +85,8 @@ class ManageContentTitleController extends Controller
             $content_title=ContentTitle::find($id);
             abort_if($content_title==null,404,'Content title could not be found!');
 
-
-            # get the documents associated with the code
-            $documents=Document::where('system_code','=',$content_title->code)->get();
-            # get the sections associated with the code
-            $sections=Section::where('system_code','=',$content_title->code)->get();
-
-            foreach($documents as $document)
-            {
-                # update
-                $document->system_code=$request['code'];
-                $document->save();
-            }
-            foreach($sections as $section)
-            {
-                # update
-                $section->system_code=$request['code'];
-                $section->save();
-            }
-
-
-            $content_title->code=strtoupper($request['code']);
+ 
+            $content_title->code=$request['code'];
             $content_title->name=$request['name'];
             $content_title->edited_by=auth()->user()->name;
             $content_title->save();

@@ -4,6 +4,7 @@ import {
 from './Datum.js';
 
 export class ContentItem {
+    
     constructor(name, data, meta, box_hidden) {
         // invokes the setter
         if (name !== undefined)

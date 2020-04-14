@@ -8,11 +8,10 @@
 
         <div class="form-group">
             <label class="label-control">Code</label>
-            <input class="form-control text-uppercase" v-model="content_title.code">
+            <input class="form-control" v-model="content_title.code">
         </div>
 
        
-
     </div>
 
 </template>
