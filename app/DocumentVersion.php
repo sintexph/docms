@@ -41,14 +41,17 @@ class DocumentVersion extends Model
     ];
 
     protected $casts=[
+        
+        'for_review'=>'boolean',
+        'for_approval'=>'boolean',
         'reviewed'=>'boolean',
         'approved'=>'boolean',
+
         'released'=>'boolean',
         'active'=>'boolean',
         'current'=>'boolean',
         'obsolete'=>'boolean',
-        'for_review'=>'boolean',
-        'for_approval'=>'boolean',
+
         'content'=>'array',
         'description'=>'array',
         'state'=>'integer',

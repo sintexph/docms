@@ -7232,8 +7232,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
+    can_delete: {
+      type: Boolean,
+      "default": function _default() {
+        return false;
+      }
+    },
     attachments: {
       type: [Object, Array],
       "default": function _default() {
@@ -22531,55 +22540,72 @@ var render = function() {
             _vm._v(" "),
             _vm._l(_vm.attachments, function(value, key) {
               return _c("tr", { key: key }, [
-                _c("td", { staticClass: "fit" }, [
-                  _c(
-                    "a",
-                    {
-                      attrs: {
-                        href: value.upload.download_link,
-                        title: "Download the file"
-                      }
-                    },
-                    [
-                      _c("i", {
-                        staticClass: "fa fa-download",
-                        attrs: { "aria-hidden": "true" }
-                      })
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("span", [_vm._v("   ")]),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    {
-                      staticClass: "text-red",
-                      attrs: { href: "#", title: "Remove the file" },
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.delete_file(value.id)
+                _c(
+                  "td",
+                  { staticClass: "fit" },
+                  [
+                    _c(
+                      "a",
+                      {
+                        attrs: {
+                          href: value.upload.download_link,
+                          title: "Download the file"
                         }
-                      }
-                    },
-                    [
-                      _c("i", {
-                        staticClass: "fa fa-trash",
-                        attrs: { "aria-hidden": "true" }
-                      })
-                    ]
-                  )
-                ]),
+                      },
+                      [
+                        _c("i", {
+                          staticClass: "fa fa-download",
+                          attrs: { "aria-hidden": "true" }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm.can_delete === true
+                      ? [
+                          _c("span", [_vm._v("   ")]),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "text-red",
+                              attrs: { href: "#", title: "Remove the file" },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.delete_file(value.id)
+                                }
+                              }
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "fa fa-trash",
+                                attrs: { "aria-hidden": "true" }
+                              })
+                            ]
+                          )
+                        ]
+                      : _vm._e()
+                  ],
+                  2
+                ),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(value.upload.file_name))]),
+                _c("td", [
+                  _c("div", [_vm._v(_vm._s(value.upload.file_name))]),
+                  _vm._v(" "),
+                  _c("div", [
+                    _c("small", [_vm._v(_vm._s(value.upload.file_size))])
+                  ])
+                ]),
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(value.upload.file_type))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(value.upload.file_size))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(value.upload.uploaded_by))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(value.upload.created_at))])
+                _c("td", { staticClass: "fit" }, [
+                  _c("div", [_vm._v(_vm._s(value.upload.uploaded_by))]),
+                  _vm._v(" "),
+                  _c("div", [
+                    _c("small", [_vm._v(_vm._s(value.upload.created_at))])
+                  ])
+                ])
               ])
             })
           ],
@@ -22608,13 +22634,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("File")]),
         _vm._v(" "),
-        _c("th", { staticClass: "fit" }, [_vm._v("File Type")]),
+        _c("th", { staticClass: "fit" }, [_vm._v("Type")]),
         _vm._v(" "),
-        _c("th", { staticClass: "fit" }, [_vm._v("File Size")]),
-        _vm._v(" "),
-        _c("th", { staticClass: "fit" }, [_vm._v("Uploaded By")]),
-        _vm._v(" "),
-        _c("th", { staticClass: "fit" }, [_vm._v("Uploaded At")])
+        _c("th", { staticClass: "fit" }, [_vm._v("Uploaded By")])
       ])
     ])
   }

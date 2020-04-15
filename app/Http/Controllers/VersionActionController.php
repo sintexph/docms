@@ -325,6 +325,9 @@ class VersionActionController extends Controller
         $attachment=DocumentVersionAttachment::find($id);
         abort_if($attachment==null,404,'Attachment could not be found!');
 
+        $document_version=$attachment->version;
+        abort_if($document_version->for_review==true || $document_version->for_approval==true,422,'Document version is already locked for any modifications or deletions');
+
         try {
 
             DB::beginTransaction();

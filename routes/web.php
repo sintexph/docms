@@ -79,9 +79,7 @@ Route::prefix('util')->name('util')->group(function(){
 
 });
 
-//Route::get('documents','DocumentController@index')->name('documents');
-//Route::get('documents/{id}','DocumentController@view')->name('documents.view');
-
+ 
 Route::prefix('manage')->name('manage')->group(function(){
     Route::prefix('documents')->name('.documents')->group(function(){
 
