@@ -174,7 +174,7 @@ class DocumentApprovalController extends Controller
             DocumentVersionHelper::reset_status($document_version,$user);
             CommentHelper::save($request['comment'],$document_version,$user);
 
-            DB::rollBack();
+            DB::commit();
 
             return response()->json(['message'=>'Document version has been successfully rejected!']);
 

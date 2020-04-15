@@ -42331,7 +42331,7 @@ function () {
       this._meta = meta;
     } else {
       this._meta = {
-        with_header: true
+        with_header: false
       };
     }
 
