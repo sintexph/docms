@@ -39,7 +39,6 @@ class Table extends Datum
             if($head->fit==true)
                 $style .= 'white-space: nowrap; width: 1%; ';
 
-            dump($head);
             if($head->center==true)
                 $style .= 'text-align:center; ';
  
