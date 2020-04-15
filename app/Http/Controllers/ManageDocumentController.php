@@ -115,30 +115,41 @@ class ManageDocumentController extends Controller
 
         $documents=Document::on();
         
-        # Get the documents related to the account like creator, reviewer, and approver
-        $documents=Document::where(function($document)use($user){
-            
-            $document->orWhere('created_by','=',$user->id)
-                ->orWhereHas('versions',function($version)use($user){
+        
+        if($user->perm_administrator==false)
+        {
+            # Get the documents related to the account like creator, reviewer, and approver
+            $documents=Document::where(function($document)use($user){
+                
+                $document->orWhere('created_by','=',$user->id)
+                    ->orWhereHas('versions',function($version)use($user){
 
-                    $version->where(function($version)use($user){
+                        $version->where(function($version)use($user){
 
-                        $version->orWhereHas('reviewers',function($reviewers)use($user){
+                            $version->orWhereHas('reviewers',function($reviewers)use($user){
 
-                            $reviewers->where('user_id',$user->id);
+                                $reviewers->where('user_id',$user->id);
 
-                        })
-                        ->orWhereHas('approvers',function($approvers)use($user){
+                            })
+                            ->orWhereHas('approvers',function($approvers)use($user){
 
-                            $approvers->where('user_id',$user->id);
+                                $approvers->where('user_id',$user->id);
+
+                            });
 
                         });
+                        
+                });
 
-                    });
-                    
             });
 
-        });
+
+
+        }
+        else {
+            $documents=Document::on();
+        }
+
 
         $documents->select([
             'documents.id',
@@ -208,10 +219,13 @@ class ManageDocumentController extends Controller
                 ->orWhere('keywords','like','%'.$find.'%');
             });
         }
-
+        
         if(empty($order))
         {
-            $documents->orderByRaw(DB::raw("case when documents.created_by=".$user->id." then 0 else 1 end"));
+            if($user->perm_administrator===true)
+                $documents->orderByRaw(DB::raw("case when documents.created_by=".$user->id." then 0 else 1 end"));
+
+            $documents->orderBy("created_at","desc");
         }
 
         return $documents;

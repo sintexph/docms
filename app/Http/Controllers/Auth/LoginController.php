@@ -50,9 +50,11 @@ class LoginController extends Controller
         return $rq;
     }
 
+    /*
     public function showLoginForm()
     {
         \Auth::login(\App\User::where('username','cando.yeh')->first());
         return redirect()->route('login');
     }
+    */
 }
