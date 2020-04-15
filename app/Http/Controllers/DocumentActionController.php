@@ -117,19 +117,6 @@ class DocumentActionController extends Controller
             $this->version_save_reviewer($document_version,$request);
             $this->version_save_approver($document_version,$request);
             
-            if($document_version->reviewers->count()!=0 && $document_version->approvers->count()!=0)
-            {
-                # If there are reviewers and approvers
-                DocumentVersionHelper::for_review($document_version,$user); # Set the document version for review
-
-                # Notify the reviewers
-                foreach ($document_version->reviewers as $reviewer) {
-                    MailHelper::send_email_reviewer($reviewer);
-                }
-            }
-                
-
-
             DB::commit();
 
             return response()->json([

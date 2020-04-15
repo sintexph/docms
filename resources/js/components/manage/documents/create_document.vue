@@ -1,15 +1,16 @@
 <template>
-    <form @submit.prevent="submit">
+    <form @submit.prevent="createDocument">
         <document-form ref="docForm" v-model="document">
             <access-form v-model="document.access"></access-form>
         </document-form>
         <version-form :document="document" :show_version="false" v-model="document.current_version"></version-form>
         <div class="btn-float">
-            <button class="btn btn-success" title="Submit document">
-                <i class="fa fa-paper-plane" aria-hidden="true"></i>
+            <button class="btn btn-success" title="Create document">
+             
+                 <i class="fa fa-floppy-o" aria-hidden="true"></i>
             </button>
             <button class="btn btn-warning" title="Save document as draft" @click.prevent="save_draft">
-                <i class="fa fa-pencil-square" aria-hidden="true"></i>
+               <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
             </button>
             <button @click.prevent="closeWindow" class="btn btn-danger" title="Close window creation">
                 <i class="fa fa-window-close" aria-hidden="true"></i>
@@ -43,7 +44,7 @@
                         location.replace("/manage/documents");
                 }
             },
-            submit: function () {
+            createDocument: function () {
                 let parent = this;
                 if (parent.submitted === false) {
                     parent.submitted = true;
@@ -54,8 +55,6 @@
                     var link = '/manage/documents/save';
                     if (parent.draft !== null)
                         link = '/manage/documents/save?draft=' + parent.draft.id;
-
-
 
                     axios.put(link, {
                         document: parent.document.toObject(),

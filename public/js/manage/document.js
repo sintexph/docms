@@ -5358,6 +5358,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     draft: {
@@ -5381,7 +5382,7 @@ __webpack_require__.r(__webpack_exports__);
         if (this.draft !== null) location.replace("/drafts");else location.replace("/manage/documents");
       }
     },
-    submit: function submit() {
+    createDocument: function createDocument() {
       var parent = this;
 
       if (parent.submitted === false) {
@@ -19977,7 +19978,7 @@ var render = function() {
       on: {
         submit: function($event) {
           $event.preventDefault()
-          return _vm.submit($event)
+          return _vm.createDocument($event)
         }
       }
     },
@@ -20036,7 +20037,7 @@ var render = function() {
           },
           [
             _c("i", {
-              staticClass: "fa fa-pencil-square",
+              staticClass: "fa fa-pencil-square-o",
               attrs: { "aria-hidden": "true" }
             })
           ]
@@ -20073,10 +20074,10 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "button",
-      { staticClass: "btn btn-success", attrs: { title: "Submit document" } },
+      { staticClass: "btn btn-success", attrs: { title: "Create document" } },
       [
         _c("i", {
-          staticClass: "fa fa-paper-plane",
+          staticClass: "fa fa-floppy-o",
           attrs: { "aria-hidden": "true" }
         })
       ]
