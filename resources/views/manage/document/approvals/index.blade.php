@@ -4,7 +4,7 @@
 
 
 @section('breadcrumbs')
-<li class="active">Approvals</li>
+<li class="active"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Approvals</li>
 @stop
 
 @section('title','Approve Document Versions')

@@ -45,8 +45,7 @@
                 },
                 submitted: false,
                 columns: [
-
-                    {
+ {
                         label: 'Document No.',
                         name: 'document_number',
                         data: 'document_number',
@@ -56,8 +55,10 @@
                         name: 'title',
                         data: 'title',
                         className: 'fit',
-                        render: function (data) {
-                            return `<strong>` + data + `</strong>`;
+                        render: function (data, meta, row) {
+
+                            return `<a title="Click to view the `+data+`" href="/for_approval/view/` + row.id + `"><strong>` + data +
+                                `</strong></a>`
                         }
                     },
 
@@ -70,37 +71,25 @@
                         label: 'System',
                         name: 'system',
                         data: 'system',
+                        className: 'fit',
                     },
                     {
                         label: 'Section',
                         name: 'section',
                         data: 'section',
+                        className: 'fit',
                     },
-
                     {
                         label: 'Category',
                         name: 'category',
                         data: 'category',
+                        className: 'fit',
                     },
-
                     {
                         label: 'Created',
                         name: 'version_creator',
                         data: 'version_creator',
-                    },
-                    {
-                        label: 'Actions',
-                        name: 'id',
-                        data: 'id',
                         className: 'fit',
-                         export:false,
-                        render: function (data, meta, row) {
-
-                            var btn_view = `<a href="/for_approval/view/` + data +
-                                `" target="_blank"><i aria-hidden="true" class="fa fa-star"></i> View Content</a>`;
-                          
-                                return  btn_view;
-                        }
                     }
 
 

@@ -45,7 +45,9 @@
                     state: '',
                 },
                 submitted: false,
-                columns: [{
+                columns: [
+                    
+                    {
                         label: 'Document No.',
                         name: 'document_number',
                         data: 'document_number',

@@ -6678,7 +6678,7 @@ __webpack_require__.r(__webpack_exports__);
         render: function render(data, meta, row) {
           var text = '';
           if (row.archived === true) text = "<strong class=\"text-red\">" + data + "</strong>";else if (row.obsolete === true) text = "<strong class=\"text-yellow\">" + data + "</strong>";else text = "<strong class=\"text-green\">" + data + "</strong>";
-          return "<a href=\"/manage/documents/view/" + row.id + "\">" + text + "</a>";
+          return "<a title=\"Click to view the document\" href=\"/manage/documents/view/" + row.id + "\">" + text + "</a>";
         }
       }, {
         label: 'State',
@@ -6744,15 +6744,6 @@ __webpack_require__.r(__webpack_exports__);
         name: 'created_at',
         data: 'created_at',
         className: 'fit'
-      }, {
-        label: 'Action',
-        name: 'id',
-        data: 'id',
-        className: 'fit',
-        "export": false,
-        render: function render(data) {
-          return "<a href=\"/manage/documents/view/" + data + "\">View More</a>";
-        }
       }],
       system_data: [],
       filters: {

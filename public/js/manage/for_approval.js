@@ -3902,8 +3902,8 @@ __webpack_require__.r(__webpack_exports__);
         name: 'title',
         data: 'title',
         className: 'fit',
-        render: function render(data) {
-          return "<strong>" + data + "</strong>";
+        render: function render(data, meta, row) {
+          return "<a title=\"Click to view the " + data + "\" href=\"/for_approval/view/" + row.id + "\"><strong>" + data + "</strong></a>";
         }
       }, {
         label: 'Version',
@@ -3912,29 +3912,23 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         label: 'System',
         name: 'system',
-        data: 'system'
+        data: 'system',
+        className: 'fit'
       }, {
         label: 'Section',
         name: 'section',
-        data: 'section'
+        data: 'section',
+        className: 'fit'
       }, {
         label: 'Category',
         name: 'category',
-        data: 'category'
+        data: 'category',
+        className: 'fit'
       }, {
         label: 'Created',
         name: 'version_creator',
-        data: 'version_creator'
-      }, {
-        label: 'Actions',
-        name: 'id',
-        data: 'id',
-        className: 'fit',
-        "export": false,
-        render: function render(data, meta, row) {
-          var btn_view = "<a href=\"/for_approval/view/" + data + "\" target=\"_blank\"><i aria-hidden=\"true\" class=\"fa fa-star\"></i> View Content</a>";
-          return btn_view;
-        }
+        data: 'version_creator',
+        className: 'fit'
       }]
     };
   },

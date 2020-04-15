@@ -158,7 +158,7 @@
                             else
                                 text = `<strong class="text-green">` + data + `</strong>`;
 
-                            return `<a href="/manage/documents/view/` + row.id + `">` + text + `</a>`
+                            return `<a title="Click to view the document" href="/manage/documents/view/` + row.id + `">` + text + `</a>`
                         }
                     },
                     {
@@ -252,16 +252,7 @@
                         data: 'created_at',
                         className: 'fit',
                     },
-                    {
-                        label: 'Action',
-                        name: 'id',
-                        data: 'id',
-                        className: 'fit',
-                        export: false,
-                        render: function (data) {
-                            return `<a href="/manage/documents/view/` + data + `">View More</a>`;
-                        }
-                    }
+                   
                 ],
                 system_data: [],
                 filters: {
