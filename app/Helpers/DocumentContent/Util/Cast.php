@@ -147,9 +147,15 @@ class Cast
     public static function cast_to_cell($data) {
         
         $temp = new TableCell($data['value'],$data['fit']);
-        $temp->rowspan=$data['rowspan'];
-        $temp->colspan=$data['colspan'];
-        $temp->center=$data['center'];
+
+        if(isset($data['rowspan']))
+            $temp->rowspan=$data['rowspan'];
+
+        if(isset($data['colspan'])) 
+            $temp->colspan=$data['colspan'];
+
+        if(isset($data['center']))
+            $temp->center=$data['center'];
         
         return $temp;
     }

@@ -30,7 +30,8 @@
                 <h3 class="box-title">Documents to be reviewed</h3>
             </div>
             <div class="box-body">
-                <datatable ref="datatables" :parameters="filters" :columns="columns" url="/for_review/list"></datatable>
+                <datatable ref="datatables" fixedRightColumns="1" :parameters="filters" :columns="columns"
+                    url="/for_review/list"></datatable>
             </div>
         </div>
     </div>
@@ -54,10 +55,13 @@
                         name: 'title',
                         data: 'title',
                         className: 'fit',
-                        render: function (data) {
-                            return `<strong>` + data + `</strong>`;
+                        render: function (data, meta, row) {
+
+                            return `<a title="Click to view the `+data+`" href="/for_review/view/` + row.id + `"><strong>` + data +
+                                `</strong></a>`
                         }
                     },
+
                     {
                         label: 'Version',
                         name: 'version',
@@ -67,38 +71,26 @@
                         label: 'System',
                         name: 'system',
                         data: 'system',
+                        className: 'fit',
                     },
                     {
                         label: 'Section',
                         name: 'section',
                         data: 'section',
+                        className: 'fit',
                     },
                     {
                         label: 'Category',
                         name: 'category',
                         data: 'category',
+                        className: 'fit',
                     },
                     {
                         label: 'Created',
                         name: 'version_creator',
                         data: 'version_creator',
-                    },
-                    {
-                        label: 'Actions',
-                        name: 'id',
-                        data: 'id',
                         className: 'fit',
-                        export: false,
-                        render: function (data, meta, row) {
-
-                            var btn_view = `<a href="/for_review/view/` + data +
-                                `" target="_blank"><i aria-hidden="true" class="fa fa-star"></i> View Content</a>`;
-                         
-                                return  btn_view;
-                        }
                     }
-
-
                 ]
             }
         },
@@ -112,9 +104,9 @@
             find_document: function () {
                 this.$refs.datatables.reload();
             },
-         
+
         },
-       
+
     }
 
 </script>

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\DocumentVersionComment;
 use App\DocumentVersion;
 use DB;
-use App\Helpers\MailHelper;
+use App\Helpers\CommentHelper;
 
 class CommentController extends Controller
 {
@@ -26,17 +26,8 @@ class CommentController extends Controller
         try {
             DB::beginTransaction();
 
-            $version_comment=DocumentVersionComment::create([
-                'version_id'=>$document_version->id,
-                'comment'=>$request['comment'],
-                'created_by'=>auth()->user()->id,
-            ]);
-
-            # Get the creator of the document version
-            $creator=$document_version->document->creator;
-
-            MailHelper::send_email_to_comments($document_version,auth()->user());
-             
+            CommentHelper::save($request['comment'],$document_version,auth()->user());
+           
             DB::commit();
 
             return response()->json(['message'=>'Comment successfully saved!']);

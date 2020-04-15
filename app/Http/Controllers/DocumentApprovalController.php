@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\DocumentApprover;
 use App\Helpers\DocumentVersionHelper;
 use DB;
+use App\Helpers\CommentHelper;
 
 class DocumentApprovalController extends Controller
 {
@@ -144,5 +145,42 @@ class DocumentApprovalController extends Controller
             'references'=>$references,
             'document_approver'=>$document_approver,
         ]);
+    }
+
+    public function reject(Request $request,$id)
+    {
+        $this->validate($request,[
+            'comment'=>'required'
+        ]);
+        
+        $user=auth()->user();
+        $for_approval=DocumentApprover::find($id);
+        
+        abort_if($for_approval==null,404,'Could not find the data on the system!');
+        $document_version=$for_approval->document_version;
+        
+        # Must be reviewed first and must be ready for approval
+        abort_if($document_version->for_approval==false || $document_version->reviewed==false,422,'Document version is not ready for approval!');      
+
+        abort_if($for_approval->approved==true,422,'Document version was been already approved.');      
+        # Cannot update if the user is not the approver of the document version
+        abort_if($for_approval->user_id!=$user->id,422,'You are not the approver of the document!');
+
+        
+        try {
+
+            DB::beginTransaction();
+
+            DocumentVersionHelper::reset_status($document_version,$user);
+            CommentHelper::save($request['comment'],$document_version,$user);
+
+            DB::rollBack();
+
+            return response()->json(['message'=>'Document version has been successfully rejected!']);
+
+        }catch (\Exception $e) {
+            DB::rollBack();
+            abort(422,$e->getMessage());
+        }
     }
 }

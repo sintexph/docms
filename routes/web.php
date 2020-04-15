@@ -179,6 +179,7 @@ Route::middleware('reviewer')->group(function(){
         Route::get('view/{id}','DocumentReviewingController@view_document')->name('.view');
         Route::post('list','DocumentReviewingController@list')->name('.list');
         Route::patch('review/{id}','DocumentReviewingController@review')->name('.review');
+        Route::post('reject/{id}','DocumentReviewingController@reject')->name('.reject');
 
     });
 
@@ -192,6 +193,7 @@ Route::middleware('approver')->group(function(){
         Route::get('view/{id}','DocumentApprovalController@view_document')->name('.view');
         Route::post('list','DocumentApprovalController@list')->name('.list');
         Route::patch('approve/{id}','DocumentApprovalController@approve')->name('.approve');
+        Route::post('reject/{id}','DocumentApprovalController@reject')->name('.reject');
 
     });
     

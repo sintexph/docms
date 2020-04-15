@@ -3756,14 +3756,58 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['version_reviewer_id'],
   data: function data() {
     return {
-      submitted: false
+      submitted: false,
+      comment: ''
     };
   },
   methods: {
+    reject: function reject() {
+      var par = this;
+
+      if (par.submitted == false) {
+        var r = confirm("Please confirm the document rejection");
+
+        if (r == true) {
+          par.submitted = true;
+          par.show_wait("Please wait while the system is updating the document...");
+          axios.post('/for_review/reject/' + par.version_reviewer_id, {
+            comment: par.comment
+          }).then(function (response) {
+            par.hide_wait();
+            par.alert_success(response);
+            par.submitted = false;
+            setTimeout(function () {
+              location.reload();
+            }, 1000);
+          })["catch"](function (error) {
+            par.hide_wait();
+            par.submitted = false;
+            par.alert_failed(error);
+          });
+        }
+      }
+    },
     review: function review() {
       var par = this;
 
@@ -3842,6 +3886,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3859,8 +3904,8 @@ __webpack_require__.r(__webpack_exports__);
         name: 'title',
         data: 'title',
         className: 'fit',
-        render: function render(data) {
-          return "<strong>" + data + "</strong>";
+        render: function render(data, meta, row) {
+          return "<a title=\"Click to view the " + data + "\" href=\"/for_review/view/" + row.id + "\"><strong>" + data + "</strong></a>";
         }
       }, {
         label: 'Version',
@@ -3869,29 +3914,23 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         label: 'System',
         name: 'system',
-        data: 'system'
+        data: 'system',
+        className: 'fit'
       }, {
         label: 'Section',
         name: 'section',
-        data: 'section'
+        data: 'section',
+        className: 'fit'
       }, {
         label: 'Category',
         name: 'category',
-        data: 'category'
+        data: 'category',
+        className: 'fit'
       }, {
         label: 'Created',
         name: 'version_creator',
-        data: 'version_creator'
-      }, {
-        label: 'Actions',
-        name: 'id',
-        data: 'id',
-        className: 'fit',
-        "export": false,
-        render: function render(data, meta, row) {
-          var btn_view = "<a href=\"/for_review/view/" + data + "\" target=\"_blank\"><i aria-hidden=\"true\" class=\"fa fa-star\"></i> View Content</a>";
-          return btn_view;
-        }
+        data: 'version_creator',
+        className: 'fit'
       }]
     };
   },
@@ -9541,21 +9580,115 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "button",
-    {
-      staticClass: "btn btn-primary btn-sm",
-      attrs: { type: "button" },
-      on: {
-        click: function($event) {
-          $event.preventDefault()
-          return _vm.review($event)
-        }
-      }
-    },
+    "div",
     [
-      _c("i", { staticClass: "fa fa-check", attrs: { "aria-hidden": "true" } }),
-      _vm._v(" Reviewed")
-    ]
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary btn-sm",
+          attrs: { type: "button" },
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              return _vm.review($event)
+            }
+          }
+        },
+        [
+          _c("i", {
+            staticClass: "fa fa-check",
+            attrs: { "aria-hidden": "true" }
+          }),
+          _vm._v(" Reviewed")
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-danger btn-sm",
+          attrs: { type: "button" },
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              return _vm.$refs.modal.show()
+            }
+          }
+        },
+        [
+          _c("i", {
+            staticClass: "fa fa-thumbs-down",
+            attrs: { "aria-hidden": "true" }
+          }),
+          _vm._v(" Reject")
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "modal",
+        { ref: "modal", attrs: { name: "reject-modal" } },
+        [
+          _c("template", { slot: "header" }, [_vm._v("Reject Document")]),
+          _vm._v(" "),
+          _c("template", { slot: "body" }, [
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.comment,
+                  expression: "comment"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                rows: "3",
+                placeholder:
+                  "Please put a reason why you need to reject the document....",
+                required: ""
+              },
+              domProps: { value: _vm.comment },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.comment = $event.target.value
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("template", { slot: "footer" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-default",
+                attrs: { type: "button", "data-dismiss": "modal" }
+              },
+              [_vm._v("Close")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-danger",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.reject($event)
+                  }
+                }
+              },
+              [_vm._v("Reject")]
+            )
+          ])
+        ],
+        2
+      )
+    ],
+    1
   )
 }
 var staticRenderFns = []
@@ -9702,6 +9835,7 @@ var render = function() {
           _c("datatable", {
             ref: "datatables",
             attrs: {
+              fixedRightColumns: "1",
               parameters: _vm.filters,
               columns: _vm.columns,
               url: "/for_review/list"

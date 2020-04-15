@@ -7,6 +7,7 @@ use App\DocumentReviewer;
 use App\DocumentVersion;
 use DB;
 use App\Helpers\DocumentVersionHelper;
+use App\Helpers\CommentHelper;
 
 class DocumentReviewingController extends Controller
 {
@@ -87,7 +88,6 @@ class DocumentReviewingController extends Controller
 
         # Must be ready for review first
         abort_if($document_version->for_review!=true,422,'Document version is not ready for reviewing!');      
-
         abort_if($for_review->reviewed==true,422,'Document version was been already reviewed.');
                 
         # Cannot update if the user is not the reviewer of the document version
@@ -146,5 +146,43 @@ class DocumentReviewingController extends Controller
             'current_version'=>$current_version,
             'document_reviewer'=>$document_reviewer,
         ]);
+    }
+
+
+    public function reject(Request $request,$id)
+    {
+        $this->validate($request,[
+            'comment'=>'required'
+        ]);
+
+        $document_reviewer=DocumentReviewer::find($id);
+        abort_if($document_reviewer==null,404,'Document version to review could not be found!');
+
+        $document_version=$document_reviewer->document_version;
+        $user=auth()->user();
+
+        # Must be ready for review first
+        abort_if($document_version->for_review!=true,422,'Document version was not submitted yet!');      
+        abort_if($document_reviewer->reviewed==true,422,'Document version was been already reviewed.');
+                
+        # Cannot update if the user is not the reviewer of the document version
+        abort_if($document_reviewer->user_id!=$user->id,422,'You are not the reviewer of the document!');
+
+        
+        try {
+
+            DB::beginTransaction();
+
+            DocumentVersionHelper::reset_status($document_version,$user);
+            CommentHelper::save($request['comment'],$document_version,$user);
+
+            DB::commit();
+
+            return response()->json(['message'=>'Document version has been successfully rejected!']);
+
+        }catch (\Exception $e) {
+            DB::rollBack();
+            abort(422,$e->getMessage());
+        }
     }
 }
