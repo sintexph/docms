@@ -48,11 +48,6 @@ class EloquentHelper
         return $documents;
     }
     
-    public static function document(User $user)
-    {
-        if($user->perm_administrator==false)
-            return Document::where('created_by','=',$user->id);
-        else
-            return Document::on();
-    }
+
+ 
 }

@@ -52,7 +52,7 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
-        \Auth::login(\App\User::where('username','admin')->first());
+        \Auth::login(\App\User::where('username','MALOU')->first());
         return redirect()->route('login');
     }
 }

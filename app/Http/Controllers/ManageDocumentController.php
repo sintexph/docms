@@ -13,7 +13,7 @@ use App\Section;
 use App\System;
 use App\Category;
 use Auth;
-use App\Helpers\EloquentHelper;
+use DB;
 
 class ManageDocumentController extends Controller
 {
@@ -111,9 +111,35 @@ class ManageDocumentController extends Controller
         $system=$request['system'];
         $section=$request['section'];
         $category=$request['category'];
+        $order=$request['order'];
 
         $documents=Document::on();
-        $documents=EloquentHelper::document($user);
+        
+        # Get the documents related to the account like creator, reviewer, and approver
+        $documents=Document::where(function($document)use($user){
+            
+            $document->orWhere('created_by','=',$user->id)
+                ->orWhereHas('versions',function($version)use($user){
+
+                    $version->where(function($version)use($user){
+
+                        $version->orWhereHas('reviewers',function($reviewers)use($user){
+
+                            $reviewers->where('user_id',$user->id);
+
+                        })
+                        ->orWhereHas('approvers',function($approvers)use($user){
+
+                            $approvers->where('user_id',$user->id);
+
+                        });
+
+                    });
+                    
+            });
+
+        });
+
         $documents->select([
             'documents.id',
             'documents.document_number', 
@@ -181,6 +207,11 @@ class ManageDocumentController extends Controller
                 ->orWhere('title','like','%'.$find.'%')
                 ->orWhere('keywords','like','%'.$find.'%');
             });
+        }
+
+        if(empty($order))
+        {
+            $documents->orderByRaw(DB::raw("case when documents.created_by=".$user->id." then 0 else 1 end"));
         }
 
         return $documents;
